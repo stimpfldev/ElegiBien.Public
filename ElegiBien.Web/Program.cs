@@ -4,6 +4,22 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
+// Servicios de aplicación
+builder.Services.AddScoped<
+    ElegiBien.Application.Interfaces.IAirConditioningCalculator,
+    ElegiBien.Application.Services.AirConditioningCalculator>();
+
+builder.Services.AddScoped<
+    ElegiBien.Application.Interfaces.IAirConditioningAnalysisStore,
+    ElegiBien.Infrastructure.Persistence.AirConditioningAnalysisStore>();
+
+builder.Services.AddScoped<
+    ElegiBien.Application.Interfaces.IAirConditioningProductComparer,
+    ElegiBien.Application.Services.AirConditioningProductComparer>();
+
+
+
+
 
 var connectionString =
     builder.Configuration.GetConnectionString("ElegiBienDb")
@@ -14,6 +30,14 @@ builder.Services.AddDbContext<ElegiBienDbContext>(options =>
     options.UseSqlServer(connectionString));
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext =
+        scope.ServiceProvider.GetRequiredService<ElegiBienDbContext>();
+
+    await ElegiBienDbSeeder.SeedAsync(dbContext);
+}
 
 if (!app.Environment.IsDevelopment())
 {
@@ -33,3 +57,5 @@ app.MapControllerRoute(
     .WithStaticAssets();
 
 app.Run();
+
+public partial class Program;
