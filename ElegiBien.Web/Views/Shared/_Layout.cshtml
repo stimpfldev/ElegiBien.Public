@@ -1,8 +1,33 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
+    @if (ViewData["Robots"] is string robots)
+    {
+        <meta name="robots"
+              content="@robots" />
+    }
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <meta name="description"
+          content="ElegíBien te ayuda a calcular qué aire acondicionado necesitás y comparar alternativas mediante un puntaje explicable." />
+
+    <meta name="theme-color"
+          content="#0d6efd" />
+
+    <meta name="application-name"
+          content="ElegíBien" />
+
+    <link rel="manifest"
+          href="/manifest.webmanifest" />
+
+    <link rel="icon"
+          type="image/png"
+          sizes="192x192"
+          href="/icons/icon-192.png" />
+
+    <link rel="apple-touch-icon"
+          href="/icons/icon-192.png" />
     <title>@ViewData["Title"] - ElegiBien.Web</title>
     <script type="importmap"></script>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
@@ -53,5 +78,26 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
+
+    <div class="container">
+        <a asp-controller="Legal"
+           asp-action="Privacy">
+            Privacidad
+        </a>
+
+        <span class="mx-2">|</span>
+
+        <a asp-controller="Legal"
+           asp-action="Terms">
+            Términos
+        </a>
+
+        <span class="mx-2">|</span>
+
+        <a asp-controller="Legal"
+           asp-action="Methodology">
+            Metodología
+        </a>
+    </div>
 </body>
 </html>

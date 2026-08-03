@@ -1,8 +1,18 @@
 <Solution>
-  <Project Path="ElegiBien.Application/ElegiBien.Application.csproj" />
-  <Project Path="ElegiBien.Domain/ElegiBien.Domain.csproj" />
+  <Project Path="ElegiBien.Application/ElegiBien.Application.csproj">
+    <BuildType Project="Release" />
+  </Project>
+  <Project Path="ElegiBien.Domain/ElegiBien.Domain.csproj">
+    <BuildType Project="Release" />
+  </Project>
   <Project Path="ElegiBien.Infrastructure/ElegiBien.Infrastructure.csproj" />
-  <Project Path="ElegiBien.Tests.Integration/ElegiBien.Tests.Integration.csproj" />
-  <Project Path="ElegiBien.Tests.Unit/ElegiBien.Tests.Unit.csproj" />
-  <Project Path="ElegiBien.Web/ElegiBien.Web.csproj" />
+  <Project Path="ElegiBien.Tests.Integration/ElegiBien.Tests.Integration.csproj">
+    <BuildType Project="Release" />
+  </Project>
+  <Project Path="ElegiBien.Tests.Unit/ElegiBien.Tests.Unit.csproj">
+    <BuildType Project="Release" />
+  </Project>
+  <Project Path="ElegiBien.Web/ElegiBien.Web.csproj">
+    <BuildType Project="Release" />
+  </Project>
 </Solution>

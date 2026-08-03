@@ -20,19 +20,6 @@ public class SharedResultService : ISharedResultService
         Guid analysisId,
         CancellationToken cancellationToken = default)
     {
-        var existing = await _dbContext.SharedResults
-            .SingleOrDefaultAsync(
-                x =>
-                    x.AnalysisId == analysisId &&
-                    x.IsActive &&
-                    x.ExpiresAtUtc > DateTime.UtcNow,
-                cancellationToken);
-
-        if (existing is not null)
-        {
-            return existing.PublicToken;
-        }
-
         var analysisExists = await _dbContext.Analyses
             .AnyAsync(
                 x => x.AnalysisId == analysisId,
@@ -44,13 +31,61 @@ public class SharedResultService : ISharedResultService
                 "No se encontró el análisis.");
         }
 
+        var existingSharedResult =
+            await _dbContext.SharedResults
+                .SingleOrDefaultAsync(
+                    x => x.AnalysisId == analysisId,
+                    cancellationToken);
+
+        var now = DateTime.UtcNow;
+
+        /*
+         * Si el enlace ya existe, está activo y no venció,
+         * reutilizamos el mismo token.
+         */
+        if (existingSharedResult is not null &&
+            existingSharedResult.IsActive &&
+            existingSharedResult.ExpiresAtUtc > now)
+        {
+            return existingSharedResult.PublicToken;
+        }
+
+        var newToken = await GenerateUniqueTokenAsync(
+            cancellationToken);
+
+        /*
+         * Si ya existe un registro vencido o desactivado,
+         * lo actualizamos en lugar de insertar otro.
+         */
+        if (existingSharedResult is not null)
+        {
+            existingSharedResult.PublicToken = newToken;
+            existingSharedResult.IsActive = true;
+            existingSharedResult.CreatedAtUtc = now;
+            existingSharedResult.ExpiresAtUtc =
+                now.AddMonths(12);
+            existingSharedResult.AccessCount = 0;
+            existingSharedResult.LastAccessedAtUtc = null;
+
+            await _dbContext.SaveChangesAsync(
+                cancellationToken);
+
+            return newToken;
+        }
+
+        /*
+         * Solo se inserta un registro cuando el análisis
+         * todavía no tiene ningún resultado compartido.
+         */
         var sharedResult = new SharedResult
         {
             AnalysisId = analysisId,
-            PublicToken = CreateToken(),
-            CreatedAtUtc = DateTime.UtcNow,
-            ExpiresAtUtc = DateTime.UtcNow.AddMonths(12),
-            IsActive = true
+            PublicToken = newToken,
+            IsActive = true,
+            CreatedAtUtc = now,
+            ExpiresAtUtc = now.AddMonths(12),
+            AccessCount = 0,
+            LastAccessedAtUtc = null
         };
 
         _dbContext.SharedResults.Add(sharedResult);
@@ -58,7 +93,7 @@ public class SharedResultService : ISharedResultService
         await _dbContext.SaveChangesAsync(
             cancellationToken);
 
-        return sharedResult.PublicToken;
+        return newToken;
     }
 
     public async Task<Guid?> GetAnalysisIdAsync(
@@ -70,13 +105,16 @@ public class SharedResultService : ISharedResultService
             return null;
         }
 
-        var sharedResult = await _dbContext.SharedResults
-            .SingleOrDefaultAsync(
-                x =>
-                    x.PublicToken == publicToken &&
-                    x.IsActive &&
-                    x.ExpiresAtUtc > DateTime.UtcNow,
-                cancellationToken);
+        var now = DateTime.UtcNow;
+
+        var sharedResult =
+            await _dbContext.SharedResults
+                .SingleOrDefaultAsync(
+                    x =>
+                        x.PublicToken == publicToken &&
+                        x.IsActive &&
+                        x.ExpiresAtUtc > now,
+                    cancellationToken);
 
         if (sharedResult is null)
         {
@@ -84,7 +122,7 @@ public class SharedResultService : ISharedResultService
         }
 
         sharedResult.AccessCount++;
-        sharedResult.LastAccessedAtUtc = DateTime.UtcNow;
+        sharedResult.LastAccessedAtUtc = now;
 
         await _dbContext.SaveChangesAsync(
             cancellationToken);
@@ -92,10 +130,25 @@ public class SharedResultService : ISharedResultService
         return sharedResult.AnalysisId;
     }
 
-    private static string CreateToken()
+    private async Task<string> GenerateUniqueTokenAsync(
+        CancellationToken cancellationToken)
     {
-        return Convert
-            .ToHexString(RandomNumberGenerator.GetBytes(24))
-            .ToLowerInvariant();
+        string token;
+        bool tokenExists;
+
+        do
+        {
+            token = Convert.ToHexString(
+                    RandomNumberGenerator.GetBytes(24))
+                .ToLowerInvariant();
+
+            tokenExists = await _dbContext.SharedResults
+                .AnyAsync(
+                    x => x.PublicToken == token,
+                    cancellationToken);
+        }
+        while (tokenExists);
+
+        return token;
     }
 }

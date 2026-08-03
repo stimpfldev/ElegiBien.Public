@@ -23,4 +23,8 @@
     <ProjectReference Include="..\ElegiBien.Infrastructure\ElegiBien.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\icons\" />
+  </ItemGroup>
+
 </Project>

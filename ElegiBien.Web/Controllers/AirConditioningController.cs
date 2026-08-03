@@ -4,6 +4,7 @@ using ElegiBien.Domain.Entities;
 using ElegiBien.Domain.Enums;
 using ElegiBien.Web.Models.AirConditioning;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace ElegiBien.Web.Controllers;
 
@@ -38,6 +39,7 @@ public class AirConditioningController : Controller
     }
 
     [HttpGet]
+
     public IActionResult Index()
     {
         return View(new AirConditioningQuickViewModel());
@@ -45,6 +47,7 @@ public class AirConditioningController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
+    [EnableRateLimiting("public-forms")]
     public async Task<IActionResult> Index(
         AirConditioningQuickViewModel model,
         CancellationToken cancellationToken)
@@ -152,6 +155,7 @@ public class AirConditioningController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
+    [EnableRateLimiting("public-forms")]
     public async Task<IActionResult> Compare(
         AirConditioningComparisonViewModel model,
         CancellationToken cancellationToken)
