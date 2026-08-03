@@ -17,6 +17,29 @@ builder.Services.AddScoped<
     ElegiBien.Application.Interfaces.IAirConditioningProductComparer,
     ElegiBien.Application.Services.AirConditioningProductComparer>();
 
+builder.Services.AddScoped<
+    ElegiBien.Application.Interfaces.IAirConditioningAnalysisReader,
+    ElegiBien.Infrastructure.Persistence.AirConditioningAnalysisReader>();
+
+builder.Services.AddScoped<
+    ElegiBien.Application.Interfaces.IAirConditioningComparisonStore,
+    ElegiBien.Infrastructure.Persistence.AirConditioningComparisonStore>();
+
+builder.Services.AddScoped<
+    ElegiBien.Application.Interfaces.ISharedResultService,
+    ElegiBien.Infrastructure.Persistence.SharedResultService>();
+
+builder.Services.AddScoped<
+    ElegiBien.Application.Interfaces.ISharedAirConditioningResultReader,
+    ElegiBien.Infrastructure.Persistence.SharedAirConditioningResultReader>();
+
+builder.Services.AddScoped<
+    ElegiBien.Application.Interfaces.IAnonymousAnalyticsService,
+    ElegiBien.Infrastructure.Persistence.AnonymousAnalyticsService>();
+
+
+
+
 
 
 
@@ -53,7 +76,7 @@ app.MapStaticAssets();
 
 app.MapControllerRoute(
         name: "default",
-        pattern: "{controller=Home}/{action=Index}/{id?}")
+        pattern: "{controller=AirConditioning}/{action=Index}/{id?}")
     .WithStaticAssets();
 
 app.Run();

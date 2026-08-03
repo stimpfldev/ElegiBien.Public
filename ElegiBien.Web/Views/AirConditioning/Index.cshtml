@@ -78,7 +78,31 @@
                     <span asp-validation-for="Input.SunExposure"
                           class="text-danger"></span>
                 </div>
+                <div class="form-check mb-2">
+                    <input asp-for="AllowAnonymousAnalytics"
+                           class="form-check-input" />
 
+                    <label asp-for="AllowAnonymousAnalytics"
+                           class="form-check-label">
+                        Permitir estadísticas anónimas para mejorar ElegíBien.
+                    </label>
+                </div>
+
+                <div class="form-check mb-3">
+                    <input asp-for="AllowRadarData"
+                           class="form-check-input" />
+
+                    <label asp-for="AllowRadarData"
+                           class="form-check-label">
+                        Permitir que los datos anónimos de esta consulta
+                        se incorporen en futuras estadísticas del Radar ElegíBien.
+                    </label>
+                </div>
+
+                <p class="small text-muted">
+                    No solicitamos nombre, documento, teléfono,
+                    domicilio ni información bancaria.
+                </p>
                 <button type="submit"
                         class="btn btn-primary">
                     Calcular frigorías
@@ -145,6 +169,12 @@
                                 la evaluación de un técnico matriculado.
                             </div>
                         }
+                        <a asp-controller="AirConditioning"
+                           asp-action="Compare"
+                           asp-route-id="@Model.Result.AnalysisId"
+                           class="btn btn-success mt-3">
+                            Comparar dos equipos
+                        </a>
                     </div>
                 </div>
             }
