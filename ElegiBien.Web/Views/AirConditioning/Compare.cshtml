@@ -1,4 +1,4 @@
-﻿@model ElegiBien.Web.Models.AirConditioning.AirConditioningComparisonViewModel
+@model ElegiBien.Web.Models.AirConditioning.AirConditioningComparisonViewModel
 @using ElegiBien.Domain.Enums
 
 @{
@@ -81,7 +81,7 @@
                 <input asp-for="AnalysisId" type="hidden" />
 
                 <div asp-validation-summary="ModelOnly"
-                     class="text-danger mb-3">
+                     class="text-danger mb-3" data-validation-summary>
                 </div>
 
                 <div class="row">
@@ -288,15 +288,21 @@
                     </div>
                 </div>
 
-                <button type="submit"
+                <div class="mobile-submit-bar">
+
+
+                    <button type="submit"
                         class="btn btn-primary">
                     Comparar equipos
                 </button>
+
+
+                </div>
             </form>
 
             @if (Model.Result is not null)
             {
-                <div class="card mt-4">
+                <div class="card mt-4 result-focus-target" data-auto-scroll-target tabindex="-1">
                     <div class="card-body">
                         <h2 class="h3">
                             Resultado ElegíBien
@@ -412,14 +418,14 @@
                     </label>
 
                     <div class="input-group">
-                        <input id="shareUrl"
+                        <input id="shareUrl" data-share-url
                                class="form-control"
                                value="@Model.ShareUrl"
                                readonly />
 
                         <button type="button"
                                 class="btn btn-outline-secondary"
-                                onclick="copyShareUrl()">
+                                data-copy-share-url>
                             Copiar enlace
                         </button>
                     </div>
@@ -432,15 +438,4 @@
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 
-    <script>
-        function copyShareUrl() {
-            const input = document.getElementById("shareUrl");
-
-            if (!input) {
-                return;
-            }
-
-            navigator.clipboard.writeText(input.value);
-        }
-    </script>
 }

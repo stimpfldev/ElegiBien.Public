@@ -1,0 +1,376 @@
+@model ElegiBien.Web.Models.Paint.PaintComparisonViewModel
+@using ElegiBien.Domain.Enums
+
+@{
+    ViewData["Title"] = "Comparar pinturas";
+}
+
+@functions {
+    private static string StatusText(PaintCoverageStatus value)
+    {
+        return value switch
+        {
+            PaintCoverageStatus.Adequate =>
+                "Adecuada",
+
+            PaintCoverageStatus.Excessive =>
+                "Exceso de compra",
+
+            PaintCoverageStatus.Insufficient =>
+                "Insuficiente",
+
+            _ => "Desconocida"
+        };
+    }
+
+    private static string FactorText(PaintScoreFactorType value)
+    {
+        return value switch
+        {
+            PaintScoreFactorType.CoverageAdequacy =>
+                "Aprovechamiento",
+
+            PaintScoreFactorType.TotalCost =>
+                "Costo total",
+
+            PaintScoreFactorType.Washability =>
+                "Lavabilidad",
+
+            PaintScoreFactorType.DryingTime =>
+                "Secado",
+
+            _ => "Factor"
+        };
+    }
+}
+
+<div class="container py-4">
+    <h1>Compará dos pinturas</h1>
+
+    <p>
+        Superficie neta:
+        <strong>
+            @Model.NetAreaSquareMeters.ToString("N2") m²
+        </strong>.
+
+        Referencia inicial:
+        <strong>
+            @Model.ReferenceLiters.ToString("N2") litros
+        </strong>.
+    </p>
+
+    <form asp-action="Compare" method="post">
+        @Html.AntiForgeryToken()
+
+        <input asp-for="AnalysisId" type="hidden" />
+
+        <div asp-validation-summary="ModelOnly"
+             class="text-danger mb-3" data-validation-summary>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h2 class="h4">Pintura A</h2>
+
+                        <div class="mb-3">
+                            <label asp-for="FirstProduct.Name"
+                                   class="form-label">
+                            </label>
+
+                            <input asp-for="FirstProduct.Name"
+                                   class="form-control" />
+
+                            <span asp-validation-for="FirstProduct.Name"
+                                  class="text-danger">
+                            </span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="FirstProduct.ContainerLiters"
+                                   class="form-label">
+                            </label>
+
+                            <input asp-for="FirstProduct.ContainerLiters"
+                                   class="form-control"
+                                   step="0.1" />
+
+                            <span asp-validation-for="FirstProduct.ContainerLiters"
+                                  class="text-danger">
+                            </span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="FirstProduct.PricePerContainer"
+                                   class="form-label">
+                            </label>
+
+                            <input asp-for="FirstProduct.PricePerContainer"
+                                   class="form-control"
+                                   step="0.01" />
+
+                            <span asp-validation-for="FirstProduct.PricePerContainer"
+                                  class="text-danger">
+                            </span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="FirstProduct.CoverageSquareMetersPerLiterPerCoat"
+                                   class="form-label">
+                            </label>
+
+                            <input asp-for="FirstProduct.CoverageSquareMetersPerLiterPerCoat"
+                                   class="form-control"
+                                   step="0.1" />
+
+                            <span asp-validation-for="FirstProduct.CoverageSquareMetersPerLiterPerCoat"
+                                  class="text-danger">
+                            </span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="FirstProduct.Washability"
+                                   class="form-label">
+                            </label>
+
+                            <select asp-for="FirstProduct.Washability"
+                                    class="form-select">
+                                <option value="@PaintWashability.Unknown">
+                                    No lo sé
+                                </option>
+
+                                <option value="@PaintWashability.Low">
+                                    Baja
+                                </option>
+
+                                <option value="@PaintWashability.Medium">
+                                    Media
+                                </option>
+
+                                <option value="@PaintWashability.High">
+                                    Alta
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="FirstProduct.DryingHours"
+                                   class="form-label">
+                            </label>
+
+                            <input asp-for="FirstProduct.DryingHours"
+                                   class="form-control"
+                                   step="0.1" />
+
+                            <span asp-validation-for="FirstProduct.DryingHours"
+                                  class="text-danger">
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h2 class="h4">Pintura B</h2>
+
+                        <div class="mb-3">
+                            <label asp-for="SecondProduct.Name"
+                                   class="form-label">
+                            </label>
+
+                            <input asp-for="SecondProduct.Name"
+                                   class="form-control" />
+
+                            <span asp-validation-for="SecondProduct.Name"
+                                  class="text-danger">
+                            </span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="SecondProduct.ContainerLiters"
+                                   class="form-label">
+                            </label>
+
+                            <input asp-for="SecondProduct.ContainerLiters"
+                                   class="form-control"
+                                   step="0.1" />
+
+                            <span asp-validation-for="SecondProduct.ContainerLiters"
+                                  class="text-danger">
+                            </span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="SecondProduct.PricePerContainer"
+                                   class="form-label">
+                            </label>
+
+                            <input asp-for="SecondProduct.PricePerContainer"
+                                   class="form-control"
+                                   step="0.01" />
+
+                            <span asp-validation-for="SecondProduct.PricePerContainer"
+                                  class="text-danger">
+                            </span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="SecondProduct.CoverageSquareMetersPerLiterPerCoat"
+                                   class="form-label">
+                            </label>
+
+                            <input asp-for="SecondProduct.CoverageSquareMetersPerLiterPerCoat"
+                                   class="form-control"
+                                   step="0.1" />
+
+                            <span asp-validation-for="SecondProduct.CoverageSquareMetersPerLiterPerCoat"
+                                  class="text-danger">
+                            </span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="SecondProduct.Washability"
+                                   class="form-label">
+                            </label>
+
+                            <select asp-for="SecondProduct.Washability"
+                                    class="form-select">
+                                <option value="@PaintWashability.Unknown">
+                                    No lo sé
+                                </option>
+
+                                <option value="@PaintWashability.Low">
+                                    Baja
+                                </option>
+
+                                <option value="@PaintWashability.Medium">
+                                    Media
+                                </option>
+
+                                <option value="@PaintWashability.High">
+                                    Alta
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="SecondProduct.DryingHours"
+                                   class="form-label">
+                            </label>
+
+                            <input asp-for="SecondProduct.DryingHours"
+                                   class="form-control"
+                                   step="0.1" />
+
+                            <span asp-validation-for="SecondProduct.DryingHours"
+                                  class="text-danger">
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mobile-submit-bar">
+
+
+            <button class="btn btn-primary"
+                type="submit">
+            Comparar pinturas
+        </button>
+
+
+        </div>
+    </form>
+
+    @if (Model.Result is not null)
+    {
+        <div class="card mt-4 result-focus-target" data-auto-scroll-target tabindex="-1">
+            <div class="card-body">
+                <h2 class="h3">
+                    Resultado ElegíBien
+                </h2>
+
+                <div class="alert alert-primary">
+                    @Model.Result.Recommendation
+                </div>
+
+                <div class="row">
+                    @foreach (var product in new[]
+                    {
+                        Model.Result.FirstProduct,
+                        Model.Result.SecondProduct
+                    })
+                    {
+                        <div class="col-md-6 mb-4">
+                            <h3 class="h5">
+                                @product.ProductName
+                            </h3>
+
+                            <p class="fs-4">
+                                <strong>
+                                    @product.TotalScore/100
+                                </strong>
+                            </p>
+
+                            <p>
+                                @product.ContainersRequired envases ·
+                                @product.LitersPurchased.ToString("N2") litros ·
+                                $@product.TotalCost.ToString("N2")
+                            </p>
+
+                            <p>
+                                Cobertura:
+                                <strong>
+                                    @StatusText(product.CoverageStatus)
+                                </strong>
+                            </p>
+
+                            <ul>
+                                @foreach (var factor in product.Factors)
+                                {
+                                    <li class="mb-2">
+                                        <strong>
+                                            @FactorText(factor.FactorType):
+                                            @factor.Score.ToString("N1")
+                                            /
+                                            @factor.MaximumScore.ToString("N0")
+                                        </strong>
+
+                                        <br />
+
+                                        @factor.Explanation
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+
+    @if (!string.IsNullOrWhiteSpace(Model.ShareUrl))
+    {
+        <div class="input-group mt-3">
+            <input id="shareUrl" data-share-url
+                   class="form-control"
+                   value="@Model.ShareUrl"
+                   readonly />
+
+            <button type="button"
+                    class="btn btn-outline-secondary"
+                    data-copy-share-url>
+                Copiar enlace
+            </button>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+}

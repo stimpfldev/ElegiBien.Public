@@ -1,0 +1,41 @@
+@model ElegiBien.Web.Models.Contact.ContactViewModel
+
+@{
+    ViewData["Title"] = "Contacto";
+    ViewData["Description"] = "Canal de contacto de ElegíBien para consultas, sugerencias y oportunidades de colaboración.";
+}
+
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-xl-7">
+            <span class="eyebrow">Estamos para escucharte</span>
+            <h1>Contactanos</h1>
+
+            <p class="lead">
+                Podés escribirnos por consultas, sugerencias, errores detectados
+                u oportunidades de colaboración.
+            </p>
+
+            <section class="contact-card" aria-labelledby="contact-email-title">
+                <h2 id="contact-email-title" class="h4">Correo electrónico</h2>
+
+                @if (Model.IsConfigured)
+                {
+                    <p>Respondemos desde la dirección oficial de ElegíBien.</p>
+
+                    <a class="btn btn-primary"
+                       href="mailto:@Model.Email">
+                        Escribir a @Model.Email
+                    </a>
+                }
+                else
+                {
+                    <p class="mb-0">
+                        El canal de contacto está preparado. La dirección oficial
+                        se publicará próximamente.
+                    </p>
+                }
+            </section>
+        </div>
+    </div>
+</div>

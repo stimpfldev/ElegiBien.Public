@@ -1,6 +1,5 @@
-﻿using ElegiBien.Domain.Entities;
+using ElegiBien.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection.Emit;
 
 namespace ElegiBien.Infrastructure.Data;
 
@@ -25,14 +24,30 @@ public class ElegiBienDbContext : DbContext
     public DbSet<DimensioningResult> DimensioningResults =>
         Set<DimensioningResult>();
 
-    public DbSet<ProductAlternative> ProductAlternatives =>
-        Set<ProductAlternative>();
+    public DbSet<PaintInput> PaintInputs => Set<PaintInput>();
 
-    public DbSet<ProductScore> ProductScores =>
-        Set<ProductScore>();
+    public DbSet<PaintCalculationResult> PaintCalculationResults =>
+        Set<PaintCalculationResult>();
 
-    public DbSet<ScoreFactor> ScoreFactors =>
-        Set<ScoreFactor>();
+    public DbSet<FlooringInput> FlooringInputs => Set<FlooringInput>();
+
+    public DbSet<FlooringCalculationResult> FlooringCalculationResults =>
+        Set<FlooringCalculationResult>();
+
+    public DbSet<HeatingInput> HeatingInputs =>
+        Set<HeatingInput>();
+
+    public DbSet<HeatingCalculationResult> HeatingCalculationResults =>
+        Set<HeatingCalculationResult>();
+
+    public DbSet<ComparisonAlternative> ComparisonAlternatives =>
+        Set<ComparisonAlternative>();
+
+    public DbSet<ComparisonScore> ComparisonScores =>
+        Set<ComparisonScore>();
+
+    public DbSet<ComparisonFactor> ComparisonFactors =>
+        Set<ComparisonFactor>();
 
     public DbSet<SharedResult> SharedResults =>
         Set<SharedResult>();

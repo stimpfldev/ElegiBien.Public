@@ -1,0 +1,54 @@
+@model ElegiBien.Application.DTOs.HeatingProductAlternativeDto
+@using ElegiBien.Domain.Enums
+
+<div class="row">
+    <div class="col-md-6 mb-3">
+        <label asp-for="Name" class="form-label">Nombre del equipo</label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    <div class="col-md-6 mb-3">
+        <label asp-for="SystemType" class="form-label">Tipo de sistema</label>
+        <select asp-for="SystemType" class="form-select">
+            <option value="@HeatingSystemType.BalancedFlueGasHeater">Calefactor a gas de tiro balanceado</option>
+            <option value="@HeatingSystemType.ElectricHeater">Estufa eléctrica</option>
+            <option value="@HeatingSystemType.ElectricPanel">Panel eléctrico</option>
+            <option value="@HeatingSystemType.FanHeater">Caloventor</option>
+            <option value="@HeatingSystemType.HeatPumpAirConditioner">Aire acondicionado frío/calor</option>
+        </select>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-4 mb-3">
+        <label asp-for="HeatingCapacityWatts" class="form-label">Potencia térmica</label>
+        <div class="input-group"><input asp-for="HeatingCapacityWatts" class="form-control" step="1" /><span class="input-group-text">W</span></div>
+        <span asp-validation-for="HeatingCapacityWatts" class="text-danger"></span>
+    </div>
+    <div class="col-md-4 mb-3">
+        <label asp-for="PurchasePrice" class="form-label">Precio del equipo</label>
+        <div class="input-group"><span class="input-group-text">$</span><input asp-for="PurchasePrice" class="form-control" step="0.01" /></div>
+        <span asp-validation-for="PurchasePrice" class="text-danger"></span>
+    </div>
+    <div class="col-md-4 mb-3">
+        <label asp-for="EstimatedHourlyCost" class="form-label">Costo estimado por hora</label>
+        <div class="input-group"><span class="input-group-text">$</span><input asp-for="EstimatedHourlyCost" class="form-control" step="0.01" /></div>
+        <span asp-validation-for="EstimatedHourlyCost" class="text-danger"></span>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6 mb-3">
+        <label asp-for="EfficiencyLevel" class="form-label">Eficiencia</label>
+        <select asp-for="EfficiencyLevel" class="form-select">
+            <option value="@HeatingEfficiencyLevel.Low">Baja</option><option value="@HeatingEfficiencyLevel.Medium">Media</option><option value="@HeatingEfficiencyLevel.High">Alta</option><option value="@HeatingEfficiencyLevel.VeryHigh">Muy alta</option>
+        </select>
+    </div>
+    <div class="col-md-6 mb-3">
+        <label asp-for="SafetyLevel" class="form-label">Instalación y seguridad</label>
+        <select asp-for="SafetyLevel" class="form-select">
+            <option value="@HeatingSafetyLevel.RequiresSpecialistInstallation">Requiere instalación profesional</option>
+            <option value="@HeatingSafetyLevel.RequiresDedicatedElectricalCheck">Requiere revisión eléctrica dedicada</option>
+            <option value="@HeatingSafetyLevel.StandardInstallation">Instalación estándar</option>
+            <option value="@HeatingSafetyLevel.SimpleInstallation">Instalación simple</option>
+        </select>
+    </div>
+</div>

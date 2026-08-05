@@ -185,6 +185,124 @@ namespace ElegiBien.Infrastructure.Migrations
                     b.ToTable("Categories", (string)null);
                 });
 
+            modelBuilder.Entity("ElegiBien.Domain.Entities.ComparisonAlternative", b =>
+                {
+                    b.Property<Guid>("ComparisonAlternativeId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("AnalysisId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("CategoryCode")
+                        .HasColumnType("int");
+
+                    b.Property<string>("DetailsJson")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<int>("Position")
+                        .HasColumnType("int");
+
+                    b.Property<decimal?>("TotalCost")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("ComparisonAlternativeId");
+
+                    b.HasIndex("CategoryCode");
+
+                    b.HasIndex("AnalysisId", "Position")
+                        .IsUnique();
+
+                    b.ToTable("ComparisonAlternatives", (string)null);
+                });
+
+            modelBuilder.Entity("ElegiBien.Domain.Entities.ComparisonFactor", b =>
+                {
+                    b.Property<Guid>("ComparisonFactorId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ComparisonScoreId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Explanation")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("FactorCode")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Label")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<decimal>("MaximumScore")
+                        .HasPrecision(8, 2)
+                        .HasColumnType("decimal(8,2)");
+
+                    b.Property<decimal>("Score")
+                        .HasPrecision(8, 2)
+                        .HasColumnType("decimal(8,2)");
+
+                    b.Property<decimal?>("Weight")
+                        .HasPrecision(8, 4)
+                        .HasColumnType("decimal(8,4)");
+
+                    b.HasKey("ComparisonFactorId");
+
+                    b.HasIndex("ComparisonScoreId", "FactorCode")
+                        .IsUnique();
+
+                    b.ToTable("ComparisonFactors", (string)null);
+                });
+
+            modelBuilder.Entity("ElegiBien.Domain.Entities.ComparisonScore", b =>
+                {
+                    b.Property<Guid>("ComparisonScoreId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal?>("AppliedMaximumScore")
+                        .HasPrecision(8, 2)
+                        .HasColumnType("decimal(8,2)");
+
+                    b.Property<Guid>("ComparisonAlternativeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("DetailsJson")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsEligible")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("StatusCode")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<decimal>("TotalScore")
+                        .HasPrecision(8, 2)
+                        .HasColumnType("decimal(8,2)");
+
+                    b.HasKey("ComparisonScoreId");
+
+                    b.HasIndex("ComparisonAlternativeId")
+                        .IsUnique();
+
+                    b.ToTable("ComparisonScores", (string)null);
+                });
+
             modelBuilder.Entity("ElegiBien.Domain.Entities.ConsentRecord", b =>
                 {
                     b.Property<Guid>("ConsentRecordId")
@@ -268,6 +386,183 @@ namespace ElegiBien.Infrastructure.Migrations
                     b.ToTable("DimensioningResults", (string)null);
                 });
 
+            modelBuilder.Entity("ElegiBien.Domain.Entities.FlooringCalculationResult", b =>
+                {
+                    b.Property<Guid>("FlooringCalculationResultId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("AnalysisId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("ConfidenceLevel")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("RequiredAreaSquareMeters")
+                        .HasPrecision(12, 2)
+                        .HasColumnType("decimal(12,2)");
+
+                    b.Property<bool>("RequiresProfessionalReview")
+                        .HasColumnType("bit");
+
+                    b.Property<decimal>("TotalAreaSquareMeters")
+                        .HasPrecision(12, 2)
+                        .HasColumnType("decimal(12,2)");
+
+                    b.Property<decimal>("WasteAreaSquareMeters")
+                        .HasPrecision(12, 2)
+                        .HasColumnType("decimal(12,2)");
+
+                    b.Property<decimal>("WastePercentage")
+                        .HasPrecision(5, 2)
+                        .HasColumnType("decimal(5,2)");
+
+                    b.HasKey("FlooringCalculationResultId");
+
+                    b.HasIndex("AnalysisId")
+                        .IsUnique();
+
+                    b.ToTable("FlooringCalculationResults", (string)null);
+                });
+
+            modelBuilder.Entity("ElegiBien.Domain.Entities.FlooringInput", b =>
+                {
+                    b.Property<Guid>("FlooringInputId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("AnalysisId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("InstallationPattern")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("LengthMeters")
+                        .HasPrecision(8, 2)
+                        .HasColumnType("decimal(8,2)");
+
+                    b.Property<decimal>("WastePercentage")
+                        .HasPrecision(5, 2)
+                        .HasColumnType("decimal(5,2)");
+
+                    b.Property<decimal>("WidthMeters")
+                        .HasPrecision(8, 2)
+                        .HasColumnType("decimal(8,2)");
+
+                    b.HasKey("FlooringInputId");
+
+                    b.HasIndex("AnalysisId")
+                        .IsUnique();
+
+                    b.ToTable("FlooringInputs", (string)null);
+                });
+
+            modelBuilder.Entity("ElegiBien.Domain.Entities.HeatingCalculationResult", b =>
+                {
+                    b.Property<Guid>("HeatingCalculationResultId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("AdjustmentPowerWatts")
+                        .HasPrecision(12, 2)
+                        .HasColumnType("decimal(12,2)");
+
+                    b.Property<Guid>("AnalysisId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("BasePowerWatts")
+                        .HasPrecision(12, 2)
+                        .HasColumnType("decimal(12,2)");
+
+                    b.Property<int>("ConfidenceLevel")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("EstimatedPowerWatts")
+                        .HasPrecision(12, 2)
+                        .HasColumnType("decimal(12,2)");
+
+                    b.Property<decimal>("IdealPowerKcalPerHour")
+                        .HasPrecision(12, 2)
+                        .HasColumnType("decimal(12,2)");
+
+                    b.Property<decimal>("IdealPowerWatts")
+                        .HasPrecision(12, 2)
+                        .HasColumnType("decimal(12,2)");
+
+                    b.Property<decimal>("RecommendedMaximumWatts")
+                        .HasPrecision(12, 2)
+                        .HasColumnType("decimal(12,2)");
+
+                    b.Property<decimal>("RecommendedMinimumWatts")
+                        .HasPrecision(12, 2)
+                        .HasColumnType("decimal(12,2)");
+
+                    b.Property<bool>("RequiresProfessionalReview")
+                        .HasColumnType("bit");
+
+                    b.Property<decimal>("SurfaceSquareMeters")
+                        .HasPrecision(12, 2)
+                        .HasColumnType("decimal(12,2)");
+
+                    b.Property<decimal>("VolumeCubicMeters")
+                        .HasPrecision(12, 2)
+                        .HasColumnType("decimal(12,2)");
+
+                    b.HasKey("HeatingCalculationResultId");
+
+                    b.HasIndex("AnalysisId")
+                        .IsUnique();
+
+                    b.ToTable("HeatingCalculationResults", (string)null);
+                });
+
+            modelBuilder.Entity("ElegiBien.Domain.Entities.HeatingInput", b =>
+                {
+                    b.Property<Guid>("HeatingInputId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("AnalysisId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("ClimateZone")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ExteriorWallsCount")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("HeightMeters")
+                        .HasPrecision(8, 2)
+                        .HasColumnType("decimal(8,2)");
+
+                    b.Property<int>("InsulationLevel")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsHeightAssumed")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsOpenToAnotherSpace")
+                        .HasColumnType("bit");
+
+                    b.Property<decimal>("LengthMeters")
+                        .HasPrecision(8, 2)
+                        .HasColumnType("decimal(8,2)");
+
+                    b.Property<decimal>("WidthMeters")
+                        .HasPrecision(8, 2)
+                        .HasColumnType("decimal(8,2)");
+
+                    b.Property<int>("WindowExposure")
+                        .HasColumnType("int");
+
+                    b.HasKey("HeatingInputId");
+
+                    b.HasIndex("AnalysisId")
+                        .IsUnique();
+
+                    b.ToTable("HeatingInputs", (string)null);
+                });
+
             modelBuilder.Entity("ElegiBien.Domain.Entities.MethodologyVersion", b =>
                 {
                     b.Property<int>("MethodologyVersionId")
@@ -306,115 +601,103 @@ namespace ElegiBien.Infrastructure.Migrations
                     b.ToTable("MethodologyVersions", (string)null);
                 });
 
-            modelBuilder.Entity("ElegiBien.Domain.Entities.ProductAlternative", b =>
+            modelBuilder.Entity("ElegiBien.Domain.Entities.PaintCalculationResult", b =>
                 {
-                    b.Property<Guid>("ProductAlternativeId")
+                    b.Property<Guid>("PaintCalculationResultId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("AdjustedAreaSquareMeters")
+                        .HasPrecision(12, 2)
+                        .HasColumnType("decimal(12,2)");
+
+                    b.Property<Guid>("AnalysisId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("CeilingAreaSquareMeters")
+                        .HasPrecision(12, 2)
+                        .HasColumnType("decimal(12,2)");
+
+                    b.Property<int>("ConfidenceLevel")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("DeductedAreaSquareMeters")
+                        .HasPrecision(12, 2)
+                        .HasColumnType("decimal(12,2)");
+
+                    b.Property<decimal>("NetAreaSquareMeters")
+                        .HasPrecision(12, 2)
+                        .HasColumnType("decimal(12,2)");
+
+                    b.Property<decimal>("ReferenceCoverageSquareMetersPerLiter")
+                        .HasPrecision(8, 2)
+                        .HasColumnType("decimal(8,2)");
+
+                    b.Property<decimal>("ReferenceLiters")
+                        .HasPrecision(10, 2)
+                        .HasColumnType("decimal(10,2)");
+
+                    b.Property<bool>("RequiresProfessionalReview")
+                        .HasColumnType("bit");
+
+                    b.Property<decimal>("WallAreaSquareMeters")
+                        .HasPrecision(12, 2)
+                        .HasColumnType("decimal(12,2)");
+
+                    b.HasKey("PaintCalculationResultId");
+
+                    b.HasIndex("AnalysisId")
+                        .IsUnique();
+
+                    b.ToTable("PaintCalculationResults", (string)null);
+                });
+
+            modelBuilder.Entity("ElegiBien.Domain.Entities.PaintInput", b =>
+                {
+                    b.Property<Guid>("PaintInputId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("AnalysisId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Brand")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<decimal>("CapacityFrigories")
-                        .HasPrecision(12, 2)
-                        .HasColumnType("decimal(12,2)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<decimal?>("NominalConsumptionWatts")
-                        .HasPrecision(12, 2)
-                        .HasColumnType("decimal(12,2)");
-
-                    b.Property<decimal>("Price")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("ReferenceUrl")
-                        .HasMaxLength(1000)
-                        .HasColumnType("nvarchar(1000)");
-
-                    b.Property<int>("Technology")
+                    b.Property<int>("CoatCount")
                         .HasColumnType("int");
 
-                    b.Property<int>("WarrantyMonths")
+                    b.Property<int>("DoorCount")
                         .HasColumnType("int");
 
-                    b.HasKey("ProductAlternativeId");
+                    b.Property<decimal>("HeightMeters")
+                        .HasPrecision(8, 2)
+                        .HasColumnType("decimal(8,2)");
 
-                    b.HasIndex("AnalysisId");
-
-                    b.ToTable("ProductAlternatives", (string)null);
-                });
-
-            modelBuilder.Entity("ElegiBien.Domain.Entities.ProductScore", b =>
-                {
-                    b.Property<Guid>("ProductScoreId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int?>("AppliedMaximumScore")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CapacityStatus")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ConfidenceLevel")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsEligible")
+                    b.Property<bool>("IncludeCeiling")
                         .HasColumnType("bit");
 
-                    b.Property<Guid>("ProductAlternativeId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<decimal>("LengthMeters")
+                        .HasPrecision(8, 2)
+                        .HasColumnType("decimal(8,2)");
 
-                    b.Property<int>("TotalScore")
+                    b.Property<int>("SurfaceCondition")
                         .HasColumnType("int");
 
-                    b.HasKey("ProductScoreId");
+                    b.Property<decimal>("WastePercentage")
+                        .HasPrecision(5, 2)
+                        .HasColumnType("decimal(5,2)");
 
-                    b.HasIndex("ProductAlternativeId")
+                    b.Property<decimal>("WidthMeters")
+                        .HasPrecision(8, 2)
+                        .HasColumnType("decimal(8,2)");
+
+                    b.Property<int>("WindowCount")
+                        .HasColumnType("int");
+
+                    b.HasKey("PaintInputId");
+
+                    b.HasIndex("AnalysisId")
                         .IsUnique();
 
-                    b.ToTable("ProductScores", (string)null);
-                });
-
-            modelBuilder.Entity("ElegiBien.Domain.Entities.ScoreFactor", b =>
-                {
-                    b.Property<Guid>("ScoreFactorId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Explanation")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<int>("FactorType")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("MaximumScore")
-                        .HasPrecision(6, 2)
-                        .HasColumnType("decimal(6,2)");
-
-                    b.Property<Guid>("ProductScoreId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<decimal>("Score")
-                        .HasPrecision(6, 2)
-                        .HasColumnType("decimal(6,2)");
-
-                    b.HasKey("ScoreFactorId");
-
-                    b.HasIndex("ProductScoreId");
-
-                    b.ToTable("ScoreFactors", (string)null);
+                    b.ToTable("PaintInputs", (string)null);
                 });
 
             modelBuilder.Entity("ElegiBien.Domain.Entities.SharedResult", b =>
@@ -507,6 +790,39 @@ namespace ElegiBien.Infrastructure.Migrations
                     b.Navigation("Category");
                 });
 
+            modelBuilder.Entity("ElegiBien.Domain.Entities.ComparisonAlternative", b =>
+                {
+                    b.HasOne("ElegiBien.Domain.Entities.Analysis", "Analysis")
+                        .WithMany("ComparisonAlternatives")
+                        .HasForeignKey("AnalysisId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Analysis");
+                });
+
+            modelBuilder.Entity("ElegiBien.Domain.Entities.ComparisonFactor", b =>
+                {
+                    b.HasOne("ElegiBien.Domain.Entities.ComparisonScore", "ComparisonScore")
+                        .WithMany("Factors")
+                        .HasForeignKey("ComparisonScoreId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ComparisonScore");
+                });
+
+            modelBuilder.Entity("ElegiBien.Domain.Entities.ComparisonScore", b =>
+                {
+                    b.HasOne("ElegiBien.Domain.Entities.ComparisonAlternative", "Alternative")
+                        .WithOne("Score")
+                        .HasForeignKey("ElegiBien.Domain.Entities.ComparisonScore", "ComparisonAlternativeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Alternative");
+                });
+
             modelBuilder.Entity("ElegiBien.Domain.Entities.ConsentRecord", b =>
                 {
                     b.HasOne("ElegiBien.Domain.Entities.Analysis", "Analysis")
@@ -529,6 +845,50 @@ namespace ElegiBien.Infrastructure.Migrations
                     b.Navigation("Analysis");
                 });
 
+            modelBuilder.Entity("ElegiBien.Domain.Entities.FlooringCalculationResult", b =>
+                {
+                    b.HasOne("ElegiBien.Domain.Entities.Analysis", "Analysis")
+                        .WithOne("FlooringCalculationResult")
+                        .HasForeignKey("ElegiBien.Domain.Entities.FlooringCalculationResult", "AnalysisId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Analysis");
+                });
+
+            modelBuilder.Entity("ElegiBien.Domain.Entities.FlooringInput", b =>
+                {
+                    b.HasOne("ElegiBien.Domain.Entities.Analysis", "Analysis")
+                        .WithOne("FlooringInput")
+                        .HasForeignKey("ElegiBien.Domain.Entities.FlooringInput", "AnalysisId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Analysis");
+                });
+
+            modelBuilder.Entity("ElegiBien.Domain.Entities.HeatingCalculationResult", b =>
+                {
+                    b.HasOne("ElegiBien.Domain.Entities.Analysis", "Analysis")
+                        .WithOne("HeatingCalculationResult")
+                        .HasForeignKey("ElegiBien.Domain.Entities.HeatingCalculationResult", "AnalysisId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Analysis");
+                });
+
+            modelBuilder.Entity("ElegiBien.Domain.Entities.HeatingInput", b =>
+                {
+                    b.HasOne("ElegiBien.Domain.Entities.Analysis", "Analysis")
+                        .WithOne("HeatingInput")
+                        .HasForeignKey("ElegiBien.Domain.Entities.HeatingInput", "AnalysisId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Analysis");
+                });
+
             modelBuilder.Entity("ElegiBien.Domain.Entities.MethodologyVersion", b =>
                 {
                     b.HasOne("ElegiBien.Domain.Entities.Category", "Category")
@@ -540,37 +900,26 @@ namespace ElegiBien.Infrastructure.Migrations
                     b.Navigation("Category");
                 });
 
-            modelBuilder.Entity("ElegiBien.Domain.Entities.ProductAlternative", b =>
+            modelBuilder.Entity("ElegiBien.Domain.Entities.PaintCalculationResult", b =>
                 {
                     b.HasOne("ElegiBien.Domain.Entities.Analysis", "Analysis")
-                        .WithMany("ProductAlternatives")
-                        .HasForeignKey("AnalysisId")
+                        .WithOne("PaintCalculationResult")
+                        .HasForeignKey("ElegiBien.Domain.Entities.PaintCalculationResult", "AnalysisId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Analysis");
                 });
 
-            modelBuilder.Entity("ElegiBien.Domain.Entities.ProductScore", b =>
+            modelBuilder.Entity("ElegiBien.Domain.Entities.PaintInput", b =>
                 {
-                    b.HasOne("ElegiBien.Domain.Entities.ProductAlternative", "ProductAlternative")
-                        .WithOne("ProductScore")
-                        .HasForeignKey("ElegiBien.Domain.Entities.ProductScore", "ProductAlternativeId")
+                    b.HasOne("ElegiBien.Domain.Entities.Analysis", "Analysis")
+                        .WithOne("PaintInput")
+                        .HasForeignKey("ElegiBien.Domain.Entities.PaintInput", "AnalysisId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("ProductAlternative");
-                });
-
-            modelBuilder.Entity("ElegiBien.Domain.Entities.ScoreFactor", b =>
-                {
-                    b.HasOne("ElegiBien.Domain.Entities.ProductScore", "ProductScore")
-                        .WithMany("Factors")
-                        .HasForeignKey("ProductScoreId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ProductScore");
+                    b.Navigation("Analysis");
                 });
 
             modelBuilder.Entity("ElegiBien.Domain.Entities.SharedResult", b =>
@@ -590,21 +939,33 @@ namespace ElegiBien.Infrastructure.Migrations
 
                     b.Navigation("AnalyticsEvents");
 
+                    b.Navigation("ComparisonAlternatives");
+
                     b.Navigation("ConsentRecords");
 
                     b.Navigation("DimensioningResult");
 
-                    b.Navigation("ProductAlternatives");
+                    b.Navigation("FlooringCalculationResult");
+
+                    b.Navigation("FlooringInput");
+
+                    b.Navigation("HeatingCalculationResult");
+
+                    b.Navigation("HeatingInput");
+
+                    b.Navigation("PaintCalculationResult");
+
+                    b.Navigation("PaintInput");
 
                     b.Navigation("SharedResult");
                 });
 
-            modelBuilder.Entity("ElegiBien.Domain.Entities.ProductAlternative", b =>
+            modelBuilder.Entity("ElegiBien.Domain.Entities.ComparisonAlternative", b =>
                 {
-                    b.Navigation("ProductScore");
+                    b.Navigation("Score");
                 });
 
-            modelBuilder.Entity("ElegiBien.Domain.Entities.ProductScore", b =>
+            modelBuilder.Entity("ElegiBien.Domain.Entities.ComparisonScore", b =>
                 {
                     b.Navigation("Factors");
                 });

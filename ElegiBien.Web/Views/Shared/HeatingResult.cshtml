@@ -1,0 +1,17 @@
+@model ElegiBien.Application.DTOs.SharedHeatingResultDto
+@using ElegiBien.Domain.Enums
+@{ ViewData["Title"] = "Resultado compartido de calefacción"; ViewData["Robots"] = "noindex, nofollow"; }
+<div class="container py-4"><div class="row justify-content-center"><div class="col-lg-9">
+<h1>Resultado ElegíBien: Calefacción</h1>
+<p>Ambiente: <strong>@Model.SurfaceSquareMeters.ToString("N2") m²</strong> · @Model.VolumeCubicMeters.ToString("N2") m³</p>
+<p>Rango recomendado: <strong>@Model.RecommendedMinimumWatts.ToString("N0") a @Model.RecommendedMaximumWatts.ToString("N0") W</strong></p>
+<p>Potencia ideal: <strong>@Model.IdealPowerWatts.ToString("N0") W</strong> (@Model.IdealPowerKcalPerHour.ToString("N0") kcal/h)</p>
+<div class="alert alert-primary">@Model.Recommendation</div>
+@foreach (var product in Model.Products) { <div class="card mb-3"><div class="card-body"><h2 class="h4">@product.ProductName</h2><p class="fs-4"><strong>@product.TotalScore/100</strong></p><p>Capacidad: <strong>@CapacityText(product.CapacityStatus)</strong></p><ul>@foreach (var factor in product.Factors) { <li class="mb-2"><strong>@FactorText(factor.FactorType): @factor.Score.ToString("N1")/@factor.MaximumScore.ToString("N0")</strong><br />@factor.Explanation</li> }</ul></div></div> }
+<div class="alert alert-info">Resultado orientativo. La instalación de gas o una instalación eléctrica dedicada debe ser revisada por un profesional habilitado.</div>
+<a asp-controller="Heating" asp-action="Index" class="btn btn-primary">Calcular otro ambiente</a>
+</div></div></div>
+@functions {
+private static string CapacityText(HeatingCapacityStatus status) => status switch { HeatingCapacityStatus.Insufficient => "Insuficiente", HeatingCapacityStatus.Correct => "Correcta", HeatingCapacityStatus.AcceptableOversized => "Sobredimensionada aceptable", HeatingCapacityStatus.RelevantOversized => "Sobredimensionada", _ => "Sin datos" };
+private static string FactorText(HeatingScoreFactorType factor) => factor switch { HeatingScoreFactorType.CapacityAdequacy => "Adecuación de potencia", HeatingScoreFactorType.EstimatedOperatingCost => "Costo estimado de uso", HeatingScoreFactorType.Efficiency => "Eficiencia", HeatingScoreFactorType.SafetyAndInstallation => "Seguridad e instalación", HeatingScoreFactorType.PurchasePrice => "Precio del equipo", _ => "Factor" };
+}

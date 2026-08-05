@@ -1,4 +1,4 @@
-﻿using ElegiBien.Domain.Enums;
+using ElegiBien.Domain.Enums;
 
 namespace ElegiBien.Domain.Entities;
 
@@ -28,10 +28,22 @@ public class Analysis
 
     public DimensioningResult? DimensioningResult { get; set; }
 
+    public PaintInput? PaintInput { get; set; }
+
+    public PaintCalculationResult? PaintCalculationResult { get; set; }
+
+    public FlooringInput? FlooringInput { get; set; }
+
+    public FlooringCalculationResult? FlooringCalculationResult { get; set; }
+
+    public HeatingInput? HeatingInput { get; set; }
+
+    public HeatingCalculationResult? HeatingCalculationResult { get; set; }
+
     public SharedResult? SharedResult { get; set; }
 
-    public ICollection<ProductAlternative> ProductAlternatives { get; set; } =
-        new List<ProductAlternative>();
+    public ICollection<ComparisonAlternative> ComparisonAlternatives { get; set; } =
+        new List<ComparisonAlternative>();
 
     public ICollection<ConsentRecord> ConsentRecords { get; set; } =
         new List<ConsentRecord>();

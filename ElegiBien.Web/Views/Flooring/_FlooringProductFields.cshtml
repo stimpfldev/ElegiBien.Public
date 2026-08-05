@@ -1,0 +1,61 @@
+@model ElegiBien.Application.DTOs.FlooringProductAlternativeDto
+@using ElegiBien.Domain.Enums
+
+<div class="mb-3">
+    <label asp-for="Name" class="form-label"></label>
+    <input asp-for="Name" class="form-control" />
+    <span asp-validation-for="Name" class="text-danger"></span>
+</div>
+
+<div class="mb-3">
+    <label asp-for="CoverageSquareMetersPerBox"
+           class="form-label">
+    </label>
+
+    <div class="input-group">
+        <input asp-for="CoverageSquareMetersPerBox"
+               class="form-control"
+               step="0.01" />
+        <span class="input-group-text">m²</span>
+    </div>
+
+    <span asp-validation-for="CoverageSquareMetersPerBox"
+          class="text-danger">
+    </span>
+</div>
+
+<div class="mb-3">
+    <label asp-for="PricePerBox" class="form-label"></label>
+
+    <div class="input-group">
+        <span class="input-group-text">$</span>
+        <input asp-for="PricePerBox"
+               class="form-control"
+               step="0.01" />
+    </div>
+
+    <span asp-validation-for="PricePerBox"
+          class="text-danger">
+    </span>
+</div>
+
+<div class="mb-3">
+    <label asp-for="UseResistance" class="form-label"></label>
+    <select asp-for="UseResistance" class="form-select">
+        <option value="@FlooringUseResistance.Unknown">No lo sé</option>
+        <option value="@FlooringUseResistance.Light">Uso liviano</option>
+        <option value="@FlooringUseResistance.Medium">Uso medio</option>
+        <option value="@FlooringUseResistance.High">Uso intenso</option>
+        <option value="@FlooringUseResistance.VeryHigh">Uso muy intenso</option>
+    </select>
+</div>
+
+<div class="mb-3">
+    <label asp-for="ReplacementEase" class="form-label"></label>
+    <select asp-for="ReplacementEase" class="form-select">
+        <option value="@FlooringReplacementEase.Unknown">No lo sé</option>
+        <option value="@FlooringReplacementEase.Low">Baja</option>
+        <option value="@FlooringReplacementEase.Medium">Media</option>
+        <option value="@FlooringReplacementEase.High">Alta</option>
+    </select>
+</div>

@@ -1,4 +1,4 @@
-﻿@model ElegiBien.Web.Models.AirConditioning.AirConditioningQuickViewModel
+@model ElegiBien.Web.Models.AirConditioning.AirConditioningQuickViewModel
 @using ElegiBien.Domain.Enums
 
 @{
@@ -19,7 +19,7 @@
                 @Html.AntiForgeryToken()
 
                 <div asp-validation-summary="ModelOnly"
-                     class="text-danger mb-3"></div>
+                     class="text-danger mb-3" data-validation-summary></div>
 
                 <div class="row">
                     <div class="col-md-6 mb-3">
@@ -103,15 +103,19 @@
                     No solicitamos nombre, documento, teléfono,
                     domicilio ni información bancaria.
                 </p>
-                <button type="submit"
+                <div class="mobile-submit-bar">
+
+                    <button type="submit"
                         class="btn btn-primary">
                     Calcular frigorías
                 </button>
+
+                </div>
             </form>
 
             @if (Model.Result is not null)
             {
-                <div class="card mt-4">
+                <div class="card mt-4 result-focus-target" data-auto-scroll-target tabindex="-1">
                     <div class="card-body">
                         <h2 class="h4">
                             Resultado orientativo

@@ -1,121 +1,72 @@
-﻿using ElegiBien.Application.DTOs;
+using System.Globalization;
+using System.Text.Json;
+using ElegiBien.Application.DTOs;
 using ElegiBien.Application.Interfaces;
-using ElegiBien.Domain.Entities;
+using ElegiBien.Domain.Enums;
 using ElegiBien.Infrastructure.Data;
-using Microsoft.EntityFrameworkCore;
 
 namespace ElegiBien.Infrastructure.Persistence;
 
-public class AirConditioningComparisonStore
-    : IAirConditioningComparisonStore
+public class AirConditioningComparisonStore : IAirConditioningComparisonStore
 {
     private readonly ElegiBienDbContext _dbContext;
 
-    public AirConditioningComparisonStore(
-        ElegiBienDbContext dbContext)
+    public AirConditioningComparisonStore(ElegiBienDbContext dbContext)
     {
         _dbContext = dbContext;
     }
 
-    public async Task SaveAsync(
+    public Task SaveAsync(
         Guid analysisId,
         ProductAlternativeDto firstProduct,
         ProductAlternativeDto secondProduct,
         ProductComparisonResultDto comparisonResult,
         CancellationToken cancellationToken = default)
     {
-        var analysisExists = await _dbContext.Analyses
-            .AnyAsync(
-                x => x.AnalysisId == analysisId,
-                cancellationToken);
-
-        if (!analysisExists)
-        {
-            throw new InvalidOperationException(
-                "No se encontró el análisis asociado.");
-        }
-
-        var existingAlternatives =
-            await _dbContext.ProductAlternatives
-                .Where(x => x.AnalysisId == analysisId)
-                .Include(x => x.ProductScore!)
-                    .ThenInclude(x => x.Factors)
-                .ToListAsync(cancellationToken);
-
-        if (existingAlternatives.Count > 0)
-        {
-            _dbContext.ProductAlternatives.RemoveRange(
-                existingAlternatives);
-
-            await _dbContext.SaveChangesAsync(
-                cancellationToken);
-        }
-
-        var firstEntity = CreateAlternative(
+        return GenericComparisonPersistence.ReplaceAsync(
+            _dbContext,
             analysisId,
-            firstProduct,
-            comparisonResult.FirstProduct);
-
-        var secondEntity = CreateAlternative(
-            analysisId,
-            secondProduct,
-            comparisonResult.SecondProduct);
-
-        _dbContext.ProductAlternatives.AddRange(
-            firstEntity,
-            secondEntity);
-
-        await _dbContext.SaveChangesAsync(
+            CategoryCode.AirConditioning,
+            [
+                CreateAlternative(1, firstProduct, comparisonResult.FirstProduct),
+                CreateAlternative(2, secondProduct, comparisonResult.SecondProduct)
+            ],
             cancellationToken);
     }
 
-    private static ProductAlternative CreateAlternative(
-        Guid analysisId,
+    private static GenericComparisonAlternativeData CreateAlternative(
+        int position,
         ProductAlternativeDto product,
-        ProductScoreResultDto scoreResult)
+        ProductScoreResultDto score)
     {
-        var alternativeId = Guid.NewGuid();
-        var productScoreId = Guid.NewGuid();
-
-        return new ProductAlternative
-        {
-            ProductAlternativeId = alternativeId,
-            AnalysisId = analysisId,
-            Name = product.Name.Trim(),
-            CapacityFrigories = product.CapacityFrigories,
-            Price = product.Price,
-            Technology = product.Technology,
-            NominalConsumptionWatts =
-                product.NominalConsumptionWatts,
-            WarrantyMonths = product.WarrantyMonths,
-            ProductScore = new ProductScore
+        return new GenericComparisonAlternativeData(
+            position,
+            product.Name,
+            product.Price,
+            JsonSerializer.Serialize(new
             {
-                ProductScoreId = productScoreId,
-                ProductAlternativeId = alternativeId,
-                TotalScore = scoreResult.TotalScore,
-                AppliedMaximumScore =
-                    scoreResult.AppliedMaximumScore,
-                CapacityStatus =
-                    scoreResult.CapacityStatus,
-                ConfidenceLevel =
-                    scoreResult.ConfidenceLevel,
-                IsEligible =
-                    scoreResult.IsEligible,
-                Factors = scoreResult.Factors
-                    .Select(
-                        factor => new ScoreFactor
-                        {
-                            ScoreFactorId = Guid.NewGuid(),
-                            ProductScoreId = productScoreId,
-                            FactorType = factor.FactorType,
-                            Score = factor.Score,
-                            MaximumScore =
-                                factor.MaximumScore,
-                            Explanation =
-                                factor.Explanation
-                        })
-                    .ToList()
-            }
-        };
+                product.CapacityFrigories,
+                product.Price,
+                product.Technology,
+                product.NominalConsumptionWatts,
+                product.WarrantyMonths
+            }),
+            score.TotalScore,
+            score.AppliedMaximumScore,
+            score.IsEligible,
+            Convert.ToInt32(score.CapacityStatus, CultureInfo.InvariantCulture)
+                .ToString(CultureInfo.InvariantCulture),
+            JsonSerializer.Serialize(new
+            {
+                score.CapacityStatus,
+                score.ConfidenceLevel
+            }),
+            score.Factors.Select(factor => new GenericComparisonFactorData(
+                Convert.ToInt32(factor.FactorType, CultureInfo.InvariantCulture)
+                    .ToString(CultureInfo.InvariantCulture),
+                factor.FactorType.ToString(),
+                factor.Score,
+                factor.MaximumScore,
+                factor.Explanation)).ToList());
     }
 }

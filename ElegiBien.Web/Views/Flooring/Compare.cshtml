@@ -1,0 +1,173 @@
+@model ElegiBien.Web.Models.Flooring.FlooringComparisonViewModel
+@using ElegiBien.Domain.Enums
+
+@{
+    ViewData["Title"] = "Comparar cerámicos y pisos";
+    ViewData["Description"] = "Compará dos opciones de cerámicos o pisos por cajas necesarias, costo total, excedente, resistencia y facilidad de reposición.";
+}
+
+<div class="container py-4">
+    <h1>Comparar cerámicos y pisos</h1>
+
+    <p class="lead">
+        Necesitás cubrir aproximadamente
+        <strong>@Model.RequiredAreaSquareMeters.ToString("N2") m²</strong>.
+    </p>
+
+    <form asp-action="Compare" method="post">
+        @Html.AntiForgeryToken()
+        <input asp-for="AnalysisId" type="hidden" />
+
+        <div asp-validation-summary="ModelOnly"
+             class="text-danger mb-3" data-validation-summary>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h2 class="h4">Producto A</h2>
+
+                        <partial name="_FlooringProductFields"
+                                 for="FirstProduct" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h2 class="h4">Producto B</h2>
+
+                        <partial name="_FlooringProductFields"
+                                 for="SecondProduct" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mobile-submit-bar">
+
+
+            <button class="btn btn-primary"
+                type="submit">
+            Comparar productos
+        </button>
+
+
+        </div>
+    </form>
+
+    @if (Model.Result is not null)
+    {
+        <div class="card mt-4 result-focus-target" data-auto-scroll-target tabindex="-1">
+            <div class="card-body">
+                <h2 class="h3">Resultado ElegíBien</h2>
+
+                <div class="alert alert-primary">
+                    @Model.Result.Recommendation
+                </div>
+
+                @if (!string.IsNullOrWhiteSpace(Model.ShareUrl))
+                {
+                    <div class="share-result-box mb-4">
+                        <label for="flooring-share-url"
+                               class="form-label fw-semibold">
+                            Enlace para compartir este resultado
+                        </label>
+
+                        <div class="input-group">
+                            <input id="flooring-share-url" data-share-url
+                                   class="form-control"
+                                   value="@Model.ShareUrl"
+                                   readonly />
+
+                            <button type="button"
+                                    class="btn btn-outline-primary"
+                                    data-copy-share-url>
+                                Copiar enlace
+                            </button>
+                        </div>
+                    </div>
+                }
+
+                <div class="row">
+                    @foreach (var product in new[]
+                    {
+                        Model.Result.FirstProduct,
+                        Model.Result.SecondProduct
+                    })
+                    {
+                        <div class="col-md-6 mb-4">
+                            <h3 class="h5">@product.ProductName</h3>
+
+                            <p class="fs-4">
+                                <strong>@product.TotalScore/100</strong>
+                            </p>
+
+                            <p>
+                                @product.BoxesRequired cajas ·
+                                @product.PurchasedAreaSquareMeters.ToString("N2") m² comprados ·
+                                $@product.TotalCost.ToString("N2")
+                            </p>
+
+                            <p>
+                                Excedente estimado:
+                                <strong>
+                                    @product.ExcessAreaSquareMeters.ToString("N2") m²
+                                    (@product.ExcessPercentage.ToString("N1") %)
+                                </strong>
+                            </p>
+
+                            <p>
+                                Cobertura:
+                                <strong>@CoverageText(product.CoverageStatus)</strong>
+                            </p>
+
+                            <ul>
+                                @foreach (var factor in product.Factors)
+                                {
+                                    <li class="mb-2">
+                                        <strong>
+                                            @FactorText(factor.FactorType):
+                                            @factor.Score.ToString("N1") /
+                                            @factor.MaximumScore.ToString("N0")
+                                        </strong>
+                                        <br />
+                                        @factor.Explanation
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+
+@functions {
+    private static string CoverageText(FlooringCoverageStatus status) =>
+        status switch
+        {
+            FlooringCoverageStatus.Insufficient => "Insuficiente",
+            FlooringCoverageStatus.Adequate => "Adecuada",
+            FlooringCoverageStatus.Excessive => "Excesiva",
+            _ => "Sin datos"
+        };
+
+    private static string FactorText(FlooringScoreFactorType factor) =>
+        factor switch
+        {
+            FlooringScoreFactorType.ActualCoverage => "Cobertura real",
+            FlooringScoreFactorType.TotalCost => "Costo total",
+            FlooringScoreFactorType.EstimatedWaste => "Desperdicio estimado",
+            FlooringScoreFactorType.UseResistance => "Resistencia de uso",
+            FlooringScoreFactorType.ReplacementEase => "Facilidad de reposición",
+            _ => "Factor"
+        };
+}
