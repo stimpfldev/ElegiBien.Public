@@ -1,0 +1,31 @@
+@model ErrorViewModel
+@{
+    ViewData["Title"] = "Ocurrió un problema";
+    ViewData["Robots"] = "noindex,nofollow";
+}
+
+<section class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-sm">
+                <div class="card-body p-4 p-md-5">
+                    <h1 class="h3 mb-3">Ocurrió un problema</h1>
+                    <p class="mb-3">
+                        No pudimos completar la operación. Podés volver al inicio e intentarlo nuevamente.
+                    </p>
+
+                    @if (Model.ShowRequestId)
+                    {
+                        <p class="small text-muted mb-4">
+                            Identificador de solicitud: <code>@Model.RequestId</code>
+                        </p>
+                    }
+
+                    <a class="btn btn-primary" asp-controller="Home" asp-action="Index">
+                        Volver al inicio
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

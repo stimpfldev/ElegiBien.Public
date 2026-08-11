@@ -1,0 +1,123 @@
+@{
+    ViewData["Title"] = "Elegí mejor antes de comprar";
+    ViewData["Description"] = "Calculá qué aire acondicionado, pintura, cerámicos, pisos o calefacción necesitás y compará alternativas con criterios claros.";
+}
+
+<section class="home-hero home-hero-compact">
+    <div class="container">
+        <div class="row align-items-center g-4">
+            <div class="col-lg-7">
+                <span class="eyebrow">Decisiones de compra, sin adivinar</span>
+                <h1>Calculá lo que necesitás. Compará con criterios claros.</h1>
+                <p class="hero-copy">
+                    ElegíBien transforma medidas y datos simples en recomendaciones orientativas para ayudarte a comprar con más información.
+                </p>
+
+                <div class="hero-tools-grid" aria-label="Herramientas principales de ElegíBien">
+                    <a class="btn btn-primary btn-lg" asp-controller="AirConditioning" asp-action="Index">
+                        Aire acondicionado
+                    </a>
+                    <a class="btn btn-primary btn-lg" asp-controller="Paint" asp-action="Index">
+                        Pintura
+                    </a>
+                    <a class="btn btn-primary btn-lg" asp-controller="Flooring" asp-action="Index">
+                        Cerámicos y pisos
+                    </a>
+                    <a class="btn btn-primary btn-lg" asp-controller="Heating" asp-action="Index">
+                        Calefacción
+                    </a>
+                </div>
+
+                <a class="tools-anchor-link" href="#herramientas">
+                    Ver detalles de todas las herramientas
+                </a>
+
+                <div class="trust-row" aria-label="Características de ElegíBien">
+                    <span>Cálculos explicables</span>
+                    <span>Sin registro</span>
+                    <span>Privacidad por diseño</span>
+                </div>
+            </div>
+
+            <div class="col-lg-5 d-none d-lg-block">
+                <div class="hero-visual hero-visual-compact">
+                    <img src="~/images/hero-decision.svg"
+                         alt="Ilustración de una decisión de compra informada"
+                         class="img-fluid"
+                         width="520"
+                         height="390" />
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="herramientas" class="category-section category-section-raised">
+    <div class="container">
+        <div class="section-heading section-heading-compact">
+            <span class="eyebrow">Herramientas disponibles</span>
+            <h2>Elegí qué necesitás resolver</h2>
+            <p>Cada categoría usa reglas específicas y muestra cómo se obtiene el resultado.</p>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-6 col-xl-3">
+                <article class="category-card">
+                    <div class="category-image category-image-air"><img src="~/images/category-air.svg" alt="" width="160" height="130" /></div>
+                    <div class="category-card-body">
+                        <span class="category-status">Disponible</span>
+                        <h3>Aire acondicionado</h3>
+                        <p>Calculá un rango de frigorías y compará equipos según capacidad, eficiencia, precio y garantía.</p>
+                        <a asp-controller="AirConditioning" asp-action="Index" class="stretched-link">Empezar cálculo <span aria-hidden="true">→</span></a>
+                    </div>
+                </article>
+            </div>
+            <div class="col-md-6 col-xl-3">
+                <article class="category-card">
+                    <div class="category-image category-image-paint"><img src="~/images/category-paint.svg" alt="" width="160" height="130" /></div>
+                    <div class="category-card-body">
+                        <span class="category-status">Disponible</span>
+                        <h3>Pintura</h3>
+                        <p>Estimá litros, manos y envases, y compará productos por costo, rendimiento y prestaciones.</p>
+                        <a asp-controller="Paint" asp-action="Index" class="stretched-link">Empezar cálculo <span aria-hidden="true">→</span></a>
+                    </div>
+                </article>
+            </div>
+            <div class="col-md-6 col-xl-3">
+                <article class="category-card">
+                    <div class="category-image category-image-flooring"><img src="~/images/category-flooring.svg" alt="" width="160" height="130" /></div>
+                    <div class="category-card-body">
+                        <span class="category-status">Disponible</span>
+                        <h3>Cerámicos y pisos</h3>
+                        <p>Calculá superficie, material adicional y cajas necesarias. Compará costo, cobertura y resistencia.</p>
+                        <a asp-controller="Flooring" asp-action="Index" class="stretched-link">Empezar cálculo <span aria-hidden="true">→</span></a>
+                    </div>
+                </article>
+            </div>
+            <div class="col-md-6 col-xl-3">
+                <article class="category-card">
+                    <div class="category-image category-image-heating"><img src="~/images/category-heating.svg" alt="" width="160" height="130" /></div>
+                    <div class="category-card-body">
+                        <span class="category-status">Disponible</span>
+                        <h3>Calefacción</h3>
+                        <p>Estimá la potencia necesaria y compará equipos por consumo, eficiencia, instalación y precio.</p>
+                        <a asp-controller="Heating" asp-action="Index" class="stretched-link">Empezar cálculo <span aria-hidden="true">→</span></a>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="contact-cta">
+    <div class="container">
+        <div class="contact-cta-card">
+            <div>
+                <span class="eyebrow">Contacto</span>
+                <h2>¿Detectaste un error o querés proponer una mejora?</h2>
+                <p>El canal está preparado para consultas, sugerencias y oportunidades de colaboración.</p>
+            </div>
+            <a class="btn btn-primary btn-lg" asp-controller="Contact" asp-action="Index">Contactanos</a>
+        </div>
+    </div>
+</section>

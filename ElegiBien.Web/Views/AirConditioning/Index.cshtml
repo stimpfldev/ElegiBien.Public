@@ -1,0 +1,192 @@
+@model ElegiBien.Web.Models.AirConditioning.AirConditioningQuickViewModel
+@using ElegiBien.Domain.Enums
+
+@{
+    ViewData["Title"] = "Qué aire acondicionado necesito";
+    ViewData["Description"] = "Calculá cuántas frigorías necesitás para tu ambiente y compará equipos por capacidad, eficiencia, precio y garantía.";
+}
+
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <h1>Qué aire acondicionado necesitás</h1>
+
+            <p class="lead">
+                Ingresá cuatro datos y obtené un rango orientativo
+                de frigorías para tu ambiente.
+            </p>
+
+            <form asp-action="Index" method="post" class="mt-4">
+                @Html.AntiForgeryToken()
+
+                <div asp-validation-summary="ModelOnly"
+                     class="text-danger mb-3" data-validation-summary></div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="Input.LengthMeters"
+                               class="form-label"></label>
+
+                        <input asp-for="Input.LengthMeters"
+                               class="form-control"
+                               step="0.1" />
+
+                        <span asp-validation-for="Input.LengthMeters"
+                              class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="Input.WidthMeters"
+                               class="form-label"></label>
+
+                        <input asp-for="Input.WidthMeters"
+                               class="form-control"
+                               step="0.1" />
+
+                        <span asp-validation-for="Input.WidthMeters"
+                              class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Input.PeopleCount"
+                           class="form-label"></label>
+
+                    <input asp-for="Input.PeopleCount"
+                           class="form-control" />
+
+                    <span asp-validation-for="Input.PeopleCount"
+                          class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Input.SunExposure"
+                           class="form-label"></label>
+
+                    <select asp-for="Input.SunExposure"
+                            class="form-select">
+                        <option value="@SunExposure.Low">
+                            Baja
+                        </option>
+                        <option value="@SunExposure.Medium">
+                            Media
+                        </option>
+                        <option value="@SunExposure.High">
+                            Alta
+                        </option>
+                    </select>
+
+                    <span asp-validation-for="Input.SunExposure"
+                          class="text-danger"></span>
+                </div>
+                <div class="form-check mb-2">
+                    <input asp-for="AllowAnonymousAnalytics"
+                           class="form-check-input" />
+
+                    <label asp-for="AllowAnonymousAnalytics"
+                           class="form-check-label">
+                        Permitir estadísticas anónimas para mejorar ElegíBien.
+                    </label>
+                </div>
+
+                <div class="form-check mb-3">
+                    <input asp-for="AllowRadarData"
+                           class="form-check-input" />
+
+                    <label asp-for="AllowRadarData"
+                           class="form-check-label">
+                        Permitir que los datos anónimos de esta consulta
+                        se incorporen en futuras estadísticas del Radar ElegíBien.
+                    </label>
+                </div>
+
+                <p class="small text-muted">
+                    No solicitamos nombre, documento, teléfono,
+                    domicilio ni información bancaria.
+                </p>
+                <div class="mobile-submit-bar">
+
+                    <button type="submit"
+                        class="btn btn-primary">
+                    Calcular frigorías
+                </button>
+
+                </div>
+            </form>
+
+            @if (Model.Result is not null)
+            {
+                <div class="card mt-4 result-focus-target" data-auto-scroll-target tabindex="-1">
+                    <div class="card-body">
+                        <h2 class="h4">
+                            Resultado orientativo
+                        </h2>
+
+                        <p class="fs-5 mb-2">
+                            Necesitás aproximadamente entre
+                            <strong>
+                                @Model.Result.RecommendedMinimumFrigories.ToString("N0")
+                            </strong>
+                            y
+                            <strong>
+                                @Model.Result.RecommendedMaximumFrigories.ToString("N0")
+                            </strong>
+                            frigorías.
+                        </p>
+
+                        <p>
+                            Capacidad ideal aproximada:
+                            <strong>
+                                @Model.Result.IdealFrigories.ToString("N0")
+                                frigorías
+                            </strong>
+                        </p>
+
+                        <p>
+                            Superficie:
+                            @Model.Result.SurfaceSquareMeters.ToString("N1")
+                            m²
+                        </p>
+
+                        <p>
+                            Nivel de confianza:
+                            <strong>
+                                @Model.Result.ConfidenceLevel
+                            </strong>
+                        </p>
+
+                        <p class="mb-0">
+                            @Model.Result.Explanation
+                        </p>
+
+                        @if (Model.Result.RequiresProfessionalReview)
+                        {
+                            <div class="alert alert-warning mt-3 mb-0">
+                                Este ambiente presenta condiciones que
+                                requieren revisión profesional antes de
+                                comprar o instalar el equipo.
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="alert alert-info mt-3 mb-0">
+                                El resultado es orientativo y no reemplaza
+                                la evaluación de un técnico matriculado.
+                            </div>
+                        }
+                        <a asp-controller="AirConditioning"
+                           asp-action="Compare"
+                           asp-route-id="@Model.Result.AnalysisId"
+                           class="btn btn-success mt-3">
+                            Comparar dos equipos
+                        </a>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

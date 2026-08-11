@@ -1,0 +1,132 @@
+﻿@model ElegiBien.Application.DTOs.SharedAirConditioningResultDto
+@using ElegiBien.Domain.Enums
+
+@{
+    ViewData["Title"] = "Resultado compartido";
+    ViewData["Robots"] = "noindex, nofollow";
+}
+
+@functions {
+    private static string CapacityStatusText(CapacityFitStatus value)
+    {
+        return value switch
+        {
+            CapacityFitStatus.Insufficient => "Insuficiente",
+            CapacityFitStatus.Correct => "Correcta",
+            CapacityFitStatus.AcceptableOversized =>
+                "Sobredimensionada aceptable",
+            CapacityFitStatus.RelevantOversized =>
+                "Sobredimensionada relevante",
+            _ => "Desconocida"
+        };
+    }
+
+    private static string ConfidenceText(ConfidenceLevel value)
+    {
+        return value switch
+        {
+            ConfidenceLevel.Low => "Baja",
+            ConfidenceLevel.Medium => "Media",
+            ConfidenceLevel.High => "Alta",
+            _ => "Desconocida"
+        };
+    }
+
+    private static string FactorText(ScoreFactorType value)
+    {
+        return value switch
+        {
+            ScoreFactorType.CapacityAdequacy =>
+                "Adecuación de capacidad",
+            ScoreFactorType.Efficiency =>
+                "Eficiencia",
+            ScoreFactorType.RelativePrice =>
+                "Precio relativo",
+            ScoreFactorType.Warranty =>
+                "Garantía",
+            _ => "Factor"
+        };
+    }
+}
+
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-9">
+            <h1>Resultado ElegíBien</h1>
+
+            <p class="lead">
+                Capacidad recomendada:
+                <strong>
+                    @Model.RecommendedMinimumFrigories.ToString("N0")
+                    a
+                    @Model.RecommendedMaximumFrigories.ToString("N0")
+                    frigorías
+                </strong>
+            </p>
+
+            <div class="alert alert-primary">
+                @Model.Recommendation
+            </div>
+
+            @foreach (var product in Model.Products)
+            {
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h2 class="h4">
+                            @product.ProductName
+                        </h2>
+
+                        <p class="fs-4">
+                            <strong>
+                                @product.TotalScore/100
+                            </strong>
+                        </p>
+
+                        <p>
+                            Estado de capacidad:
+                            <strong>
+                                @CapacityStatusText(product.CapacityStatus)
+                            </strong>
+                        </p>
+
+                        <p>
+                            Nivel de confianza:
+                            <strong>
+                                @ConfidenceText(product.ConfidenceLevel)
+                            </strong>
+                        </p>
+
+                        <ul>
+                            @foreach (var factor in product.Factors)
+                            {
+                                <li class="mb-2">
+                                    <strong>
+                                        @FactorText(factor.FactorType):
+                                        @factor.Score.ToString("N1")
+                                        /
+                                        @factor.MaximumScore.ToString("N0")
+                                    </strong>
+
+                                    <br />
+
+                                    @factor.Explanation
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            }
+
+            <div class="alert alert-info">
+                Este resultado es orientativo y no reemplaza
+                la evaluación de un técnico matriculado.
+            </div>
+
+            <a asp-controller="AirConditioning"
+               asp-action="Index"
+               class="btn btn-primary">
+                Analizar otra opción
+            </a>
+        </div>
+    </div>
+</div>

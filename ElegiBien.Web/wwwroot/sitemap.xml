@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ElegíBien genera /sitemap.xml dinámicamente con el dominio real de cada entorno. -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" />

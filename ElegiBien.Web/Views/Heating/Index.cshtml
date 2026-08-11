@@ -1,0 +1,168 @@
+@model ElegiBien.Web.Models.Heating.HeatingQuickViewModel
+@using ElegiBien.Domain.Enums
+
+@{
+    ViewData["Title"] = "Qué potencia de calefacción necesito";
+    ViewData["Description"] = "Calculá una potencia orientativa de calefacción según el tamaño, el clima y las características del ambiente.";
+}
+
+<div class="container calculator-page py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <h1>Qué potencia de calefacción necesitás</h1>
+
+            <p class="lead">
+                Estimá la potencia necesaria para calefaccionar el ambiente sin elegir un equipo demasiado chico o excesivo.
+            </p>
+
+            <form asp-action="Index" method="post" id="heatingForm">
+                @Html.AntiForgeryToken()
+
+                <div asp-validation-summary="ModelOnly"
+                     class="text-danger mb-3"
+                     id="validationSummary" data-validation-summary>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label asp-for="Input.LengthMeters" class="form-label"></label>
+                        <div class="input-group">
+                            <input asp-for="Input.LengthMeters" class="form-control" step="0.01" />
+                            <span class="input-group-text">m</span>
+                        </div>
+                        <span asp-validation-for="Input.LengthMeters" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                        <label asp-for="Input.WidthMeters" class="form-label"></label>
+                        <div class="input-group">
+                            <input asp-for="Input.WidthMeters" class="form-control" step="0.01" />
+                            <span class="input-group-text">m</span>
+                        </div>
+                        <span asp-validation-for="Input.WidthMeters" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                        <label asp-for="Input.HeightMeters" class="form-label"></label>
+                        <div class="input-group">
+                            <input asp-for="Input.HeightMeters" class="form-control" step="0.01" />
+                            <span class="input-group-text">m</span>
+                        </div>
+                        <span asp-validation-for="Input.HeightMeters" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="Input.ClimateZone" class="form-label"></label>
+                        <select asp-for="Input.ClimateZone" class="form-select">
+                            <option value="@HeatingClimateZone.Mild">Templada</option>
+                            <option value="@HeatingClimateZone.TemperateCold">Templada fría</option>
+                            <option value="@HeatingClimateZone.Cold">Fría</option>
+                            <option value="@HeatingClimateZone.VeryCold">Muy fría</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="Input.InsulationLevel" class="form-label"></label>
+                        <select asp-for="Input.InsulationLevel" class="form-select">
+                            <option value="@InsulationLevel.Good">Bueno</option>
+                            <option value="@InsulationLevel.Normal">Normal</option>
+                            <option value="@InsulationLevel.Poor">Deficiente</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="Input.ExteriorWallsCount" class="form-label"></label>
+                        <select asp-for="Input.ExteriorWallsCount" class="form-select">
+                            <option value="0">Ninguna</option>
+                            <option value="1">Una</option>
+                            <option value="2">Dos</option>
+                            <option value="3">Tres</option>
+                            <option value="4">Cuatro</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="Input.WindowExposure" class="form-label"></label>
+                        <select asp-for="Input.WindowExposure" class="form-select">
+                            <option value="@WindowExposure.Normal">Pocas o normales</option>
+                            <option value="@WindowExposure.Significant">Varias o grandes</option>
+                            <option value="@WindowExposure.LargeGlazing">Ventanal amplio</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-check mb-3">
+                    <input asp-for="Input.IsOpenToAnotherSpace" class="form-check-input" />
+                    <label asp-for="Input.IsOpenToAnotherSpace" class="form-check-label"></label>
+                </div>
+
+                <div class="form-check mb-2">
+                    <input asp-for="AllowAnonymousAnalytics" class="form-check-input" />
+                    <label asp-for="AllowAnonymousAnalytics" class="form-check-label"></label>
+                </div>
+
+                <div class="form-check mb-3">
+                    <input asp-for="AllowRadarData" class="form-check-input" />
+                    <label asp-for="AllowRadarData" class="form-check-label"></label>
+                </div>
+
+                <div class="mobile-submit-bar"><button class="btn btn-primary btn-lg" type="submit">Calcular potencia</button></div>
+            </form>
+
+            @if (Model.Result is not null)
+            {
+                <div class="card mt-4 result-focus-target"
+                     id="heatingResult"
+                     data-auto-scroll-target
+                     tabindex="-1">
+                    <div class="card-body">
+                        <h2 class="h3">Resultado orientativo</h2>
+
+                        <dl class="row mb-0">
+                            <dt class="col-sm-7">Superficie del ambiente</dt>
+                            <dd class="col-sm-5">@Model.Result.SurfaceSquareMeters.ToString("N2") m²</dd>
+
+                            <dt class="col-sm-7">Volumen calculado</dt>
+                            <dd class="col-sm-5">@Model.Result.VolumeCubicMeters.ToString("N2") m³</dd>
+
+                            <dt class="col-sm-7">Potencia mínima recomendada</dt>
+                            <dd class="col-sm-5">@Model.Result.RecommendedMinimumWatts.ToString("N0") W</dd>
+
+                            <dt class="col-sm-7">Potencia máxima recomendada</dt>
+                            <dd class="col-sm-5">@Model.Result.RecommendedMaximumWatts.ToString("N0") W</dd>
+
+                            <dt class="col-sm-7">Potencia ideal orientativa</dt>
+                            <dd class="col-sm-5 fs-5">
+                                <strong>@Model.Result.IdealPowerWatts.ToString("N0") W</strong>
+                            </dd>
+
+                            <dt class="col-sm-7">Equivalencia aproximada</dt>
+                            <dd class="col-sm-5">@Model.Result.IdealPowerKcalPerHour.ToString("N0") kcal/h</dd>
+                        </dl>
+
+                        <a asp-action="Compare"
+                           asp-route-id="@Model.Result.AnalysisId"
+                           class="btn btn-primary mt-3">
+                            Comparar dos equipos
+                        </a>
+
+                        @if (Model.Result.RequiresProfessionalReview)
+                        {
+                            <div class="alert alert-warning mt-3 mb-0">
+                                Por las características del ambiente, conviene validar la instalación y la potencia con un profesional.
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

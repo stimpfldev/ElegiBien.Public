@@ -1,0 +1,35 @@
+@model ElegiBien.Web.Models.Heating.HeatingComparisonViewModel
+@using ElegiBien.Domain.Enums
+@{
+    ViewData["Title"] = "Comparar equipos de calefacción";
+}
+<div class="container calculator-page py-4"><div class="row justify-content-center"><div class="col-lg-10">
+<h1>Compará dos equipos de calefacción</h1>
+<p class="lead">Rango recomendado: <strong>@Model.RecommendedMinimumWatts.ToString("N0") a @Model.RecommendedMaximumWatts.ToString("N0") W</strong>.</p>
+<form asp-action="Compare" method="post">
+@Html.AntiForgeryToken()<input asp-for="AnalysisId" type="hidden" />
+<div asp-validation-summary="ModelOnly" class="text-danger mb-3" data-validation-summary></div>
+<div class="card mb-4"><div class="card-body"><h2 class="h4">Primer equipo</h2><div asp-for="FirstProduct"><partial name="_HeatingProductFields" for="FirstProduct" /></div></div></div>
+<div class="card mb-4"><div class="card-body"><h2 class="h4">Segundo equipo</h2><div asp-for="SecondProduct"><partial name="_HeatingProductFields" for="SecondProduct" /></div></div></div>
+<div class="mobile-submit-bar"><button type="submit" class="btn btn-primary btn-lg">Comparar equipos</button></div>
+</form>
+@if (Model.Result is not null)
+{
+<div id="heatingComparisonResult" class="result-focus-target mt-4" data-auto-scroll-target tabindex="-1">
+<div class="alert alert-primary"><strong>@(Model.Result.IsTie ? "Empate técnico" : $"Recomendación: {Model.Result.RecommendedProductName}")</strong></div>
+@if (!string.IsNullOrWhiteSpace(Model.ShareUrl)) { <div class="mb-3"><label class="form-label">Enlace para compartir</label><input class="form-control" readonly value="@Model.ShareUrl" /></div> }
+<div class="row g-3">
+@foreach (var product in new[] { Model.Result.FirstProduct, Model.Result.SecondProduct })
+{
+<div class="col-md-6"><div class="card h-100"><div class="card-body"><h2 class="h4">@product.ProductName</h2><p class="display-6"><strong>@product.TotalScore/100</strong></p><p>Capacidad: <strong>@CapacityText(product.CapacityStatus)</strong></p>
+<ul class="ps-3">@foreach (var factor in product.Factors) { <li class="mb-2"><strong>@FactorText(factor.FactorType): @factor.Score.ToString("N1")/@factor.MaximumScore.ToString("N0")</strong><br />@factor.Explanation</li> }</ul>
+</div></div></div>
+}
+</div></div>
+}
+</div></div></div>
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }
+@functions {
+private static string CapacityText(HeatingCapacityStatus status) => status switch { HeatingCapacityStatus.Insufficient => "Insuficiente", HeatingCapacityStatus.Correct => "Correcta", HeatingCapacityStatus.AcceptableOversized => "Sobredimensionada aceptable", HeatingCapacityStatus.RelevantOversized => "Sobredimensionada", _ => "Sin datos" };
+private static string FactorText(HeatingScoreFactorType factor) => factor switch { HeatingScoreFactorType.CapacityAdequacy => "Adecuación de potencia", HeatingScoreFactorType.EstimatedOperatingCost => "Costo estimado de uso", HeatingScoreFactorType.Efficiency => "Eficiencia", HeatingScoreFactorType.SafetyAndInstallation => "Seguridad e instalación", HeatingScoreFactorType.PurchasePrice => "Precio del equipo", _ => "Factor" };
+}

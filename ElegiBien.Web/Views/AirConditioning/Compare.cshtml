@@ -1,0 +1,441 @@
+@model ElegiBien.Web.Models.AirConditioning.AirConditioningComparisonViewModel
+@using ElegiBien.Domain.Enums
+
+@{
+    ViewData["Title"] = "Comparar aires acondicionados";
+}
+
+@functions {
+    private static string CapacityStatusText(CapacityFitStatus value)
+    {
+        return value switch
+        {
+            CapacityFitStatus.Insufficient =>
+                "Insuficiente",
+
+            CapacityFitStatus.Correct =>
+                "Correcta",
+
+            CapacityFitStatus.AcceptableOversized =>
+                "Sobredimensionada aceptable",
+
+            CapacityFitStatus.RelevantOversized =>
+                "Sobredimensionada relevante",
+
+            _ => "Desconocida"
+        };
+    }
+
+    private static string ConfidenceText(ConfidenceLevel value)
+    {
+        return value switch
+        {
+            ConfidenceLevel.Low => "Baja",
+            ConfidenceLevel.Medium => "Media",
+            ConfidenceLevel.High => "Alta",
+            _ => "Desconocida"
+        };
+    }
+
+    private static string FactorText(ScoreFactorType value)
+    {
+        return value switch
+        {
+            ScoreFactorType.CapacityAdequacy =>
+                "Adecuación de capacidad",
+
+            ScoreFactorType.Efficiency =>
+                "Eficiencia",
+
+            ScoreFactorType.RelativePrice =>
+                "Precio relativo",
+
+            ScoreFactorType.Warranty =>
+                "Garantía",
+
+            _ => "Factor"
+        };
+    }
+}
+
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-xl-10">
+            <h1>Compará dos equipos</h1>
+
+            <p class="lead">
+                Para este ambiente necesitás entre
+                <strong>
+                    @Model.RecommendedMinimumFrigories.ToString("N0")
+                </strong>
+                y
+                <strong>
+                    @Model.RecommendedMaximumFrigories.ToString("N0")
+                </strong>
+                frigorías.
+            </p>
+
+            <form asp-action="Compare" method="post">
+                @Html.AntiForgeryToken()
+
+                <input asp-for="AnalysisId" type="hidden" />
+
+                <div asp-validation-summary="ModelOnly"
+                     class="text-danger mb-3" data-validation-summary>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-6 mb-4">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h2 class="h4">Equipo A</h2>
+
+                                <div class="mb-3">
+                                    <label class="form-label">
+                                        Nombre o modelo
+                                    </label>
+
+                                    <input asp-for="FirstProduct.Name"
+                                           class="form-control" />
+
+                                    <span asp-validation-for="FirstProduct.Name"
+                                          class="text-danger">
+                                    </span>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">
+                                        Capacidad en frigorías
+                                    </label>
+
+                                    <input asp-for="FirstProduct.CapacityFrigories"
+                                           class="form-control"
+                                           step="1" />
+
+                                    <span asp-validation-for="FirstProduct.CapacityFrigories"
+                                          class="text-danger">
+                                    </span>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">
+                                        Precio total
+                                    </label>
+
+                                    <input asp-for="FirstProduct.Price"
+                                           class="form-control"
+                                           step="0.01" />
+
+                                    <span asp-validation-for="FirstProduct.Price"
+                                          class="text-danger">
+                                    </span>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">
+                                        Tecnología
+                                    </label>
+
+                                    <select asp-for="FirstProduct.Technology"
+                                            class="form-select">
+                                        <option value="@AirConditionerTechnology.Unknown">
+                                            No lo sé
+                                        </option>
+
+                                        <option value="@AirConditionerTechnology.Conventional">
+                                            Convencional
+                                        </option>
+
+                                        <option value="@AirConditionerTechnology.Inverter">
+                                            Inverter
+                                        </option>
+                                    </select>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">
+                                        Consumo nominal en watts
+                                    </label>
+
+                                    <input asp-for="FirstProduct.NominalConsumptionWatts"
+                                           class="form-control"
+                                           step="1" />
+
+                                    <span asp-validation-for="FirstProduct.NominalConsumptionWatts"
+                                          class="text-danger">
+                                    </span>
+
+                                    <div class="form-text">
+                                        Opcional.
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">
+                                        Garantía en meses
+                                    </label>
+
+                                    <input asp-for="FirstProduct.WarrantyMonths"
+                                           class="form-control" />
+
+                                    <span asp-validation-for="FirstProduct.WarrantyMonths"
+                                          class="text-danger">
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6 mb-4">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h2 class="h4">Equipo B</h2>
+
+                                <div class="mb-3">
+                                    <label class="form-label">
+                                        Nombre o modelo
+                                    </label>
+
+                                    <input asp-for="SecondProduct.Name"
+                                           class="form-control" />
+
+                                    <span asp-validation-for="SecondProduct.Name"
+                                          class="text-danger">
+                                    </span>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">
+                                        Capacidad en frigorías
+                                    </label>
+
+                                    <input asp-for="SecondProduct.CapacityFrigories"
+                                           class="form-control"
+                                           step="1" />
+
+                                    <span asp-validation-for="SecondProduct.CapacityFrigories"
+                                          class="text-danger">
+                                    </span>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">
+                                        Precio total
+                                    </label>
+
+                                    <input asp-for="SecondProduct.Price"
+                                           class="form-control"
+                                           step="0.01" />
+
+                                    <span asp-validation-for="SecondProduct.Price"
+                                          class="text-danger">
+                                    </span>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">
+                                        Tecnología
+                                    </label>
+
+                                    <select asp-for="SecondProduct.Technology"
+                                            class="form-select">
+                                        <option value="@AirConditionerTechnology.Unknown">
+                                            No lo sé
+                                        </option>
+
+                                        <option value="@AirConditionerTechnology.Conventional">
+                                            Convencional
+                                        </option>
+
+                                        <option value="@AirConditionerTechnology.Inverter">
+                                            Inverter
+                                        </option>
+                                    </select>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">
+                                        Consumo nominal en watts
+                                    </label>
+
+                                    <input asp-for="SecondProduct.NominalConsumptionWatts"
+                                           class="form-control"
+                                           step="1" />
+
+                                    <span asp-validation-for="SecondProduct.NominalConsumptionWatts"
+                                          class="text-danger">
+                                    </span>
+
+                                    <div class="form-text">
+                                        Opcional.
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">
+                                        Garantía en meses
+                                    </label>
+
+                                    <input asp-for="SecondProduct.WarrantyMonths"
+                                           class="form-control" />
+
+                                    <span asp-validation-for="SecondProduct.WarrantyMonths"
+                                          class="text-danger">
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mobile-submit-bar">
+
+
+                    <button type="submit"
+                        class="btn btn-primary">
+                    Comparar equipos
+                </button>
+
+
+                </div>
+            </form>
+
+            @if (Model.Result is not null)
+            {
+                <div class="card mt-4 result-focus-target" data-auto-scroll-target tabindex="-1">
+                    <div class="card-body">
+                        <h2 class="h3">
+                            Resultado ElegíBien
+                        </h2>
+
+                        <div class="alert alert-primary">
+                            @Model.Result.Recommendation
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-4">
+                                <h3 class="h5">
+                                    @Model.Result.FirstProduct.ProductName
+                                </h3>
+
+                                <p class="fs-4">
+                                    <strong>
+                                        @Model.Result.FirstProduct.TotalScore/100
+                                    </strong>
+                                </p>
+
+                                <p>
+                                    Capacidad:
+                                    <strong>
+                                        @CapacityStatusText(
+                                            Model.Result.FirstProduct.CapacityStatus)
+                                    </strong>
+                                </p>
+
+                                <p>
+                                    Confianza:
+                                    <strong>
+                                        @ConfidenceText(
+                                            Model.Result.FirstProduct.ConfidenceLevel)
+                                    </strong>
+                                </p>
+
+                                <ul>
+                                    @foreach (var factor in
+                                        Model.Result.FirstProduct.Factors)
+                                    {
+                                        <li class="mb-2">
+                                            <strong>
+                                                @FactorText(factor.FactorType):
+                                                @factor.Score.ToString("N1")
+                                                /
+                                                @factor.MaximumScore.ToString("N0")
+                                            </strong>
+
+                                            <br />
+
+                                            @factor.Explanation
+                                        </li>
+                                    }
+                                </ul>
+                            </div>
+
+                            <div class="col-md-6 mb-4">
+                                <h3 class="h5">
+                                    @Model.Result.SecondProduct.ProductName
+                                </h3>
+
+                                <p class="fs-4">
+                                    <strong>
+                                        @Model.Result.SecondProduct.TotalScore/100
+                                    </strong>
+                                </p>
+
+                                <p>
+                                    Capacidad:
+                                    <strong>
+                                        @CapacityStatusText(
+                                            Model.Result.SecondProduct.CapacityStatus)
+                                    </strong>
+                                </p>
+
+                                <p>
+                                    Confianza:
+                                    <strong>
+                                        @ConfidenceText(
+                                            Model.Result.SecondProduct.ConfidenceLevel)
+                                    </strong>
+                                </p>
+
+                                <ul>
+                                    @foreach (var factor in
+                                        Model.Result.SecondProduct.Factors)
+                                    {
+                                        <li class="mb-2">
+                                            <strong>
+                                                @FactorText(factor.FactorType):
+                                                @factor.Score.ToString("N1")
+                                                /
+                                                @factor.MaximumScore.ToString("N0")
+                                            </strong>
+
+                                            <br />
+
+                                            @factor.Explanation
+                                        </li>
+                                    }
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+            @if (!string.IsNullOrWhiteSpace(Model.ShareUrl))
+            {
+                <div class="mt-3">
+                    <label class="form-label">
+                        Enlace para compartir
+                    </label>
+
+                    <div class="input-group">
+                        <input id="shareUrl" data-share-url
+                               class="form-control"
+                               value="@Model.ShareUrl"
+                               readonly />
+
+                        <button type="button"
+                                class="btn btn-outline-secondary"
+                                data-copy-share-url>
+                            Copiar enlace
+                        </button>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+}

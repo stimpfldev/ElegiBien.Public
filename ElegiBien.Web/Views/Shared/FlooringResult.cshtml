@@ -1,0 +1,114 @@
+@model ElegiBien.Application.DTOs.SharedFlooringResultDto
+@using ElegiBien.Domain.Enums
+
+@{
+    ViewData["Title"] = "Resultado compartido de cerámicos y pisos";
+    ViewData["Robots"] = "noindex, nofollow";
+}
+
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-9">
+            <h1>Resultado ElegíBien: Cerámicos y pisos</h1>
+
+            <p>
+                Superficie original:
+                <strong>@Model.TotalAreaSquareMeters.ToString("N2") m²</strong>
+            </p>
+
+            <p>
+                Material adicional considerado:
+                <strong>@Model.WastePercentage.ToString("N1") %</strong>
+            </p>
+
+            <p>
+                Superficie total necesaria:
+                <strong>@Model.RequiredAreaSquareMeters.ToString("N2") m²</strong>
+            </p>
+
+            <div class="alert alert-primary">
+                @Model.Recommendation
+            </div>
+
+            @foreach (var product in Model.Products)
+            {
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h2 class="h4">@product.ProductName</h2>
+
+                        <p class="fs-4">
+                            <strong>@product.TotalScore/100</strong>
+                        </p>
+
+                        <p>
+                            @product.BoxesRequired cajas ·
+                            @product.PurchasedAreaSquareMeters.ToString("N2") m² comprados ·
+                            $@product.TotalCost.ToString("N2")
+                        </p>
+
+                        <p>
+                            Excedente estimado:
+                            <strong>
+                                @product.ExcessAreaSquareMeters.ToString("N2") m²
+                                (@product.ExcessPercentage.ToString("N1") %)
+                            </strong>
+                        </p>
+
+                        <p>
+                            Cobertura:
+                            <strong>@CoverageText(product.CoverageStatus)</strong>
+                        </p>
+
+                        <ul>
+                            @foreach (var factor in product.Factors)
+                            {
+                                <li class="mb-2">
+                                    <strong>
+                                        @FactorText(factor.FactorType):
+                                        @factor.Score.ToString("N1") /
+                                        @factor.MaximumScore.ToString("N0")
+                                    </strong>
+                                    <br />
+                                    @factor.Explanation
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            }
+
+            <div class="alert alert-info">
+                Resultado orientativo. Verificá la cobertura informada en la caja,
+                el lote disponible y las recomendaciones del fabricante o colocador.
+            </div>
+
+            <a asp-controller="Flooring"
+               asp-action="Index"
+               class="btn btn-primary">
+                Calcular otra superficie
+            </a>
+        </div>
+    </div>
+</div>
+
+@functions {
+    private static string CoverageText(FlooringCoverageStatus status) =>
+        status switch
+        {
+            FlooringCoverageStatus.Insufficient => "Insuficiente",
+            FlooringCoverageStatus.Adequate => "Adecuada",
+            FlooringCoverageStatus.Excessive => "Excesiva",
+            _ => "Sin datos"
+        };
+
+    private static string FactorText(FlooringScoreFactorType factor) =>
+        factor switch
+        {
+            FlooringScoreFactorType.ActualCoverage => "Cobertura real",
+            FlooringScoreFactorType.TotalCost => "Costo total",
+            FlooringScoreFactorType.EstimatedWaste => "Material excedente",
+            FlooringScoreFactorType.UseResistance => "Resistencia de uso",
+            FlooringScoreFactorType.ReplacementEase => "Facilidad de reposición",
+            _ => "Factor"
+        };
+}

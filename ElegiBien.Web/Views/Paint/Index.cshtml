@@ -1,0 +1,233 @@
+@model ElegiBien.Web.Models.Paint.PaintQuickViewModel
+@using ElegiBien.Domain.Enums
+
+@{
+    ViewData["Title"] = "Cuánta pintura necesito";
+    ViewData["Description"] = "Calculá cuántos litros de pintura necesitás según la superficie, las manos y el estado de las paredes, y compará alternativas.";
+}
+
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <h1>Cuánta pintura necesitás</h1>
+
+            <p class="lead">
+                Calculá la superficie y una cantidad orientativa de litros.
+            </p>
+
+            <form asp-action="Index" method="post">
+                @Html.AntiForgeryToken()
+
+                <div asp-validation-summary="ModelOnly"
+                     class="text-danger mb-3" data-validation-summary>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label asp-for="Input.LengthMeters"
+                               class="form-label">
+                        </label>
+
+                        <input asp-for="Input.LengthMeters"
+                               class="form-control"
+                               step="0.01" />
+
+                        <span asp-validation-for="Input.LengthMeters"
+                              class="text-danger">
+                        </span>
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                        <label asp-for="Input.WidthMeters"
+                               class="form-label">
+                        </label>
+
+                        <input asp-for="Input.WidthMeters"
+                               class="form-control"
+                               step="0.01" />
+
+                        <span asp-validation-for="Input.WidthMeters"
+                              class="text-danger">
+                        </span>
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                        <label asp-for="Input.HeightMeters"
+                               class="form-label">
+                        </label>
+
+                        <input asp-for="Input.HeightMeters"
+                               class="form-control"
+                               step="0.01" />
+
+                        <span asp-validation-for="Input.HeightMeters"
+                              class="text-danger">
+                        </span>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label asp-for="Input.DoorCount"
+                               class="form-label">
+                        </label>
+
+                        <input asp-for="Input.DoorCount"
+                               class="form-control" />
+
+                        <span asp-validation-for="Input.DoorCount"
+                              class="text-danger">
+                        </span>
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                        <label asp-for="Input.WindowCount"
+                               class="form-label">
+                        </label>
+
+                        <input asp-for="Input.WindowCount"
+                               class="form-control" />
+
+                        <span asp-validation-for="Input.WindowCount"
+                              class="text-danger">
+                        </span>
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                        <label asp-for="Input.CoatCount"
+                               class="form-label">
+                        </label>
+
+                        <input asp-for="Input.CoatCount"
+                               class="form-control" />
+
+                        <span asp-validation-for="Input.CoatCount"
+                              class="text-danger">
+                        </span>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Input.SurfaceCondition"
+                           class="form-label">
+                    </label>
+
+                    <select asp-for="Input.SurfaceCondition"
+                            class="form-select">
+                        <option value="@PaintSurfaceCondition.Good">
+                            Buena
+                        </option>
+
+                        <option value="@PaintSurfaceCondition.NewOrPorous">
+                            Nueva o porosa
+                        </option>
+
+                        <option value="@PaintSurfaceCondition.Damaged">
+                            Dañada
+                        </option>
+                    </select>
+                </div>
+
+                <div class="form-check mb-3">
+                    <input asp-for="Input.IncludeCeiling"
+                           class="form-check-input" />
+
+                    <label asp-for="Input.IncludeCeiling"
+                           class="form-check-label">
+                    </label>
+                </div>
+
+                <div class="form-check mb-2">
+                    <input asp-for="AllowAnonymousAnalytics"
+                           class="form-check-input" />
+
+                    <label asp-for="AllowAnonymousAnalytics"
+                           class="form-check-label">
+                        Permitir estadísticas anónimas para mejorar ElegíBien.
+                    </label>
+                </div>
+
+                <div class="form-check mb-3">
+                    <input asp-for="AllowRadarData"
+                           class="form-check-input" />
+
+                    <label asp-for="AllowRadarData"
+                           class="form-check-label">
+                        Permitir incorporar esta consulta anónima al futuro Radar ElegíBien.
+                    </label>
+                </div>
+
+                <p class="small text-muted">
+                    No solicitamos nombre, documento, teléfono, domicilio ni información bancaria.
+                </p>
+
+                <div class="mobile-submit-bar">
+
+
+                    <button class="btn btn-primary"
+                        type="submit">
+                    Calcular pintura
+                </button>
+
+
+                </div>
+            </form>
+
+            @if (Model.Result is not null)
+            {
+                <div class="card mt-4 result-focus-target" data-auto-scroll-target tabindex="-1">
+                    <div class="card-body">
+                        <h2 class="h4">Resultado orientativo</h2>
+
+                        <p>
+                            Superficie neta:
+                            <strong>
+                                @Model.Result.NetAreaSquareMeters.ToString("N2") m²
+                            </strong>
+                        </p>
+
+                        <p>
+                            Superficie ajustada:
+                            <strong>
+                                @Model.Result.AdjustedAreaSquareMeters.ToString("N2") m²
+                            </strong>
+                        </p>
+
+                        <p>
+                            Referencia:
+                            <strong>
+                                @Model.Result.ReferenceLiters.ToString("N2") litros
+                            </strong>
+                            para @Model.Result.CoatCount manos.
+                        </p>
+
+                        <p>@Model.Result.Explanation</p>
+
+                        @if (Model.Result.RequiresProfessionalReview)
+                        {
+                            <div class="alert alert-warning">
+                                La superficie requiere revisión o preparación profesional antes de pintar.
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="alert alert-info">
+                                El resultado es orientativo. Revisá el rendimiento indicado por el fabricante.
+                            </div>
+                        }
+
+                        <a asp-action="Compare"
+                           asp-route-id="@Model.Result.AnalysisId"
+                           class="btn btn-success">
+                            Comparar dos pinturas
+                        </a>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

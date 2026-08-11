@@ -1,0 +1,5 @@
+# ElegíBien genera /robots.txt dinámicamente para usar el dominio real de cada entorno.
+# Este archivo queda únicamente como respaldo del contenido estático.
+User-agent: *
+Allow: /
+Disallow: /Shared/
