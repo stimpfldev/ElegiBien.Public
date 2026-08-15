@@ -42,18 +42,18 @@ public static class ApplicationBuilderExtensions
             headers.TryAdd("Cross-Origin-Resource-Policy", "same-origin");
 
             var csp = string.Join(' ',
-                "default-src 'self';",
-                "base-uri 'self';",
-                "object-src 'none';",
-                "frame-ancestors 'none';",
-                "form-action 'self';",
-                "script-src 'self';",
-                "style-src 'self';",
-                "img-src 'self' data:;",
-                "font-src 'self';",
-                "connect-src 'self';",
-                "manifest-src 'self';",
-                "worker-src 'self';");
+       "default-src 'self';",
+       "base-uri 'self';",
+       "object-src 'none';",
+       "frame-ancestors 'none';",
+       "form-action 'self';",
+       "script-src 'self' https://www.googletagmanager.com;",
+       "style-src 'self';",
+       "img-src 'self' data: https://*.google-analytics.com https://www.googletagmanager.com;",
+       "font-src 'self';",
+       "connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com;",
+       "manifest-src 'self';",
+       "worker-src 'self';");
 
             if (!context.RequestServices
                     .GetRequiredService<IWebHostEnvironment>()

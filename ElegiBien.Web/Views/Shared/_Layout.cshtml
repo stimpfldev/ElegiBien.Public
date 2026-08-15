@@ -1,3 +1,4 @@
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
 @{
     var robots = ViewData["Robots"] as string;
     var description = ViewData["Description"]?.ToString()
@@ -5,6 +6,17 @@
     var isIndexable = string.IsNullOrWhiteSpace(robots)
         || !robots.Contains("noindex", StringComparison.OrdinalIgnoreCase);
     var canonicalUrl = $"{Context.Request.Scheme}://{Context.Request.Host}{Context.Request.PathBase}{Context.Request.Path}";
+
+    var googleAnalyticsEnabled =
+    string.Equals(
+        Configuration["GoogleAnalytics:Enabled"],
+        "true",
+        StringComparison.OrdinalIgnoreCase);
+
+    var googleAnalyticsMeasurementId = Configuration["GoogleAnalytics:MeasurementId"];
+     var loadGoogleAnalytics = googleAnalyticsEnabled
+    && !string.IsNullOrWhiteSpace(googleAnalyticsMeasurementId)
+    && isIndexable;
 }
 <!DOCTYPE html>
 <html lang="es-AR">
@@ -23,6 +35,11 @@
     }
     <meta name="theme-color" content="#123c69" />
     <meta name="application-name" content="ElegíBien" />
+    @if (loadGoogleAnalytics)
+    {
+        <meta name="google-analytics-measurement-id"
+              content="@googleAnalyticsMeasurementId" />
+    }
 
     <link rel="manifest" href="/manifest.webmanifest" />
     <link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192.png" />
@@ -33,6 +50,8 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/ElegiBien.Web.styles.css" asp-append-version="true" />
+
+
 </head>
 <body>
     <header class="site-header">
@@ -139,11 +158,9 @@
             </div>
         </div>
     </footer>
-
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
-
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
