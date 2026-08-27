@@ -9,13 +9,22 @@
 <div class="container py-4">
     <div class="row justify-content-center">
         <div class="col-lg-8">
+            <div class="d-flex flex-wrap gap-2 mb-3">
+                <a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary">
+                    Volver al inicio
+                </a>
+                <a asp-action="Compare" class="btn btn-outline-primary">
+                    Comparar dos productos
+                </a>
+            </div>
+
             <h1>Cuántos cerámicos o pisos necesitás</h1>
 
             <p class="lead">
                 Calculá la superficie y el material adicional recomendado para cortes, roturas y futuras reposiciones.
             </p>
 
-            <form asp-action="Index" method="post">
+            <form asp-action="Index" method="post" id="flooring-input">
                 @Html.AntiForgeryToken()
 
                 <div asp-validation-summary="ModelOnly"
@@ -107,14 +116,9 @@
                 </div>
 
                 <div class="mobile-submit-bar">
-
-
-                    <button class="btn btn-primary"
-                        type="submit">
-                    Calcular superficie
-                </button>
-
-
+                    <button class="btn btn-primary" type="submit">
+                        Calcular superficie
+                    </button>
                 </div>
             </form>
 
@@ -159,11 +163,19 @@
                             </div>
                         }
 
-                        <a asp-action="Compare"
-                           asp-route-id="@Model.Result.AnalysisId"
-                           class="btn btn-outline-primary">
-                            Comparar dos productos
-                        </a>
+                        <div class="d-flex flex-wrap gap-2 mt-3">
+                            <a href="#flooring-input" class="btn btn-outline-secondary">
+                                Modificar datos
+                            </a>
+                            <a asp-action="Compare"
+                               asp-route-id="@Model.Result.AnalysisId"
+                               class="btn btn-outline-primary">
+                                Comparar dos productos
+                            </a>
+                            <a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary">
+                                Volver al inicio
+                            </a>
+                        </div>
                     </div>
                 </div>
             }
@@ -173,5 +185,4 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
-
 }
