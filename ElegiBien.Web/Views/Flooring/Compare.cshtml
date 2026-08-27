@@ -7,19 +7,48 @@
 }
 
 <div class="container py-4">
+    <div class="d-flex flex-wrap gap-2 mb-3">
+        <a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary">
+            Volver al inicio
+        </a>
+        <a asp-action="Index" class="btn btn-outline-secondary">
+            Calcular superficie
+        </a>
+    </div>
+
     <h1>Comparar cerámicos y pisos</h1>
 
     <p class="lead">
-        Necesitás cubrir aproximadamente
-        <strong>@Model.RequiredAreaSquareMeters.ToString("N2") m²</strong>.
+        Ingresá la superficie que necesitás cubrir y los datos de los dos productos.
     </p>
 
-    <form asp-action="Compare" method="post">
+    <form asp-action="Compare" method="post" id="flooring-comparison-form">
         @Html.AntiForgeryToken()
         <input asp-for="AnalysisId" type="hidden" />
 
         <div asp-validation-summary="ModelOnly"
              class="text-danger mb-3" data-validation-summary>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-body">
+                <label asp-for="RequiredAreaSquareMeters" class="form-label"></label>
+                <div class="input-group">
+                    <input asp-for="RequiredAreaSquareMeters"
+                           class="form-control"
+                           step="0.01"
+                           readonly="@(Model.AnalysisId != Guid.Empty ? "readonly" : null)" />
+                    <span class="input-group-text">m²</span>
+                </div>
+                <span asp-validation-for="RequiredAreaSquareMeters" class="text-danger"></span>
+
+                @if (Model.AnalysisId != Guid.Empty)
+                {
+                    <div class="form-text">
+                        Esta superficie proviene del cálculo anterior. Para cambiarla, iniciá una comparación nueva.
+                    </div>
+                }
+            </div>
         </div>
 
         <div class="row">
@@ -47,14 +76,9 @@
         </div>
 
         <div class="mobile-submit-bar">
-
-
-            <button class="btn btn-primary"
-                type="submit">
-            Comparar productos
-        </button>
-
-
+            <button class="btn btn-primary" type="submit">
+                Comparar productos
+            </button>
         </div>
     </form>
 
@@ -140,6 +164,18 @@
                             </ul>
                         </div>
                     }
+                </div>
+
+                <div class="d-flex flex-wrap gap-2 mt-2">
+                    <a href="#flooring-comparison-form" class="btn btn-outline-secondary">
+                        Modificar productos
+                    </a>
+                    <a asp-action="Compare" class="btn btn-outline-primary">
+                        Nueva comparación
+                    </a>
+                    <a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary">
+                        Volver al inicio
+                    </a>
                 </div>
             </div>
         </div>
