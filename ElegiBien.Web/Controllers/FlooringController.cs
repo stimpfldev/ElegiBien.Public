@@ -39,9 +39,14 @@ public class FlooringController : Controller
     }
 
     [HttpGet]
-    public async Task<IActionResult> Compare(Guid id, CancellationToken cancellationToken)
+    public async Task<IActionResult> Compare(Guid? id, CancellationToken cancellationToken)
     {
-        var context = await _useCase.GetComparisonContextAsync(id, cancellationToken);
+        if (!id.HasValue || id.Value == Guid.Empty)
+        {
+            return View(new FlooringComparisonViewModel());
+        }
+
+        var context = await _useCase.GetComparisonContextAsync(id.Value, cancellationToken);
         if (context is null)
         {
             return NotFound();
@@ -49,7 +54,7 @@ public class FlooringController : Controller
 
         return View(new FlooringComparisonViewModel
         {
-            AnalysisId = id,
+            AnalysisId = id.Value,
             RequiredAreaSquareMeters = context.RequiredAreaSquareMeters
         });
     }
@@ -61,16 +66,29 @@ public class FlooringController : Controller
         FlooringComparisonViewModel model,
         CancellationToken cancellationToken)
     {
-        var context = await _useCase.GetComparisonContextAsync(model.AnalysisId, cancellationToken);
-        if (context is null)
-        {
-            return NotFound();
-        }
-
-        model.RequiredAreaSquareMeters = context.RequiredAreaSquareMeters;
         if (!ModelState.IsValid)
         {
             return View(model);
+        }
+
+        if (model.AnalysisId == Guid.Empty)
+        {
+            var createdContext = await _useCase.CreateComparisonContextAsync(
+                model.RequiredAreaSquareMeters,
+                cancellationToken);
+
+            model.AnalysisId = createdContext.AnalysisId;
+            model.RequiredAreaSquareMeters = createdContext.RequiredAreaSquareMeters;
+        }
+        else
+        {
+            var context = await _useCase.GetComparisonContextAsync(model.AnalysisId, cancellationToken);
+            if (context is null)
+            {
+                return NotFound();
+            }
+
+            model.RequiredAreaSquareMeters = context.RequiredAreaSquareMeters;
         }
 
         var execution = await _useCase.CompareAsync(
