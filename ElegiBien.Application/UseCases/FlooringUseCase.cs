@@ -13,6 +13,10 @@ public interface IFlooringUseCase
         bool allowRadarData,
         CancellationToken cancellationToken = default);
 
+    Task<FlooringComparisonContext> CreateComparisonContextAsync(
+        decimal requiredAreaSquareMeters,
+        CancellationToken cancellationToken = default);
+
     Task<FlooringComparisonContext?> GetComparisonContextAsync(
         Guid analysisId,
         CancellationToken cancellationToken = default);
@@ -24,7 +28,7 @@ public interface IFlooringUseCase
         CancellationToken cancellationToken = default);
 }
 
-public sealed record FlooringComparisonContext(decimal RequiredAreaSquareMeters);
+public sealed record FlooringComparisonContext(decimal RequiredAreaSquareMeters, Guid AnalysisId = default);
 
 public sealed record FlooringComparisonExecution(
     FlooringComparisonContext Context,
@@ -99,6 +103,31 @@ public sealed class FlooringUseCase : IFlooringUseCase
         };
     }
 
+    public async Task<FlooringComparisonContext> CreateComparisonContextAsync(
+        decimal requiredAreaSquareMeters,
+        CancellationToken cancellationToken = default)
+    {
+        if (requiredAreaSquareMeters <= 0)
+        {
+            throw new ArgumentOutOfRangeException(nameof(requiredAreaSquareMeters));
+        }
+
+        var analysisId = Guid.NewGuid();
+        var domainInput = new FlooringInput
+        {
+            AnalysisId = analysisId,
+            LengthMeters = requiredAreaSquareMeters,
+            WidthMeters = 1m,
+            InstallationPattern = FlooringInstallationPattern.Straight,
+            WastePercentage = 0m
+        };
+
+        var result = _calculator.Calculate(domainInput);
+        await _store.SaveAsync(domainInput, result, AnalysisMode.Quick, cancellationToken);
+
+        return new FlooringComparisonContext(result.RequiredAreaSquareMeters, analysisId);
+    }
+
     public async Task<FlooringComparisonContext?> GetComparisonContextAsync(
         Guid analysisId,
         CancellationToken cancellationToken = default)
@@ -106,7 +135,7 @@ public sealed class FlooringUseCase : IFlooringUseCase
         var result = await _reader.GetCalculationResultAsync(analysisId, cancellationToken);
         return result is null
             ? null
-            : new FlooringComparisonContext(result.RequiredAreaSquareMeters);
+            : new FlooringComparisonContext(result.RequiredAreaSquareMeters, analysisId);
     }
 
     public async Task<FlooringComparisonExecution?> CompareAsync(
@@ -131,7 +160,7 @@ public sealed class FlooringUseCase : IFlooringUseCase
 
         var token = await _sharedResultService.CreateOrGetTokenAsync(analysisId, cancellationToken);
         return new FlooringComparisonExecution(
-            new FlooringComparisonContext(calculation.RequiredAreaSquareMeters),
+            new FlooringComparisonContext(calculation.RequiredAreaSquareMeters, analysisId),
             result,
             token);
     }
