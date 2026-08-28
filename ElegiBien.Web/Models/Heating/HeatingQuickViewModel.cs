@@ -9,6 +9,8 @@ public class HeatingQuickViewModel
 
     public HeatingCalculationResultDto? Result { get; set; }
 
+    public string? ShareUrl { get; set; }
+
     [Display(Name = "Permitir analítica anónima para mejorar ElegíBien")]
     public bool AllowAnonymousAnalytics { get; set; }
 
