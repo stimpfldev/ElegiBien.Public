@@ -8,4 +8,5 @@ public class FlooringQuickViewModel
     public bool AllowAnonymousAnalytics { get; set; }
     public bool AllowRadarData { get; set; }
     public FlooringCalculationResultDto? Result { get; set; }
+    public string? ShareUrl { get; set; }
 }
