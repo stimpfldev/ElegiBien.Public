@@ -11,69 +11,86 @@
         <div class="col-lg-9">
             <h1>Resultado ElegíBien: Cerámicos y pisos</h1>
 
-            <p>
-                Superficie original:
-                <strong>@Model.TotalAreaSquareMeters.ToString("N2") m²</strong>
-            </p>
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h2 class="h4">Resultado del cálculo</h2>
 
-            <p>
-                Material adicional considerado:
-                <strong>@Model.WastePercentage.ToString("N1") %</strong>
-            </p>
+                    <p>
+                        Superficie original:
+                        <strong>@Model.TotalAreaSquareMeters.ToString("N2") m²</strong>
+                    </p>
 
-            <p>
-                Superficie total necesaria:
-                <strong>@Model.RequiredAreaSquareMeters.ToString("N2") m²</strong>
-            </p>
+                    <p>
+                        Material adicional considerado:
+                        <strong>@Model.WastePercentage.ToString("N1") %</strong>
+                    </p>
 
-            <div class="alert alert-primary">
-                @Model.Recommendation
+                    <p class="mb-0">
+                        Superficie total necesaria:
+                        <strong>@Model.RequiredAreaSquareMeters.ToString("N2") m²</strong>
+                    </p>
+                </div>
             </div>
 
-            @foreach (var product in Model.Products)
+            @if (Model.Products.Count > 0)
             {
-                <div class="card mb-3">
-                    <div class="card-body">
-                        <h2 class="h4">@product.ProductName</h2>
+                <h2 class="h4 mt-4">Comparación de productos</h2>
 
-                        <p class="fs-4">
-                            <strong>@product.TotalScore/100</strong>
-                        </p>
+                <div class="alert alert-primary">
+                    @Model.Recommendation
+                </div>
 
-                        <p>
-                            @product.BoxesRequired cajas ·
-                            @product.PurchasedAreaSquareMeters.ToString("N2") m² comprados ·
-                            $@product.TotalCost.ToString("N2")
-                        </p>
+                @foreach (var product in Model.Products)
+                {
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h3 class="h5">@product.ProductName</h3>
 
-                        <p>
-                            Excedente estimado:
-                            <strong>
-                                @product.ExcessAreaSquareMeters.ToString("N2") m²
-                                (@product.ExcessPercentage.ToString("N1") %)
-                            </strong>
-                        </p>
+                            <p class="fs-4">
+                                <strong>@product.TotalScore/100</strong>
+                            </p>
 
-                        <p>
-                            Cobertura:
-                            <strong>@CoverageText(product.CoverageStatus)</strong>
-                        </p>
+                            <p>
+                                @product.BoxesRequired cajas ·
+                                @product.PurchasedAreaSquareMeters.ToString("N2") m² comprados ·
+                                $@product.TotalCost.ToString("N2")
+                            </p>
 
-                        <ul>
-                            @foreach (var factor in product.Factors)
-                            {
-                                <li class="mb-2">
-                                    <strong>
-                                        @FactorText(factor.FactorType):
-                                        @factor.Score.ToString("N1") /
-                                        @factor.MaximumScore.ToString("N0")
-                                    </strong>
-                                    <br />
-                                    @factor.Explanation
-                                </li>
-                            }
-                        </ul>
+                            <p>
+                                Excedente estimado:
+                                <strong>
+                                    @product.ExcessAreaSquareMeters.ToString("N2") m²
+                                    (@product.ExcessPercentage.ToString("N1") %)
+                                </strong>
+                            </p>
+
+                            <p>
+                                Cobertura:
+                                <strong>@CoverageText(product.CoverageStatus)</strong>
+                            </p>
+
+                            <ul>
+                                @foreach (var factor in product.Factors)
+                                {
+                                    <li class="mb-2">
+                                        <strong>
+                                            @FactorText(factor.FactorType):
+                                            @factor.Score.ToString("N1") /
+                                            @factor.MaximumScore.ToString("N0")
+                                        </strong>
+                                        <br />
+                                        @factor.Explanation
+                                    </li>
+                                }
+                            </ul>
+                        </div>
                     </div>
+                }
+            }
+            else
+            {
+                <div class="alert alert-secondary">
+                    Este enlace comparte el resultado del cálculo. No se realizó una comparación de productos para este análisis.
                 </div>
             }
 
