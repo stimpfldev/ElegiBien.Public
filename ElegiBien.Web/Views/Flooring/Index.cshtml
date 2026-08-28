@@ -33,84 +33,60 @@
 
                 <div class="row">
                     <div class="col-md-6 mb-3">
-                        <label asp-for="Input.LengthMeters"
-                               class="form-label">
-                        </label>
-
+                        <label asp-for="Input.LengthMeters" class="form-label"></label>
                         <div class="input-group">
-                            <input asp-for="Input.LengthMeters"
-                                   class="form-control"
-                                   step="0.01" />
+                            <input asp-for="Input.LengthMeters" class="form-control" step="0.01" />
                             <span class="input-group-text">m</span>
                         </div>
-
-                        <span asp-validation-for="Input.LengthMeters"
-                              class="text-danger">
-                        </span>
+                        <span asp-validation-for="Input.LengthMeters" class="text-danger"></span>
                     </div>
 
                     <div class="col-md-6 mb-3">
-                        <label asp-for="Input.WidthMeters"
-                               class="form-label">
-                        </label>
-
+                        <label asp-for="Input.WidthMeters" class="form-label"></label>
                         <div class="input-group">
-                            <input asp-for="Input.WidthMeters"
-                                   class="form-control"
-                                   step="0.01" />
+                            <input asp-for="Input.WidthMeters" class="form-control" step="0.01" />
                             <span class="input-group-text">m</span>
                         </div>
-
-                        <span asp-validation-for="Input.WidthMeters"
-                              class="text-danger">
-                        </span>
+                        <span asp-validation-for="Input.WidthMeters" class="text-danger"></span>
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-md-6 mb-3">
-                        <label asp-for="Input.InstallationPattern"
-                               class="form-label">
-                        </label>
-
+                        <label asp-for="Input.InstallationPattern" class="form-label"></label>
                         <select asp-for="Input.InstallationPattern"
                                 class="form-select"
-                                id="installationPattern" data-flooring-pattern>
-                            <option value="@FlooringInstallationPattern.Straight">
-                                Recta
-                            </option>
-                            <option value="@FlooringInstallationPattern.Staggered">
-                                Trabada
-                            </option>
-                            <option value="@FlooringInstallationPattern.Diagonal">
-                                Diagonal
-                            </option>
+                                id="installationPattern"
+                                data-flooring-pattern>
+                            <option value="@FlooringInstallationPattern.Straight">Recta</option>
+                            <option value="@FlooringInstallationPattern.Staggered">Trabada</option>
+                            <option value="@FlooringInstallationPattern.Diagonal">Diagonal</option>
                         </select>
                     </div>
+
                     <div class="col-md-6 mb-3">
                         <span class="form-label d-block">Material adicional calculado</span>
                         <div class="recommendation-panel" aria-live="polite">
                             <strong id="wasteRecommendationValue" data-flooring-waste-value>10 %</strong>
                             <span id="wasteExplanation" data-flooring-waste-explanation>para cortes, roturas y futuras reposiciones.</span>
                         </div>
-                        <input asp-for="Input.WastePercentage" type="hidden" id="wastePercentage" data-flooring-waste />
+                        <input asp-for="Input.WastePercentage"
+                               type="hidden"
+                               id="wastePercentage"
+                               data-flooring-waste />
                     </div>
                 </div>
 
                 <div class="form-check mb-2">
-                    <input asp-for="AllowAnonymousAnalytics"
-                           class="form-check-input" />
-                    <label asp-for="AllowAnonymousAnalytics"
-                           class="form-check-label">
+                    <input asp-for="AllowAnonymousAnalytics" class="form-check-input" />
+                    <label asp-for="AllowAnonymousAnalytics" class="form-check-label">
                         Permitir analítica anónima para mejorar ElegíBien.
                     </label>
                 </div>
 
                 <div class="form-check mb-3">
-                    <input asp-for="AllowRadarData"
-                           class="form-check-input" />
-                    <label asp-for="AllowRadarData"
-                           class="form-check-label">
+                    <input asp-for="AllowRadarData" class="form-check-input" />
+                    <label asp-for="AllowRadarData" class="form-check-label">
                         Permitir el uso anónimo de este resultado en estadísticas agregadas.
                     </label>
                 </div>
@@ -130,36 +106,47 @@
 
                         <dl class="row mb-0">
                             <dt class="col-sm-7">Superficie del piso</dt>
-                            <dd class="col-sm-5">
-                                @Model.Result.TotalAreaSquareMeters.ToString("N2") m²
-                            </dd>
+                            <dd class="col-sm-5">@Model.Result.TotalAreaSquareMeters.ToString("N2") m²</dd>
 
                             <dt class="col-sm-7">Material adicional aplicado</dt>
-                            <dd class="col-sm-5">
-                                @Model.Result.WastePercentage.ToString("N1") %
-                            </dd>
+                            <dd class="col-sm-5">@Model.Result.WastePercentage.ToString("N1") %</dd>
 
                             <dt class="col-sm-7">Superficie adicional</dt>
-                            <dd class="col-sm-5">
-                                @Model.Result.WasteAreaSquareMeters.ToString("N2") m²
-                            </dd>
+                            <dd class="col-sm-5">@Model.Result.WasteAreaSquareMeters.ToString("N2") m²</dd>
 
                             <dt class="col-sm-7">Superficie total necesaria</dt>
                             <dd class="col-sm-5 fs-5">
-                                <strong>
-                                    @Model.Result.RequiredAreaSquareMeters.ToString("N2") m²
-                                </strong>
+                                <strong>@Model.Result.RequiredAreaSquareMeters.ToString("N2") m²</strong>
                             </dd>
                         </dl>
 
-                        <p class="mt-3 mb-2">
-                            @Model.Result.Explanation
-                        </p>
+                        <p class="mt-3 mb-2">@Model.Result.Explanation</p>
 
                         @if (Model.Result.RequiresProfessionalReview)
                         {
                             <div class="alert alert-warning mb-3">
                                 Conviene revisar medidas, cortes y disposición antes de comprar.
+                            </div>
+                        }
+
+                        @if (!string.IsNullOrWhiteSpace(Model.ShareUrl))
+                        {
+                            <div class="share-result-box mt-3 mb-3">
+                                <label for="flooring-quick-share-url" class="form-label fw-semibold">
+                                    Enlace para compartir este resultado
+                                </label>
+                                <div class="input-group">
+                                    <input id="flooring-quick-share-url"
+                                           data-share-url
+                                           class="form-control"
+                                           value="@Model.ShareUrl"
+                                           readonly />
+                                    <button type="button"
+                                            class="btn btn-outline-primary"
+                                            data-copy-share-url>
+                                        Copiar enlace
+                                    </button>
+                                </div>
                             </div>
                         }
 
