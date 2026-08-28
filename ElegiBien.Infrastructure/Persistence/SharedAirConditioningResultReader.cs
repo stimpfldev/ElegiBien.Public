@@ -19,14 +19,19 @@ public class SharedAirConditioningResultReader : ISharedAirConditioningResultRea
         Guid analysisId,
         CancellationToken cancellationToken = default)
     {
-        var dimensioning = await _dbContext.DimensioningResults
+        var analysis = await _dbContext.Analyses
             .AsNoTracking()
+            .Include(x => x.AirConditioningInput)
+            .Include(x => x.DimensioningResult)
             .SingleOrDefaultAsync(x => x.AnalysisId == analysisId, cancellationToken);
 
-        if (dimensioning is null)
+        if (analysis?.AirConditioningInput is null || analysis.DimensioningResult is null)
         {
             return null;
         }
+
+        var input = analysis.AirConditioningInput;
+        var dimensioning = analysis.DimensioningResult;
 
         var alternatives = await GenericComparisonReader.LoadAsync(
             _dbContext,
@@ -72,6 +77,10 @@ public class SharedAirConditioningResultReader : ISharedAirConditioningResultRea
             RecommendedMinimumFrigories = dimensioning.RecommendedMinimumFrigories,
             RecommendedMaximumFrigories = dimensioning.RecommendedMaximumFrigories,
             IdealFrigories = dimensioning.IdealFrigories,
+            SurfaceSquareMeters = input.LengthMeters * input.WidthMeters,
+            VolumeCubicMeters = dimensioning.VolumeCubicMeters,
+            ConfidenceLevel = dimensioning.ConfidenceLevel,
+            RequiresProfessionalReview = dimensioning.RequiresProfessionalReview,
             Products = products,
             Recommendation = BuildRecommendation(products)
         };
