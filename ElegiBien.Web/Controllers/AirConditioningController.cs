@@ -1,3 +1,4 @@
+using ElegiBien.Application.Interfaces;
 using ElegiBien.Application.UseCases;
 using ElegiBien.Web.Models.AirConditioning;
 using Microsoft.AspNetCore.Mvc;
@@ -8,10 +9,14 @@ namespace ElegiBien.Web.Controllers;
 public class AirConditioningController : Controller
 {
     private readonly IAirConditioningUseCase _useCase;
+    private readonly ISharedResultService _sharedResultService;
 
-    public AirConditioningController(IAirConditioningUseCase useCase)
+    public AirConditioningController(
+        IAirConditioningUseCase useCase,
+        ISharedResultService sharedResultService)
     {
         _useCase = useCase;
+        _sharedResultService = sharedResultService;
     }
 
     [HttpGet]
@@ -34,6 +39,16 @@ public class AirConditioningController : Controller
             model.AllowAnonymousAnalytics,
             model.AllowRadarData,
             cancellationToken);
+
+        var token = await _sharedResultService.CreateOrGetTokenAsync(
+            model.Result.AnalysisId,
+            cancellationToken);
+
+        model.ShareUrl = Url.Action(
+            "Result",
+            "Shared",
+            new { token },
+            Request.Scheme);
 
         return View(model);
     }
