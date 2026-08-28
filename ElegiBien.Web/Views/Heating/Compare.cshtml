@@ -1,35 +1,291 @@
 @model ElegiBien.Web.Models.Heating.HeatingComparisonViewModel
 @using ElegiBien.Domain.Enums
+
 @{
     ViewData["Title"] = "Comparar equipos de calefacción";
 }
-<div class="container calculator-page py-4"><div class="row justify-content-center"><div class="col-lg-10">
-<h1>Compará dos equipos de calefacción</h1>
-<p class="lead">Rango recomendado: <strong>@Model.RecommendedMinimumWatts.ToString("N0") a @Model.RecommendedMaximumWatts.ToString("N0") W</strong>.</p>
-<form asp-action="Compare" method="post">
-@Html.AntiForgeryToken()<input asp-for="AnalysisId" type="hidden" />
-<div asp-validation-summary="ModelOnly" class="text-danger mb-3" data-validation-summary></div>
-<div class="card mb-4"><div class="card-body"><h2 class="h4">Primer equipo</h2><div asp-for="FirstProduct"><partial name="_HeatingProductFields" for="FirstProduct" /></div></div></div>
-<div class="card mb-4"><div class="card-body"><h2 class="h4">Segundo equipo</h2><div asp-for="SecondProduct"><partial name="_HeatingProductFields" for="SecondProduct" /></div></div></div>
-<div class="mobile-submit-bar"><button type="submit" class="btn btn-primary btn-lg">Comparar equipos</button></div>
-</form>
-@if (Model.Result is not null)
-{
-<div id="heatingComparisonResult" class="result-focus-target mt-4" data-auto-scroll-target tabindex="-1">
-<div class="alert alert-primary"><strong>@(Model.Result.IsTie ? "Empate técnico" : $"Recomendación: {Model.Result.RecommendedProductName}")</strong></div>
-@if (!string.IsNullOrWhiteSpace(Model.ShareUrl)) { <div class="mb-3"><label class="form-label">Enlace para compartir</label><input class="form-control" readonly value="@Model.ShareUrl" /></div> }
-<div class="row g-3">
-@foreach (var product in new[] { Model.Result.FirstProduct, Model.Result.SecondProduct })
-{
-<div class="col-md-6"><div class="card h-100"><div class="card-body"><h2 class="h4">@product.ProductName</h2><p class="display-6"><strong>@product.TotalScore/100</strong></p><p>Capacidad: <strong>@CapacityText(product.CapacityStatus)</strong></p>
-<ul class="ps-3">@foreach (var factor in product.Factors) { <li class="mb-2"><strong>@FactorText(factor.FactorType): @factor.Score.ToString("N1")/@factor.MaximumScore.ToString("N0")</strong><br />@factor.Explanation</li> }</ul>
-</div></div></div>
+
+<div class="container calculator-page py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <h1>Compará dos equipos de calefacción</h1>
+
+            <p class="lead">
+                Rango recomendado:
+                <strong>@Model.RecommendedMinimumWatts.ToString("N0") a @Model.RecommendedMaximumWatts.ToString("N0") W</strong>.
+            </p>
+
+            <form asp-action="Compare" method="post" id="heating-comparison-form">
+                @Html.AntiForgeryToken()
+                <input asp-for="AnalysisId" type="hidden" />
+
+                <div asp-validation-summary="ModelOnly"
+                     class="text-danger mb-3"
+                     data-validation-summary>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h2 class="h4">Primer equipo</h2>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="FirstProduct.Name" class="form-label">Nombre del equipo</label>
+                                <input asp-for="FirstProduct.Name" class="form-control" />
+                                <span asp-validation-for="FirstProduct.Name" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="FirstProduct.SystemType" class="form-label">Tipo de sistema</label>
+                                <select asp-for="FirstProduct.SystemType" class="form-select">
+                                    <option value="@HeatingSystemType.BalancedFlueGasHeater">Calefactor a gas de tiro balanceado</option>
+                                    <option value="@HeatingSystemType.ElectricHeater">Estufa eléctrica</option>
+                                    <option value="@HeatingSystemType.ElectricPanel">Panel eléctrico</option>
+                                    <option value="@HeatingSystemType.FanHeater">Caloventor</option>
+                                    <option value="@HeatingSystemType.HeatPumpAirConditioner">Aire acondicionado frío/calor</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label asp-for="FirstProduct.HeatingCapacityWatts" class="form-label">Potencia térmica</label>
+                                <div class="input-group">
+                                    <input asp-for="FirstProduct.HeatingCapacityWatts" class="form-control" step="1" />
+                                    <span class="input-group-text">W</span>
+                                </div>
+                                <span asp-validation-for="FirstProduct.HeatingCapacityWatts" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-4 mb-3">
+                                <label asp-for="FirstProduct.PurchasePrice" class="form-label">Precio del equipo</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">$</span>
+                                    <input asp-for="FirstProduct.PurchasePrice" class="form-control" step="0.01" />
+                                </div>
+                                <span asp-validation-for="FirstProduct.PurchasePrice" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-4 mb-3">
+                                <label asp-for="FirstProduct.EstimatedHourlyCost" class="form-label">Costo estimado por hora</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">$</span>
+                                    <input asp-for="FirstProduct.EstimatedHourlyCost" class="form-control" step="0.01" />
+                                </div>
+                                <span asp-validation-for="FirstProduct.EstimatedHourlyCost" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="FirstProduct.EfficiencyLevel" class="form-label">Eficiencia</label>
+                                <select asp-for="FirstProduct.EfficiencyLevel" class="form-select">
+                                    <option value="@HeatingEfficiencyLevel.Low">Baja</option>
+                                    <option value="@HeatingEfficiencyLevel.Medium">Media</option>
+                                    <option value="@HeatingEfficiencyLevel.High">Alta</option>
+                                    <option value="@HeatingEfficiencyLevel.VeryHigh">Muy alta</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="FirstProduct.SafetyLevel" class="form-label">Instalación y seguridad</label>
+                                <select asp-for="FirstProduct.SafetyLevel" class="form-select">
+                                    <option value="@HeatingSafetyLevel.RequiresSpecialistInstallation">Requiere instalación profesional</option>
+                                    <option value="@HeatingSafetyLevel.RequiresDedicatedElectricalCheck">Requiere revisión eléctrica dedicada</option>
+                                    <option value="@HeatingSafetyLevel.StandardInstallation">Instalación estándar</option>
+                                    <option value="@HeatingSafetyLevel.SimpleInstallation">Instalación simple</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h2 class="h4">Segundo equipo</h2>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="SecondProduct.Name" class="form-label">Nombre del equipo</label>
+                                <input asp-for="SecondProduct.Name" class="form-control" />
+                                <span asp-validation-for="SecondProduct.Name" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="SecondProduct.SystemType" class="form-label">Tipo de sistema</label>
+                                <select asp-for="SecondProduct.SystemType" class="form-select">
+                                    <option value="@HeatingSystemType.BalancedFlueGasHeater">Calefactor a gas de tiro balanceado</option>
+                                    <option value="@HeatingSystemType.ElectricHeater">Estufa eléctrica</option>
+                                    <option value="@HeatingSystemType.ElectricPanel">Panel eléctrico</option>
+                                    <option value="@HeatingSystemType.FanHeater">Caloventor</option>
+                                    <option value="@HeatingSystemType.HeatPumpAirConditioner">Aire acondicionado frío/calor</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label asp-for="SecondProduct.HeatingCapacityWatts" class="form-label">Potencia térmica</label>
+                                <div class="input-group">
+                                    <input asp-for="SecondProduct.HeatingCapacityWatts" class="form-control" step="1" />
+                                    <span class="input-group-text">W</span>
+                                </div>
+                                <span asp-validation-for="SecondProduct.HeatingCapacityWatts" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-4 mb-3">
+                                <label asp-for="SecondProduct.PurchasePrice" class="form-label">Precio del equipo</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">$</span>
+                                    <input asp-for="SecondProduct.PurchasePrice" class="form-control" step="0.01" />
+                                </div>
+                                <span asp-validation-for="SecondProduct.PurchasePrice" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-4 mb-3">
+                                <label asp-for="SecondProduct.EstimatedHourlyCost" class="form-label">Costo estimado por hora</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">$</span>
+                                    <input asp-for="SecondProduct.EstimatedHourlyCost" class="form-control" step="0.01" />
+                                </div>
+                                <span asp-validation-for="SecondProduct.EstimatedHourlyCost" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="SecondProduct.EfficiencyLevel" class="form-label">Eficiencia</label>
+                                <select asp-for="SecondProduct.EfficiencyLevel" class="form-select">
+                                    <option value="@HeatingEfficiencyLevel.Low">Baja</option>
+                                    <option value="@HeatingEfficiencyLevel.Medium">Media</option>
+                                    <option value="@HeatingEfficiencyLevel.High">Alta</option>
+                                    <option value="@HeatingEfficiencyLevel.VeryHigh">Muy alta</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="SecondProduct.SafetyLevel" class="form-label">Instalación y seguridad</label>
+                                <select asp-for="SecondProduct.SafetyLevel" class="form-select">
+                                    <option value="@HeatingSafetyLevel.RequiresSpecialistInstallation">Requiere instalación profesional</option>
+                                    <option value="@HeatingSafetyLevel.RequiresDedicatedElectricalCheck">Requiere revisión eléctrica dedicada</option>
+                                    <option value="@HeatingSafetyLevel.StandardInstallation">Instalación estándar</option>
+                                    <option value="@HeatingSafetyLevel.SimpleInstallation">Instalación simple</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mobile-submit-bar">
+                    <button type="submit" class="btn btn-primary btn-lg">
+                        Comparar equipos
+                    </button>
+                </div>
+            </form>
+
+            @if (Model.Result is not null)
+            {
+                <div id="heatingComparisonResult"
+                     class="result-focus-target mt-4"
+                     data-auto-scroll-target
+                     tabindex="-1">
+
+                    <div class="alert alert-primary">
+                        <strong>
+                            @(Model.Result.IsTie
+                                ? "Empate técnico"
+                                : $"Recomendación: {Model.Result.RecommendedProductName}")
+                        </strong>
+                    </div>
+
+                    @if (!string.IsNullOrWhiteSpace(Model.ShareUrl))
+                    {
+                        <div class="share-result-box mb-4">
+                            <label for="heating-comparison-share-url" class="form-label fw-semibold">
+                                Enlace para compartir este resultado
+                            </label>
+                            <div class="input-group">
+                                <input id="heating-comparison-share-url"
+                                       data-share-url
+                                       class="form-control"
+                                       readonly
+                                       value="@Model.ShareUrl" />
+                                <button type="button"
+                                        class="btn btn-outline-primary"
+                                        data-copy-share-url>
+                                    Copiar enlace
+                                </button>
+                            </div>
+                        </div>
+                    }
+
+                    <div class="row g-3">
+                        @foreach (var product in new[] { Model.Result.FirstProduct, Model.Result.SecondProduct })
+                        {
+                            <div class="col-md-6">
+                                <div class="card h-100">
+                                    <div class="card-body">
+                                        <h2 class="h4">@product.ProductName</h2>
+                                        <p class="display-6"><strong>@product.TotalScore/100</strong></p>
+                                        <p>Capacidad: <strong>@CapacityText(product.CapacityStatus)</strong></p>
+
+                                        <ul class="ps-3">
+                                            @foreach (var factor in product.Factors)
+                                            {
+                                                <li class="mb-2">
+                                                    <strong>
+                                                        @FactorText(factor.FactorType):
+                                                        @factor.Score.ToString("N1")/@factor.MaximumScore.ToString("N0")
+                                                    </strong>
+                                                    <br />
+                                                    @factor.Explanation
+                                                </li>
+                                            }
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+                    <div class="d-flex flex-wrap gap-2 mt-3">
+                        <a href="#heating-comparison-form" class="btn btn-outline-secondary">
+                            Modificar productos
+                        </a>
+                        <a asp-action="Index" class="btn btn-outline-secondary">
+                            Volver al cálculo
+                        </a>
+                        <a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary">
+                            Volver al inicio
+                        </a>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
 }
-</div></div>
-}
-</div></div></div>
-@section Scripts { <partial name="_ValidationScriptsPartial" /> }
+
 @functions {
-private static string CapacityText(HeatingCapacityStatus status) => status switch { HeatingCapacityStatus.Insufficient => "Insuficiente", HeatingCapacityStatus.Correct => "Correcta", HeatingCapacityStatus.AcceptableOversized => "Sobredimensionada aceptable", HeatingCapacityStatus.RelevantOversized => "Sobredimensionada", _ => "Sin datos" };
-private static string FactorText(HeatingScoreFactorType factor) => factor switch { HeatingScoreFactorType.CapacityAdequacy => "Adecuación de potencia", HeatingScoreFactorType.EstimatedOperatingCost => "Costo estimado de uso", HeatingScoreFactorType.Efficiency => "Eficiencia", HeatingScoreFactorType.SafetyAndInstallation => "Seguridad e instalación", HeatingScoreFactorType.PurchasePrice => "Precio del equipo", _ => "Factor" };
+    private static string CapacityText(HeatingCapacityStatus status) => status switch
+    {
+        HeatingCapacityStatus.Insufficient => "Insuficiente",
+        HeatingCapacityStatus.Correct => "Correcta",
+        HeatingCapacityStatus.AcceptableOversized => "Sobredimensionada aceptable",
+        HeatingCapacityStatus.RelevantOversized => "Sobredimensionada",
+        _ => "Sin datos"
+    };
+
+    private static string FactorText(HeatingScoreFactorType factor) => factor switch
+    {
+        HeatingScoreFactorType.CapacityAdequacy => "Adecuación de potencia",
+        HeatingScoreFactorType.EstimatedOperatingCost => "Costo estimado de uso",
+        HeatingScoreFactorType.Efficiency => "Eficiencia",
+        HeatingScoreFactorType.SafetyAndInstallation => "Seguridad e instalación",
+        HeatingScoreFactorType.PurchasePrice => "Precio del equipo",
+        _ => "Factor"
+    };
 }
