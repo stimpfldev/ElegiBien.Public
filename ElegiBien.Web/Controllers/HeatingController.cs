@@ -1,3 +1,4 @@
+using ElegiBien.Application.Interfaces;
 using ElegiBien.Application.UseCases;
 using ElegiBien.Web.Models.Heating;
 using Microsoft.AspNetCore.Mvc;
@@ -8,10 +9,14 @@ namespace ElegiBien.Web.Controllers;
 public class HeatingController : Controller
 {
     private readonly IHeatingUseCase _useCase;
+    private readonly ISharedResultService _sharedResultService;
 
-    public HeatingController(IHeatingUseCase useCase)
+    public HeatingController(
+        IHeatingUseCase useCase,
+        ISharedResultService sharedResultService)
     {
         _useCase = useCase;
+        _sharedResultService = sharedResultService;
     }
 
     [HttpGet]
@@ -34,6 +39,16 @@ public class HeatingController : Controller
             model.AllowAnonymousAnalytics,
             model.AllowRadarData,
             cancellationToken);
+
+        var token = await _sharedResultService.CreateOrGetTokenAsync(
+            model.Result.AnalysisId,
+            cancellationToken);
+
+        model.ShareUrl = Url.Action(
+            "HeatingResult",
+            "Shared",
+            new { token },
+            Request.Scheme);
 
         return View(model);
     }
