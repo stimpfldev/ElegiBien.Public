@@ -109,14 +109,14 @@ public class HeatingProductComparer : IHeatingProductComparer
                     FactorType = HeatingScoreFactorType.Efficiency,
                     Score = efficiency,
                     MaximumScore = 15m,
-                    Explanation = $"Nivel de eficiencia informado: {product.EfficiencyLevel}."
+                    Explanation = $"Nivel de eficiencia informado: {EfficiencyText(product.EfficiencyLevel)}."
                 },
                 new HeatingScoreFactorDto
                 {
                     FactorType = HeatingScoreFactorType.SafetyAndInstallation,
                     Score = safety,
                     MaximumScore = 15m,
-                    Explanation = $"Condición de instalación informada: {product.SafetyLevel}."
+                    Explanation = $"Condición de instalación informada: {SafetyText(product.SafetyLevel)}."
                 },
                 new HeatingScoreFactorDto
                 {
@@ -236,6 +236,18 @@ public class HeatingProductComparer : IHeatingProductComparer
         };
     }
 
+    private static string EfficiencyText(HeatingEfficiencyLevel level)
+    {
+        return level switch
+        {
+            HeatingEfficiencyLevel.Low => "Baja",
+            HeatingEfficiencyLevel.Medium => "Media",
+            HeatingEfficiencyLevel.High => "Alta",
+            HeatingEfficiencyLevel.VeryHigh => "Muy alta",
+            _ => "Sin datos"
+        };
+    }
+
     private static decimal CalculateSafetyScore(HeatingSafetyLevel level)
     {
         return level switch
@@ -245,6 +257,18 @@ public class HeatingProductComparer : IHeatingProductComparer
             HeatingSafetyLevel.StandardInstallation => 12m,
             HeatingSafetyLevel.SimpleInstallation => 15m,
             _ => 0m
+        };
+    }
+
+    private static string SafetyText(HeatingSafetyLevel level)
+    {
+        return level switch
+        {
+            HeatingSafetyLevel.RequiresSpecialistInstallation => "Requiere instalación profesional",
+            HeatingSafetyLevel.RequiresDedicatedElectricalCheck => "Requiere revisión eléctrica dedicada",
+            HeatingSafetyLevel.StandardInstallation => "Instalación estándar",
+            HeatingSafetyLevel.SimpleInstallation => "Instalación simple",
+            _ => "Sin datos"
         };
     }
 
