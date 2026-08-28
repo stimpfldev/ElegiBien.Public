@@ -20,7 +20,8 @@
 
                 <div asp-validation-summary="ModelOnly"
                      class="text-danger mb-3"
-                     id="validationSummary" data-validation-summary>
+                     id="validationSummary"
+                     data-validation-summary>
                 </div>
 
                 <div class="row">
@@ -110,7 +111,11 @@
                     <label asp-for="AllowRadarData" class="form-check-label"></label>
                 </div>
 
-                <div class="mobile-submit-bar"><button class="btn btn-primary btn-lg" type="submit">Calcular potencia</button></div>
+                <div class="mobile-submit-bar">
+                    <button class="btn btn-primary btn-lg" type="submit">
+                        Calcular potencia
+                    </button>
+                </div>
             </form>
 
             @if (Model.Result is not null)
@@ -144,18 +149,47 @@
                             <dd class="col-sm-5">@Model.Result.IdealPowerKcalPerHour.ToString("N0") kcal/h</dd>
                         </dl>
 
-                        <a asp-action="Compare"
-                           asp-route-id="@Model.Result.AnalysisId"
-                           class="btn btn-primary mt-3">
-                            Comparar dos equipos
-                        </a>
-
                         @if (Model.Result.RequiresProfessionalReview)
                         {
                             <div class="alert alert-warning mt-3 mb-0">
                                 Por las características del ambiente, conviene validar la instalación y la potencia con un profesional.
                             </div>
                         }
+
+                        @if (!string.IsNullOrWhiteSpace(Model.ShareUrl))
+                        {
+                            <div class="share-result-box mt-3 mb-3">
+                                <label for="heating-share-url" class="form-label fw-semibold">
+                                    Enlace para compartir este resultado
+                                </label>
+                                <div class="input-group">
+                                    <input id="heating-share-url"
+                                           data-share-url
+                                           class="form-control"
+                                           value="@Model.ShareUrl"
+                                           readonly />
+                                    <button type="button"
+                                            class="btn btn-outline-primary"
+                                            data-copy-share-url>
+                                        Copiar enlace
+                                    </button>
+                                </div>
+                            </div>
+                        }
+
+                        <div class="d-flex flex-wrap gap-2 mt-3">
+                            <a href="#heatingForm" class="btn btn-outline-secondary">
+                                Modificar datos
+                            </a>
+                            <a asp-action="Compare"
+                               asp-route-id="@Model.Result.AnalysisId"
+                               class="btn btn-outline-primary">
+                                Comparar dos productos
+                            </a>
+                            <a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary">
+                                Volver al inicio
+                            </a>
+                        </div>
                     </div>
                 </div>
             }
