@@ -71,6 +71,18 @@ public class PaintCalculatorTests
     }
 
     [Fact]
+    public void Calculate_LargeGoodSurface_DoesNotRequireProfessionalReview()
+    {
+        var input = CreateInput(PaintSurfaceCondition.Good, includeCeiling: true);
+        input.LengthMeters = 40m;
+        input.WidthMeters = 20m;
+
+        var result = new PaintCalculator().Calculate(input);
+
+        Assert.False(result.RequiresProfessionalReview);
+    }
+
+    [Fact]
     public void Calculate_InvalidDimensions_ThrowsException()
     {
         var input = CreateInput();
