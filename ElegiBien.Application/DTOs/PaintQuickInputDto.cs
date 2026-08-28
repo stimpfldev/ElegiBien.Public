@@ -5,10 +5,10 @@ namespace ElegiBien.Application.DTOs;
 
 public class PaintQuickInputDto
 {
-    [Required, Range(1, 30), Display(Name = "Largo del ambiente")]
+    [Required, Range(1, 200), Display(Name = "Largo del ambiente")]
     public decimal LengthMeters { get; set; }
 
-    [Required, Range(1, 30), Display(Name = "Ancho del ambiente")]
+    [Required, Range(1, 200), Display(Name = "Ancho del ambiente")]
     public decimal WidthMeters { get; set; }
 
     [Required, Range(2, 6), Display(Name = "Altura del ambiente")]
