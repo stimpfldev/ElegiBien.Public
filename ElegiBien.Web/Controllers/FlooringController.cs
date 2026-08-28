@@ -1,3 +1,4 @@
+using ElegiBien.Application.Interfaces;
 using ElegiBien.Application.UseCases;
 using ElegiBien.Web.Models.Flooring;
 using Microsoft.AspNetCore.Mvc;
@@ -8,10 +9,14 @@ namespace ElegiBien.Web.Controllers;
 public class FlooringController : Controller
 {
     private readonly IFlooringUseCase _useCase;
+    private readonly ISharedResultService _sharedResultService;
 
-    public FlooringController(IFlooringUseCase useCase)
+    public FlooringController(
+        IFlooringUseCase useCase,
+        ISharedResultService sharedResultService)
     {
         _useCase = useCase;
+        _sharedResultService = sharedResultService;
     }
 
     [HttpGet]
@@ -34,6 +39,16 @@ public class FlooringController : Controller
             model.AllowAnonymousAnalytics,
             model.AllowRadarData,
             cancellationToken);
+
+        var token = await _sharedResultService.CreateOrGetTokenAsync(
+            model.Result.AnalysisId,
+            cancellationToken);
+
+        model.ShareUrl = Url.Action(
+            "FlooringResult",
+            "Shared",
+            new { token },
+            Request.Scheme);
 
         return View(model);
     }
