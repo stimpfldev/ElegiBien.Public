@@ -6,12 +6,12 @@ namespace ElegiBien.Application.DTOs;
 public class FlooringQuickInputDto
 {
     [Required(ErrorMessage = "El campo {0} es obligatorio.")]
-    [Range(0.1, 100, ErrorMessage = "El campo {0} debe estar entre {1} y {2}.")]
+    [Range(0.1, 200, ErrorMessage = "El campo {0} debe estar entre {1} y {2}.")]
     [Display(Name = "Largo del piso")]
     public decimal LengthMeters { get; set; }
 
     [Required(ErrorMessage = "El campo {0} es obligatorio.")]
-    [Range(0.1, 100, ErrorMessage = "El campo {0} debe estar entre {1} y {2}.")]
+    [Range(0.1, 200, ErrorMessage = "El campo {0} debe estar entre {1} y {2}.")]
     [Display(Name = "Ancho del piso")]
     public decimal WidthMeters { get; set; }
 
