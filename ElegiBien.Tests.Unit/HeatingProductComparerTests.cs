@@ -36,6 +36,29 @@ public class HeatingProductComparerTests
     }
 
     [Fact]
+    public void Compare_WithVeryDifferentCapacities_DoesNotReturnTie()
+    {
+        var calculation = new HeatingCalculationResult
+        {
+            RecommendedMinimumWatts = 6175m,
+            RecommendedMaximumWatts = 7150m,
+            IdealPowerWatts = 6663m
+        };
+
+        var result = _comparer.Compare(
+            calculation,
+            CreateProduct("Equipo A", 10000m, 10m, 20m, HeatingEfficiencyLevel.Low, HeatingSafetyLevel.RequiresSpecialistInstallation),
+            CreateProduct("Equipo B", 2000m, 920m, 20m, HeatingEfficiencyLevel.Low, HeatingSafetyLevel.RequiresSpecialistInstallation));
+
+        Assert.False(result.IsTie);
+        Assert.Equal(19, result.FirstProduct.TotalScore);
+        Assert.Equal(11, result.SecondProduct.TotalScore);
+        Assert.Equal(HeatingCapacityStatus.RelevantOversized, result.FirstProduct.CapacityStatus);
+        Assert.Equal(HeatingCapacityStatus.Insufficient, result.SecondProduct.CapacityStatus);
+        Assert.Equal("Equipo A", result.RecommendedProductName);
+    }
+
+    [Fact]
     public void Compare_WithEqualProducts_ReturnsTie()
     {
         var first = CreateProduct("Producto A", 2700m, 500000m, 250m);
@@ -70,7 +93,9 @@ public class HeatingProductComparerTests
         string name,
         decimal capacityWatts,
         decimal purchasePrice,
-        decimal hourlyCost)
+        decimal hourlyCost,
+        HeatingEfficiencyLevel efficiencyLevel = HeatingEfficiencyLevel.High,
+        HeatingSafetyLevel safetyLevel = HeatingSafetyLevel.StandardInstallation)
     {
         return new HeatingProductAlternativeDto
         {
@@ -79,8 +104,8 @@ public class HeatingProductComparerTests
             HeatingCapacityWatts = capacityWatts,
             PurchasePrice = purchasePrice,
             EstimatedHourlyCost = hourlyCost,
-            EfficiencyLevel = HeatingEfficiencyLevel.High,
-            SafetyLevel = HeatingSafetyLevel.StandardInstallation
+            EfficiencyLevel = efficiencyLevel,
+            SafetyLevel = safetyLevel
         };
     }
 }
