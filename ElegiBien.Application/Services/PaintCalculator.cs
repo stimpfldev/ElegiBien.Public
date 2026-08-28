@@ -40,7 +40,7 @@ public class PaintCalculator : IPaintCalculator
         var wasteFactor = 1m + input.WastePercentage / 100m;
         var adjustedArea = netArea * input.CoatCount * conditionFactor * wasteFactor;
         var liters = adjustedArea / ReferenceCoverage;
-        var requiresReview = input.SurfaceCondition == PaintSurfaceCondition.Damaged || netArea >= 250m;
+        var requiresReview = input.SurfaceCondition == PaintSurfaceCondition.Damaged;
 
         return new PaintCalculationResult
         {
