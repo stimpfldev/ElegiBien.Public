@@ -11,4 +11,6 @@ public class AirConditioningQuickViewModel
     public bool AllowRadarData { get; set; }
 
     public AirConditioningResultDto? Result { get; set; }
+
+    public string? ShareUrl { get; set; }
 }
