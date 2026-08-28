@@ -9,6 +9,31 @@ if ("serviceWorker" in navigator) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+    if (!window.jQuery?.validator) return;
+
+    const validator = window.jQuery.validator;
+
+    window.jQuery.extend(validator.messages, {
+        required: "Este campo es obligatorio.",
+        remote: "Revisá este campo.",
+        email: "Ingresá un correo electrónico válido.",
+        url: "Ingresá una URL válida.",
+        date: "Ingresá una fecha válida.",
+        dateISO: "Ingresá una fecha válida.",
+        number: "Ingresá un número válido.",
+        digits: "Ingresá solo dígitos.",
+        equalTo: "Ingresá el mismo valor nuevamente.",
+        maxlength: validator.format("Ingresá como máximo {0} caracteres."),
+        minlength: validator.format("Ingresá al menos {0} caracteres."),
+        rangelength: validator.format("Ingresá entre {0} y {1} caracteres."),
+        range: validator.format("Ingresá un valor entre {0} y {1}."),
+        max: validator.format("Ingresá un valor menor o igual que {0}."),
+        min: validator.format("Ingresá un valor mayor o igual que {0}."),
+        step: validator.format("Ingresá un múltiplo de {0}.")
+    });
+});
+
+document.addEventListener("DOMContentLoaded", () => {
     const isVisible = element => {
         if (!element) return false;
         const style = window.getComputedStyle(element);
