@@ -59,6 +59,39 @@ document.addEventListener("click", async event => {
 });
 
 document.addEventListener("DOMContentLoaded", () => {
+    const airInputs = document.querySelectorAll(
+        'input[name="Input.LengthMeters"], ' +
+        'input[name="Input.WidthMeters"], ' +
+        'input[name$=".CapacityFrigories"], ' +
+        'input[name$=".NominalConsumptionWatts"], ' +
+        'input[name$=".Price"]'
+    );
+
+    airInputs.forEach(input => {
+        const name = input.name;
+
+        if (name.endsWith(".CapacityFrigories") ||
+            name.endsWith(".NominalConsumptionWatts")) {
+            input.step = "1";
+
+            if (input.value !== "" && Number.isFinite(Number(input.value))) {
+                input.value = Math.round(Number(input.value)).toString();
+            }
+
+            input.addEventListener("change", () => {
+                if (input.value !== "" && Number.isFinite(Number(input.value))) {
+                    input.value = Math.round(Number(input.value)).toString();
+                }
+            });
+
+            return;
+        }
+
+        input.step = "any";
+    });
+});
+
+document.addEventListener("DOMContentLoaded", () => {
     const pattern = document.querySelector("[data-flooring-pattern]");
     const waste = document.querySelector("[data-flooring-waste]");
     if (!pattern || !waste) return;
