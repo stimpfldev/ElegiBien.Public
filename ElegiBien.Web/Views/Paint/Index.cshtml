@@ -15,7 +15,7 @@
                 Calculá la superficie y una cantidad orientativa de litros.
             </p>
 
-            <form asp-action="Index" method="post">
+            <form asp-action="Index" method="post" id="paint-input">
                 @Html.AntiForgeryToken()
 
                 <div asp-validation-summary="ModelOnly"
@@ -24,135 +24,68 @@
 
                 <div class="row">
                     <div class="col-md-4 mb-3">
-                        <label asp-for="Input.LengthMeters"
-                               class="form-label">
-                        </label>
-
-                        <input asp-for="Input.LengthMeters"
-                               class="form-control"
-                               step="0.01" />
-
-                        <span asp-validation-for="Input.LengthMeters"
-                              class="text-danger">
-                        </span>
+                        <label asp-for="Input.LengthMeters" class="form-label"></label>
+                        <input asp-for="Input.LengthMeters" class="form-control" step="0.01" />
+                        <span asp-validation-for="Input.LengthMeters" class="text-danger"></span>
                     </div>
 
                     <div class="col-md-4 mb-3">
-                        <label asp-for="Input.WidthMeters"
-                               class="form-label">
-                        </label>
-
-                        <input asp-for="Input.WidthMeters"
-                               class="form-control"
-                               step="0.01" />
-
-                        <span asp-validation-for="Input.WidthMeters"
-                              class="text-danger">
-                        </span>
+                        <label asp-for="Input.WidthMeters" class="form-label"></label>
+                        <input asp-for="Input.WidthMeters" class="form-control" step="0.01" />
+                        <span asp-validation-for="Input.WidthMeters" class="text-danger"></span>
                     </div>
 
                     <div class="col-md-4 mb-3">
-                        <label asp-for="Input.HeightMeters"
-                               class="form-label">
-                        </label>
-
-                        <input asp-for="Input.HeightMeters"
-                               class="form-control"
-                               step="0.01" />
-
-                        <span asp-validation-for="Input.HeightMeters"
-                              class="text-danger">
-                        </span>
+                        <label asp-for="Input.HeightMeters" class="form-label"></label>
+                        <input asp-for="Input.HeightMeters" class="form-control" step="0.01" />
+                        <span asp-validation-for="Input.HeightMeters" class="text-danger"></span>
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-md-4 mb-3">
-                        <label asp-for="Input.DoorCount"
-                               class="form-label">
-                        </label>
-
-                        <input asp-for="Input.DoorCount"
-                               class="form-control" />
-
-                        <span asp-validation-for="Input.DoorCount"
-                              class="text-danger">
-                        </span>
+                        <label asp-for="Input.DoorCount" class="form-label"></label>
+                        <input asp-for="Input.DoorCount" class="form-control" />
+                        <span asp-validation-for="Input.DoorCount" class="text-danger"></span>
                     </div>
 
                     <div class="col-md-4 mb-3">
-                        <label asp-for="Input.WindowCount"
-                               class="form-label">
-                        </label>
-
-                        <input asp-for="Input.WindowCount"
-                               class="form-control" />
-
-                        <span asp-validation-for="Input.WindowCount"
-                              class="text-danger">
-                        </span>
+                        <label asp-for="Input.WindowCount" class="form-label"></label>
+                        <input asp-for="Input.WindowCount" class="form-control" />
+                        <span asp-validation-for="Input.WindowCount" class="text-danger"></span>
                     </div>
 
                     <div class="col-md-4 mb-3">
-                        <label asp-for="Input.CoatCount"
-                               class="form-label">
-                        </label>
-
-                        <input asp-for="Input.CoatCount"
-                               class="form-control" />
-
-                        <span asp-validation-for="Input.CoatCount"
-                              class="text-danger">
-                        </span>
+                        <label asp-for="Input.CoatCount" class="form-label"></label>
+                        <input asp-for="Input.CoatCount" class="form-control" />
+                        <span asp-validation-for="Input.CoatCount" class="text-danger"></span>
                     </div>
                 </div>
 
                 <div class="mb-3">
-                    <label asp-for="Input.SurfaceCondition"
-                           class="form-label">
-                    </label>
-
-                    <select asp-for="Input.SurfaceCondition"
-                            class="form-select">
-                        <option value="@PaintSurfaceCondition.Good">
-                            Buena
-                        </option>
-
-                        <option value="@PaintSurfaceCondition.NewOrPorous">
-                            Nueva o porosa
-                        </option>
-
-                        <option value="@PaintSurfaceCondition.Damaged">
-                            Dañada
-                        </option>
+                    <label asp-for="Input.SurfaceCondition" class="form-label"></label>
+                    <select asp-for="Input.SurfaceCondition" class="form-select">
+                        <option value="@PaintSurfaceCondition.Good">Buena</option>
+                        <option value="@PaintSurfaceCondition.NewOrPorous">Nueva o porosa</option>
+                        <option value="@PaintSurfaceCondition.Damaged">Dañada</option>
                     </select>
                 </div>
 
                 <div class="form-check mb-3">
-                    <input asp-for="Input.IncludeCeiling"
-                           class="form-check-input" />
-
-                    <label asp-for="Input.IncludeCeiling"
-                           class="form-check-label">
-                    </label>
+                    <input asp-for="Input.IncludeCeiling" class="form-check-input" />
+                    <label asp-for="Input.IncludeCeiling" class="form-check-label"></label>
                 </div>
 
                 <div class="form-check mb-2">
-                    <input asp-for="AllowAnonymousAnalytics"
-                           class="form-check-input" />
-
-                    <label asp-for="AllowAnonymousAnalytics"
-                           class="form-check-label">
+                    <input asp-for="AllowAnonymousAnalytics" class="form-check-input" />
+                    <label asp-for="AllowAnonymousAnalytics" class="form-check-label">
                         Permitir estadísticas anónimas para mejorar ElegíBien.
                     </label>
                 </div>
 
                 <div class="form-check mb-3">
-                    <input asp-for="AllowRadarData"
-                           class="form-check-input" />
-
-                    <label asp-for="AllowRadarData"
-                           class="form-check-label">
+                    <input asp-for="AllowRadarData" class="form-check-input" />
+                    <label asp-for="AllowRadarData" class="form-check-label">
                         Permitir incorporar esta consulta anónima al futuro Radar ElegíBien.
                     </label>
                 </div>
@@ -162,14 +95,9 @@
                 </p>
 
                 <div class="mobile-submit-bar">
-
-
-                    <button class="btn btn-primary"
-                        type="submit">
-                    Calcular pintura
-                </button>
-
-
+                    <button class="btn btn-primary" type="submit">
+                        Calcular pintura
+                    </button>
                 </div>
             </form>
 
@@ -181,23 +109,17 @@
 
                         <p>
                             Superficie neta:
-                            <strong>
-                                @Model.Result.NetAreaSquareMeters.ToString("N2") m²
-                            </strong>
+                            <strong>@Model.Result.NetAreaSquareMeters.ToString("N2") m²</strong>
                         </p>
 
                         <p>
                             Superficie ajustada:
-                            <strong>
-                                @Model.Result.AdjustedAreaSquareMeters.ToString("N2") m²
-                            </strong>
+                            <strong>@Model.Result.AdjustedAreaSquareMeters.ToString("N2") m²</strong>
                         </p>
 
                         <p>
                             Referencia:
-                            <strong>
-                                @Model.Result.ReferenceLiters.ToString("N2") litros
-                            </strong>
+                            <strong>@Model.Result.ReferenceLiters.ToString("N2") litros</strong>
                             para @Model.Result.CoatCount manos.
                         </p>
 
@@ -216,11 +138,40 @@
                             </div>
                         }
 
-                        <a asp-action="Compare"
-                           asp-route-id="@Model.Result.AnalysisId"
-                           class="btn btn-success">
-                            Comparar dos pinturas
-                        </a>
+                        @if (!string.IsNullOrWhiteSpace(Model.ShareUrl))
+                        {
+                            <div class="share-result-box mt-3 mb-3">
+                                <label for="paint-share-url" class="form-label fw-semibold">
+                                    Enlace para compartir este resultado
+                                </label>
+                                <div class="input-group">
+                                    <input id="paint-share-url"
+                                           data-share-url
+                                           class="form-control"
+                                           value="@Model.ShareUrl"
+                                           readonly />
+                                    <button type="button"
+                                            class="btn btn-outline-primary"
+                                            data-copy-share-url>
+                                        Copiar enlace
+                                    </button>
+                                </div>
+                            </div>
+                        }
+
+                        <div class="d-flex flex-wrap gap-2 mt-3">
+                            <a href="#paint-input" class="btn btn-outline-secondary">
+                                Modificar datos
+                            </a>
+                            <a asp-action="Compare"
+                               asp-route-id="@Model.Result.AnalysisId"
+                               class="btn btn-outline-primary">
+                                Comparar dos productos
+                            </a>
+                            <a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary">
+                                Volver al inicio
+                            </a>
+                        </div>
                     </div>
                 </div>
             }
