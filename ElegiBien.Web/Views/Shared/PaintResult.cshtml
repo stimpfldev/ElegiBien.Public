@@ -7,56 +7,33 @@
 }
 
 @functions {
-    private static string CoverageStatusText(
-        PaintCoverageStatus value)
-    {
-        return value switch
+    private static string CoverageStatusText(PaintCoverageStatus value) =>
+        value switch
         {
-            PaintCoverageStatus.Adequate =>
-                "Adecuada",
-
-            PaintCoverageStatus.Excessive =>
-                "Exceso de compra",
-
-            PaintCoverageStatus.Insufficient =>
-                "Insuficiente",
-
+            PaintCoverageStatus.Adequate => "Adecuada",
+            PaintCoverageStatus.Excessive => "Exceso de compra",
+            PaintCoverageStatus.Insufficient => "Insuficiente",
             _ => "Desconocida"
         };
-    }
 
-    private static string ConfidenceText(
-        ConfidenceLevel value)
-    {
-        return value switch
+    private static string ConfidenceText(ConfidenceLevel value) =>
+        value switch
         {
             ConfidenceLevel.Low => "Baja",
             ConfidenceLevel.Medium => "Media",
             ConfidenceLevel.High => "Alta",
             _ => "Desconocida"
         };
-    }
 
-    private static string FactorText(
-        PaintScoreFactorType value)
-    {
-        return value switch
+    private static string FactorText(PaintScoreFactorType value) =>
+        value switch
         {
-            PaintScoreFactorType.CoverageAdequacy =>
-                "Aprovechamiento",
-
-            PaintScoreFactorType.TotalCost =>
-                "Costo total",
-
-            PaintScoreFactorType.Washability =>
-                "Lavabilidad",
-
-            PaintScoreFactorType.DryingTime =>
-                "Secado",
-
+            PaintScoreFactorType.CoverageAdequacy => "Aprovechamiento",
+            PaintScoreFactorType.TotalCost => "Costo total",
+            PaintScoreFactorType.Washability => "Lavabilidad",
+            PaintScoreFactorType.DryingTime => "Secado",
             _ => "Factor"
         };
-    }
 }
 
 <div class="container py-4">
@@ -64,77 +41,79 @@
         <div class="col-lg-9">
             <h1>Resultado ElegíBien: Pintura</h1>
 
-            <p>
-                Superficie neta:
-                <strong>
-                    @Model.NetAreaSquareMeters.ToString("N2") m²
-                </strong>
-            </p>
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h2 class="h4">Resultado del cálculo</h2>
 
-            <p>
-                Referencia inicial:
-                <strong>
-                    @Model.ReferenceLiters.ToString("N2") litros
-                </strong>
-                para @Model.CoatCount manos.
-            </p>
+                    <p>
+                        Superficie neta:
+                        <strong>@Model.NetAreaSquareMeters.ToString("N2") m²</strong>
+                    </p>
 
-            <div class="alert alert-primary">
-                @Model.Recommendation
+                    <p class="mb-0">
+                        Pintura de referencia:
+                        <strong>@Model.ReferenceLiters.ToString("N2") litros</strong>
+                        para @Model.CoatCount manos.
+                    </p>
+                </div>
             </div>
 
-            @foreach (var product in Model.Products)
+            @if (Model.Products.Count > 0)
             {
-                <div class="card mb-3">
-                    <div class="card-body">
-                        <h2 class="h4">
-                            @product.ProductName
-                        </h2>
+                <h2 class="h4 mt-4">Comparación de pinturas</h2>
 
-                        <p class="fs-4">
-                            <strong>
-                                @product.TotalScore/100
-                            </strong>
-                        </p>
+                <div class="alert alert-primary">
+                    @Model.Recommendation
+                </div>
 
-                        <p>
-                            @product.ContainersRequired envases ·
-                            @product.LitersPurchased.ToString("N2") litros ·
-                            $@product.TotalCost.ToString("N2")
-                        </p>
+                @foreach (var product in Model.Products)
+                {
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h3 class="h5">@product.ProductName</h3>
 
-                        <p>
-                            Cobertura:
-                            <strong>
-                                @CoverageStatusText(product.CoverageStatus)
-                            </strong>
-                        </p>
+                            <p class="fs-4">
+                                <strong>@product.TotalScore/100</strong>
+                            </p>
 
-                        <p>
-                            Confianza:
-                            <strong>
-                                @ConfidenceText(product.ConfidenceLevel)
-                            </strong>
-                        </p>
+                            <p>
+                                @product.ContainersRequired envases ·
+                                @product.LitersPurchased.ToString("N2") litros ·
+                                $@product.TotalCost.ToString("N2")
+                            </p>
 
-                        <ul>
-                            @foreach (var factor in product.Factors)
-                            {
-                                <li class="mb-2">
-                                    <strong>
-                                        @FactorText(factor.FactorType):
-                                        @factor.Score.ToString("N1")
-                                        /
-                                        @factor.MaximumScore.ToString("N0")
-                                    </strong>
+                            <p>
+                                Cobertura:
+                                <strong>@CoverageStatusText(product.CoverageStatus)</strong>
+                            </p>
 
-                                    <br />
+                            <p>
+                                Confianza:
+                                <strong>@ConfidenceText(product.ConfidenceLevel)</strong>
+                            </p>
 
-                                    @factor.Explanation
-                                </li>
-                            }
-                        </ul>
+                            <ul>
+                                @foreach (var factor in product.Factors)
+                                {
+                                    <li class="mb-2">
+                                        <strong>
+                                            @FactorText(factor.FactorType):
+                                            @factor.Score.ToString("N1") /
+                                            @factor.MaximumScore.ToString("N0")
+                                        </strong>
+                                        <br />
+                                        @factor.Explanation
+                                    </li>
+                                }
+                            </ul>
+                        </div>
                     </div>
+                }
+            }
+            else
+            {
+                <div class="alert alert-secondary">
+                    Este enlace comparte el resultado del cálculo. No se realizó una comparación de pinturas para este análisis.
                 </div>
             }
 
