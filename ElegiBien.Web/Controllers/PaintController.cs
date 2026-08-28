@@ -1,3 +1,4 @@
+using ElegiBien.Application.Interfaces;
 using ElegiBien.Application.UseCases;
 using ElegiBien.Web.Models.Paint;
 using Microsoft.AspNetCore.Mvc;
@@ -8,10 +9,14 @@ namespace ElegiBien.Web.Controllers;
 public class PaintController : Controller
 {
     private readonly IPaintUseCase _useCase;
+    private readonly ISharedResultService _sharedResultService;
 
-    public PaintController(IPaintUseCase useCase)
+    public PaintController(
+        IPaintUseCase useCase,
+        ISharedResultService sharedResultService)
     {
         _useCase = useCase;
+        _sharedResultService = sharedResultService;
     }
 
     [HttpGet]
@@ -34,6 +39,16 @@ public class PaintController : Controller
             model.AllowAnonymousAnalytics,
             model.AllowRadarData,
             cancellationToken);
+
+        var token = await _sharedResultService.CreateOrGetTokenAsync(
+            model.Result.AnalysisId,
+            cancellationToken);
+
+        model.ShareUrl = Url.Action(
+            "PaintResult",
+            "Shared",
+            new { token },
+            Request.Scheme);
 
         return View(model);
     }
