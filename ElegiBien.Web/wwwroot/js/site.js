@@ -84,19 +84,23 @@ document.addEventListener("click", async event => {
 });
 
 document.addEventListener("DOMContentLoaded", () => {
-    const airInputs = document.querySelectorAll(
+    const numericInputs = document.querySelectorAll(
         'input[name="Input.LengthMeters"], ' +
         'input[name="Input.WidthMeters"], ' +
         'input[name$=".CapacityFrigories"], ' +
         'input[name$=".NominalConsumptionWatts"], ' +
+        'input[name$=".HeatingCapacityWatts"], ' +
         'input[name$=".Price"]'
     );
 
-    airInputs.forEach(input => {
+    numericInputs.forEach(input => {
         const name = input.name;
+        const isWholeNumberField =
+            name.endsWith(".CapacityFrigories") ||
+            name.endsWith(".NominalConsumptionWatts") ||
+            name.endsWith(".HeatingCapacityWatts");
 
-        if (name.endsWith(".CapacityFrigories") ||
-            name.endsWith(".NominalConsumptionWatts")) {
+        if (isWholeNumberField) {
             input.step = "1";
 
             if (input.value !== "" && Number.isFinite(Number(input.value))) {
