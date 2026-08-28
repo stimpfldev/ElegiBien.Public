@@ -6,12 +6,12 @@ namespace ElegiBien.Application.DTOs;
 public class AirConditioningQuickInputDto
 {
     [Required(ErrorMessage = "El campo {0} es obligatorio.")]
-    [Range(1, 30, ErrorMessage = "El campo {0} debe estar entre {1} y {2}.")]
+    [Range(1, 200, ErrorMessage = "El campo {0} debe estar entre {1} y {2}.")]
     [Display(Name = "Largo del ambiente")]
     public decimal LengthMeters { get; set; }
 
     [Required(ErrorMessage = "El campo {0} es obligatorio.")]
-    [Range(1, 30, ErrorMessage = "El campo {0} debe estar entre {1} y {2}.")]
+    [Range(1, 200, ErrorMessage = "El campo {0} debe estar entre {1} y {2}.")]
     [Display(Name = "Ancho del ambiente")]
     public decimal WidthMeters { get; set; }
 
