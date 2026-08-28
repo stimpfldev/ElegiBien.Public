@@ -8,4 +8,5 @@ public class PaintQuickViewModel
     public bool AllowAnonymousAnalytics { get; set; }
     public bool AllowRadarData { get; set; }
     public PaintCalculationResultDto? Result { get; set; }
+    public string? ShareUrl { get; set; }
 }
