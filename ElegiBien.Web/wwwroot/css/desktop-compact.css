@@ -1,93 +1,94 @@
 /* Ajuste de densidad visual para escritorio.
+   Punto intermedio entre el diseño original y la versión compacta.
    Se mantiene intacta la experiencia mobile. */
 @media (min-width: 992px) {
     html {
-        font-size: 14px;
+        font-size: 15px;
     }
 
     h1 {
-        font-size: clamp(2rem, 3.2vw, 3.15rem);
+        font-size: clamp(2rem, 3.6vw, 3.4rem);
     }
 
     .site-header .navbar {
-        min-height: 64px;
-        padding: 0.45rem 0;
+        min-height: 70px;
+        padding: 0.55rem 0;
     }
 
     .brand-lockup img {
-        max-width: 154px;
+        max-width: 165px;
     }
 
     .site-header .nav-link {
-        padding: 0.5rem 0.7rem !important;
-        font-size: 0.92rem;
+        padding: 0.58rem 0.78rem !important;
+        font-size: 0.94rem;
     }
 
     .site-main .container.py-4,
     .calculator-page {
-        padding-top: clamp(1.75rem, 3vw, 2.75rem) !important;
-        padding-bottom: clamp(2.5rem, 4vw, 4rem) !important;
+        padding-top: clamp(2rem, 4vw, 3.4rem) !important;
+        padding-bottom: clamp(3rem, 5vw, 4.8rem) !important;
     }
 
     .form-control,
     .form-select,
     .input-group-text {
-        min-height: 42px;
+        min-height: 45px;
     }
 
     .card-body {
-        padding: 1.25rem;
+        padding: 1.4rem;
     }
 
     .contact-card,
     .recommendation-panel {
-        padding: 1rem;
+        padding: 1.1rem;
     }
 
     .recommendation-panel {
-        min-height: 68px;
+        min-height: 73px;
     }
 
     .recommendation-panel strong {
-        font-size: 1.15rem;
+        font-size: 1.2rem;
     }
 
     .home-hero-compact {
-        padding-top: 2.25rem;
-        padding-bottom: 1.75rem;
+        padding-top: 2.7rem;
+        padding-bottom: 2.1rem;
     }
 
     .category-section,
     .how-it-works {
-        padding-top: 3rem;
-        padding-bottom: 3rem;
+        padding-top: 3.5rem;
+        padding-bottom: 3.5rem;
     }
 
     .category-section-raised {
-        padding-top: 1.75rem;
+        padding-top: 2rem;
     }
 
     .section-heading {
-        margin-bottom: 2rem;
+        margin-bottom: 2.2rem;
     }
 
     .category-image {
-        min-height: 165px;
+        min-height: 175px;
     }
 
     .category-card-body {
-        padding: 1.25rem;
+        padding: 1.4rem;
     }
 
     .process-step {
-        padding: 1.5rem;
+        padding: 1.75rem;
     }
 
     .hero-tools-grid .btn {
-        min-height: 50px;
+        min-height: 54px;
     }
 
     .site-footer {
-        padding: 2.5rem 0 1.25rem;
+        padding: 3rem 0 1.35rem;
     }
 }
