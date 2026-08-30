@@ -1,0 +1,93 @@
+/* Ajuste de densidad visual para escritorio.
+   Se mantiene intacta la experiencia mobile. */
+@media (min-width: 992px) {
+    html {
+        font-size: 14px;
+    }
+
+    h1 {
+        font-size: clamp(2rem, 3.2vw, 3.15rem);
+    }
+
+    .site-header .navbar {
+        min-height: 64px;
+        padding: 0.45rem 0;
+    }
+
+    .brand-lockup img {
+        max-width: 154px;
+    }
+
+    .site-header .nav-link {
+        padding: 0.5rem 0.7rem !important;
+        font-size: 0.92rem;
+    }
+
+    .site-main .container.py-4,
+    .calculator-page {
+        padding-top: clamp(1.75rem, 3vw, 2.75rem) !important;
+        padding-bottom: clamp(2.5rem, 4vw, 4rem) !important;
+    }
+
+    .form-control,
+    .form-select,
+    .input-group-text {
+        min-height: 42px;
+    }
+
+    .card-body {
+        padding: 1.25rem;
+    }
+
+    .contact-card,
+    .recommendation-panel {
+        padding: 1rem;
+    }
+
+    .recommendation-panel {
+        min-height: 68px;
+    }
+
+    .recommendation-panel strong {
+        font-size: 1.15rem;
+    }
+
+    .home-hero-compact {
+        padding-top: 2.25rem;
+        padding-bottom: 1.75rem;
+    }
+
+    .category-section,
+    .how-it-works {
+        padding-top: 3rem;
+        padding-bottom: 3rem;
+    }
+
+    .category-section-raised {
+        padding-top: 1.75rem;
+    }
+
+    .section-heading {
+        margin-bottom: 2rem;
+    }
+
+    .category-image {
+        min-height: 165px;
+    }
+
+    .category-card-body {
+        padding: 1.25rem;
+    }
+
+    .process-step {
+        padding: 1.5rem;
+    }
+
+    .hero-tools-grid .btn {
+        min-height: 50px;
+    }
+
+    .site-footer {
+        padding: 2.5rem 0 1.25rem;
+    }
+}
