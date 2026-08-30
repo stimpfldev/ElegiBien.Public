@@ -1,22 +1,35 @@
 @inject Microsoft.Extensions.Configuration.IConfiguration Configuration
 @{
+    var pageTitle = ViewData["Title"]?.ToString() ?? "EligeBien";
     var robots = ViewData["Robots"] as string;
     var description = ViewData["Description"]?.ToString()
         ?? "EligeBien ayuda a calcular qué producto necesitás y comparar alternativas mediante criterios claros y explicables.";
     var isIndexable = string.IsNullOrWhiteSpace(robots)
         || !robots.Contains("noindex", StringComparison.OrdinalIgnoreCase);
     var canonicalUrl = $"{Context.Request.Scheme}://{Context.Request.Host}{Context.Request.PathBase}{Context.Request.Path}";
+    var cspNonce = Context.Items[ElegiBien.Web.Configuration.ApplicationBuilderExtensions.CspNonceItemKey]?.ToString();
 
-    var googleAnalyticsEnabled =
-    string.Equals(
+    var searchConsoleVerificationToken = Configuration["GoogleSearchConsole:VerificationToken"]?.Trim();
+
+    var googleAnalyticsEnabled = string.Equals(
         Configuration["GoogleAnalytics:Enabled"],
         "true",
         StringComparison.OrdinalIgnoreCase);
+    var googleAnalyticsMeasurementId = Configuration["GoogleAnalytics:MeasurementId"]?.Trim();
+    var loadGoogleAnalytics = googleAnalyticsEnabled
+        && !string.IsNullOrWhiteSpace(googleAnalyticsMeasurementId)
+        && googleAnalyticsMeasurementId.StartsWith("G-", StringComparison.OrdinalIgnoreCase)
+        && isIndexable;
 
-    var googleAnalyticsMeasurementId = Configuration["GoogleAnalytics:MeasurementId"];
-     var loadGoogleAnalytics = googleAnalyticsEnabled
-    && !string.IsNullOrWhiteSpace(googleAnalyticsMeasurementId)
-    && isIndexable;
+    var googleAdSenseEnabled = string.Equals(
+        Configuration["GoogleAdSense:Enabled"],
+        "true",
+        StringComparison.OrdinalIgnoreCase);
+    var googleAdSensePublisherId = Configuration["GoogleAdSense:PublisherId"]?.Trim();
+    var loadGoogleAdSense = googleAdSenseEnabled
+        && !string.IsNullOrWhiteSpace(googleAdSensePublisherId)
+        && googleAdSensePublisherId.StartsWith("ca-pub-", StringComparison.OrdinalIgnoreCase)
+        && isIndexable;
 }
 <!DOCTYPE html>
 <html lang="es-AR">
@@ -32,27 +45,46 @@
     @if (isIndexable && Context.Request.Host.HasValue)
     {
         <link rel="canonical" href="@canonicalUrl" />
+        <meta property="og:url" content="@canonicalUrl" />
     }
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="EligeBien" />
+    <meta property="og:title" content="@pageTitle - EligeBien" />
+    <meta property="og:description" content="@description" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="@pageTitle - EligeBien" />
+    <meta name="twitter:description" content="@description" />
     <meta name="theme-color" content="#123c69" />
     <meta name="application-name" content="EligeBien" />
+
+    @if (!string.IsNullOrWhiteSpace(searchConsoleVerificationToken))
+    {
+        <meta name="google-site-verification" content="@searchConsoleVerificationToken" />
+    }
+
     @if (loadGoogleAnalytics)
     {
-        <meta name="google-analytics-measurement-id"
-              content="@googleAnalyticsMeasurementId" />
+        <meta name="google-analytics-measurement-id" content="@googleAnalyticsMeasurementId" />
+    }
+
+    @if (loadGoogleAdSense)
+    {
+        <script nonce="@cspNonce"
+                async
+                src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=@googleAdSensePublisherId"
+                crossorigin="anonymous"></script>
     }
 
     <link rel="manifest" href="/manifest.webmanifest" />
     <link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192.png" />
     <link rel="apple-touch-icon" href="/icons/icon-192.png" />
 
-    <title>@ViewData["Title"] - EligeBien</title>
+    <title>@pageTitle - EligeBien</title>
 
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/ElegiBien.Web.styles.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/desktop-compact.css" asp-append-version="true" />
-
-
 </head>
 <body>
     <header class="site-header">
@@ -166,9 +198,10 @@
             </div>
         </div>
     </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <script nonce="@cspNonce" src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script nonce="@cspNonce" src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script nonce="@cspNonce" src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
