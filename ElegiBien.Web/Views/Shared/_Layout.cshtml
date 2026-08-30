@@ -2,7 +2,7 @@
 @{
     var robots = ViewData["Robots"] as string;
     var description = ViewData["Description"]?.ToString()
-        ?? "ElegíBien ayuda a calcular qué producto necesitás y comparar alternativas mediante criterios claros y explicables.";
+        ?? "EligeBien ayuda a calcular qué producto necesitás y comparar alternativas mediante criterios claros y explicables.";
     var isIndexable = string.IsNullOrWhiteSpace(robots)
         || !robots.Contains("noindex", StringComparison.OrdinalIgnoreCase);
     var canonicalUrl = $"{Context.Request.Scheme}://{Context.Request.Host}{Context.Request.PathBase}{Context.Request.Path}";
@@ -34,7 +34,7 @@
         <link rel="canonical" href="@canonicalUrl" />
     }
     <meta name="theme-color" content="#123c69" />
-    <meta name="application-name" content="ElegíBien" />
+    <meta name="application-name" content="EligeBien" />
     @if (loadGoogleAnalytics)
     {
         <meta name="google-analytics-measurement-id"
@@ -45,7 +45,7 @@
     <link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192.png" />
     <link rel="apple-touch-icon" href="/icons/icon-192.png" />
 
-    <title>@ViewData["Title"] - ElegíBien</title>
+    <title>@ViewData["Title"] - EligeBien</title>
 
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
@@ -60,7 +60,7 @@
                 <a class="navbar-brand brand-lockup"
                    asp-controller="Home"
                    asp-action="Index"
-                   aria-label="ElegíBien, inicio">
+                   aria-label="EligeBien, inicio">
                     <img src="~/images/elegibien-logo.svg"
                          alt=""
                          width="176"
@@ -143,7 +143,7 @@
             <div class="footer-grid">
                 <div>
                     <img src="~/images/elegibien-logo-monochrome.svg"
-                         alt="ElegíBien"
+                         alt="EligeBien"
                          width="142"
                          height="36" />
                     <p class="footer-description">
@@ -160,7 +160,7 @@
             </div>
 
             <div class="footer-bottom">
-                <span>&copy; 2026 ElegíBien</span>
+                <span>&copy; 2026 EligeBien</span>
                 <span>Hecho en Argentina</span>
             </div>
         </div>
