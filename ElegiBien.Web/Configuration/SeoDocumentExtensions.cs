@@ -38,6 +38,12 @@ public static class SeoDocumentExtensions
                 return;
             }
 
+            if (context.Request.Path.Equals("/ads.txt", StringComparison.OrdinalIgnoreCase))
+            {
+                await WriteAdsTxtAsync(context);
+                return;
+            }
+
             await next();
         });
     }
@@ -81,6 +87,35 @@ public static class SeoDocumentExtensions
         context.Response.ContentType = "application/xml; charset=utf-8";
         context.Response.Headers.CacheControl = "public,max-age=3600";
         await context.Response.WriteAsync(builder.ToString(), Encoding.UTF8);
+    }
+
+    private static async Task WriteAdsTxtAsync(HttpContext context)
+    {
+        var configuration = context.RequestServices.GetRequiredService<IConfiguration>();
+        var configuredPublisherId = configuration["GoogleAdSense:PublisherId"]?.Trim();
+
+        if (string.IsNullOrWhiteSpace(configuredPublisherId))
+        {
+            context.Response.StatusCode = StatusCodes.Status404NotFound;
+            return;
+        }
+
+        var publisherId = configuredPublisherId.StartsWith("ca-pub-", StringComparison.OrdinalIgnoreCase)
+            ? configuredPublisherId[3..]
+            : configuredPublisherId;
+
+        if (!publisherId.StartsWith("pub-", StringComparison.OrdinalIgnoreCase))
+        {
+            context.Response.StatusCode = StatusCodes.Status404NotFound;
+            return;
+        }
+
+        var content = $"google.com, {publisherId}, DIRECT, f08c47fec0942fa0\n";
+
+        context.Response.StatusCode = StatusCodes.Status200OK;
+        context.Response.ContentType = "text/plain; charset=utf-8";
+        context.Response.Headers.CacheControl = "public,max-age=3600";
+        await context.Response.WriteAsync(content, Encoding.UTF8);
     }
 
     private static string BuildBaseUrl(HttpRequest request)
