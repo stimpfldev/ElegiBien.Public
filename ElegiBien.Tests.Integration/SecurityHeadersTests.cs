@@ -23,7 +23,8 @@ public sealed class SecurityHeadersTests : IClassFixture<ElegiBienWebApplication
 
         var csp = string.Join(" ", response.Headers.GetValues("Content-Security-Policy"));
         Assert.Contains("default-src 'self'", csp, StringComparison.Ordinal);
-        Assert.Contains("script-src 'self'", csp, StringComparison.Ordinal);
+        Assert.Contains("script-src 'nonce-", csp, StringComparison.Ordinal);
+        Assert.Contains("'strict-dynamic'", csp, StringComparison.Ordinal);
         Assert.DoesNotContain("unsafe-inline", csp, StringComparison.Ordinal);
         Assert.DoesNotContain("unsafe-eval", csp, StringComparison.Ordinal);
     }
