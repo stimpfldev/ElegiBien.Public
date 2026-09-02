@@ -63,6 +63,8 @@ public sealed class CoreNavigationPagesTests : IClassFixture<ElegiBienWebApplica
         Assert.Contains("data-pref-units=\"metric\"", html);
         Assert.Contains("data-pref-units=\"imperial\"", html);
         Assert.Contains("/js/presentation-preferences.js", html);
-        Assert.Contains("/js/presentation-translations-extra.js", html);
+        Assert.Contains("/js/presentation-language.js", html);
+        Assert.DoesNotContain("presentation-translations-extra.js", html);
+        Assert.DoesNotContain("presentation-fixes.js", html);
     }
 }
