@@ -1,163 +1,11 @@
 "use strict";
 
 (() => {
-    const LANGUAGE_KEY = "elegibien.language";
     const UNITS_KEY = "elegibien.units";
-
-    const translations = new Map([
-        ["Aire acondicionado", "Air conditioning"],
-        ["Pintura", "Paint"],
-        ["Cerámicos y pisos", "Flooring and tiles"],
-        ["Calefacción", "Heating"],
-        ["Contacto", "Contact"],
-        ["Cómo decidimos", "How we decide"],
-        ["Privacidad", "Privacy"],
-        ["Términos", "Terms"],
-        ["Metodología", "Methodology"],
-        ["Decisiones de compra más claras, con cálculos y criterios explicables.", "Clearer purchase decisions with transparent calculations and criteria."],
-        ["Hecho en Argentina", "Made in Argentina"],
-        ["Abrir navegación", "Open navigation"],
-
-        ["Qué aire acondicionado necesitás", "What air conditioner do you need?"],
-        ["Ingresá cuatro datos y obtené un rango orientativo de frigorías para tu ambiente.", "Enter four values to get an estimated cooling-capacity range for your room."],
-        ["Baja", "Low"], ["Media", "Medium"], ["Alta", "High"],
-        ["Permitir estadísticas anónimas para mejorar ElegíBien.", "Allow anonymous statistics to improve ElegíBien."],
-        ["Permitir que los datos anónimos de esta consulta se incorporen en futuras estadísticas del Radar ElegíBien.", "Allow anonymous data from this query to be included in future ElegíBien Radar statistics."],
-        ["No solicitamos nombre, documento, teléfono, domicilio ni información bancaria.", "We do not request your name, ID, phone number, address, or banking information."],
-        ["Calcular frigorías", "Calculate cooling capacity"],
-        ["Resultado orientativo", "Estimated result"],
-        ["Capacidad ideal aproximada:", "Approximate ideal capacity:"],
-        ["Superficie:", "Area:"],
-        ["Nivel de confianza:", "Confidence level:"],
-        ["Comparar dos equipos", "Compare two units"],
-        ["Este ambiente presenta condiciones que requieren revisión profesional antes de comprar o instalar el equipo.", "This room has conditions that should be reviewed by a professional before purchasing or installing the unit."],
-        ["El resultado es orientativo y no reemplaza la evaluación de un técnico matriculado.", "This result is an estimate and does not replace an assessment by a qualified technician."],
-
-        ["Cuánta pintura necesitás", "How much paint do you need?"],
-        ["Calculá la superficie y una cantidad orientativa de litros.", "Calculate the area and an estimated amount of paint."],
-        ["Buena", "Good"], ["Nueva o porosa", "New or porous"], ["Dañada", "Damaged"],
-        ["Permitir incorporar esta consulta anónima al futuro Radar ElegíBien.", "Allow this anonymous query to be included in the future ElegíBien Radar."],
-        ["Calcular pintura", "Calculate paint"],
-        ["Superficie neta:", "Net area:"],
-        ["Superficie ajustada:", "Adjusted area:"],
-        ["Referencia:", "Reference:"],
-        ["La superficie requiere revisión o preparación profesional antes de pintar.", "The surface requires professional review or preparation before painting."],
-        ["El resultado es orientativo. Revisá el rendimiento indicado por el fabricante.", "This result is an estimate. Check the coverage specified by the manufacturer."],
-        ["Comparar dos pinturas", "Compare two paints"],
-
-        ["Cuántos cerámicos o pisos necesitás", "How much flooring or tile do you need?"],
-        ["Calculá la superficie y el material adicional recomendado para cortes, roturas y futuras reposiciones.", "Calculate the area and the recommended extra material for cuts, breakage, and future replacements."],
-        ["Recta", "Straight"], ["Trabada", "Staggered"], ["Diagonal", "Diagonal"],
-        ["Material adicional calculado", "Calculated extra material"],
-        ["para cortes, roturas y futuras reposiciones.", "for cuts, breakage, and future replacements."],
-        ["porque la colocación trabada suele requerir más cortes.", "because staggered installation usually requires more cuts."],
-        ["porque la colocación diagonal requiere más cortes.", "because diagonal installation requires more cuts."],
-        ["Permitir analítica anónima para mejorar ElegíBien.", "Allow anonymous analytics to improve ElegíBien."],
-        ["Permitir el uso anónimo de este resultado en estadísticas agregadas.", "Allow anonymous use of this result in aggregated statistics."],
-        ["Calcular superficie", "Calculate area"],
-        ["Superficie del piso", "Floor area"],
-        ["Material adicional aplicado", "Extra material applied"],
-        ["Superficie adicional", "Extra area"],
-        ["Superficie total necesaria", "Total required area"],
-        ["Conviene revisar medidas, cortes y disposición antes de comprar.", "Review measurements, cuts, and layout before purchasing."],
-        ["Comparar dos productos", "Compare two products"],
-
-        ["Qué potencia de calefacción necesitás", "How much heating power do you need?"],
-        ["Estimá la potencia necesaria para calefaccionar el ambiente sin elegir un equipo demasiado chico o excesivo.", "Estimate the power required to heat the room without choosing a unit that is too small or unnecessarily large."],
-        ["Templada", "Mild"], ["Templada fría", "Cool temperate"], ["Fría", "Cold"], ["Muy fría", "Very cold"],
-        ["Bueno", "Good"], ["Normal", "Normal"], ["Deficiente", "Poor"],
-        ["Ninguna", "None"], ["Una", "One"], ["Dos", "Two"], ["Tres", "Three"], ["Cuatro", "Four"],
-        ["Pocas o normales", "Few or average"], ["Varias o grandes", "Several or large"], ["Ventanal amplio", "Large glazing"],
-        ["Calcular potencia", "Calculate heating power"],
-        ["Superficie del ambiente", "Room area"],
-        ["Volumen calculado", "Calculated volume"],
-        ["Potencia mínima recomendada", "Recommended minimum power"],
-        ["Potencia máxima recomendada", "Recommended maximum power"],
-        ["Potencia ideal orientativa", "Estimated ideal power"],
-        ["Equivalencia aproximada", "Approximate equivalent"],
-        ["Por las características del ambiente, conviene validar la instalación y la potencia con un profesional.", "Because of the room characteristics, the installation and required power should be validated by a professional."],
-
-        ["Largo", "Length"], ["Ancho", "Width"], ["Alto", "Height"],
-        ["Personas", "People"], ["Exposición solar", "Sun exposure"],
-        ["Cantidad de puertas", "Number of doors"], ["Cantidad de ventanas", "Number of windows"],
-        ["Cantidad de manos", "Number of coats"], ["Estado de la superficie", "Surface condition"],
-        ["Incluir cielorraso", "Include ceiling"], ["Tipo de colocación", "Installation pattern"],
-        ["Zona climática", "Climate zone"], ["Nivel de aislación", "Insulation level"],
-        ["Paredes exteriores", "Exterior walls"], ["Ventanas", "Windows"],
-        ["Abierto a otro ambiente", "Open to another space"],
-        ["Permitir analítica anónima", "Allow anonymous analytics"],
-        ["Permitir datos para Radar", "Allow Radar data"],
-
-        ["Copiado", "Copied"], ["Copiar", "Copy"], ["Volver", "Back"], ["Inicio", "Home"],
-        ["Guardar", "Save"], ["Comparar", "Compare"], ["Precio", "Price"],
-        ["Nombre", "Name"], ["Marca", "Brand"], ["Garantía", "Warranty"],
-        ["Resultado", "Result"], ["Recomendación", "Recommendation"]
-    ]);
-
-    const originalText = new WeakMap();
-    const originalAttributes = new WeakMap();
     const managedInputs = [];
 
-    const getLanguage = () => localStorage.getItem(LANGUAGE_KEY) === "en" ? "en" : "es";
     const getUnits = () => localStorage.getItem(UNITS_KEY) === "imperial" ? "imperial" : "metric";
-
-    const compact = value => value.replace(/\s+/g, " ").trim();
-
-    function translateTextNode(node, language) {
-        if (!originalText.has(node)) originalText.set(node, node.nodeValue);
-        const source = originalText.get(node);
-        if (language === "es") {
-            node.nodeValue = source;
-            return;
-        }
-
-        const normalized = compact(source);
-        if (!normalized) return;
-        const translated = translations.get(normalized);
-        if (!translated) return;
-
-        const leading = source.match(/^\s*/)?.[0] ?? "";
-        const trailing = source.match(/\s*$/)?.[0] ?? "";
-        node.nodeValue = `${leading}${translated}${trailing}`;
-    }
-
-    function translateElementAttributes(element, language) {
-        const attributes = ["placeholder", "title", "aria-label"];
-        let originals = originalAttributes.get(element);
-        if (!originals) {
-            originals = {};
-            originalAttributes.set(element, originals);
-        }
-
-        for (const attribute of attributes) {
-            if (!element.hasAttribute(attribute)) continue;
-            if (!(attribute in originals)) originals[attribute] = element.getAttribute(attribute);
-            const source = originals[attribute] ?? "";
-            element.setAttribute(attribute, language === "en" ? (translations.get(compact(source)) ?? source) : source);
-        }
-    }
-
-    function applyLanguage(language) {
-        document.documentElement.lang = language === "en" ? "en" : "es-AR";
-
-        const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
-        const nodes = [];
-        while (walker.nextNode()) nodes.push(walker.currentNode);
-
-        for (const node of nodes) {
-            const parent = node.parentElement;
-            if (!parent || ["SCRIPT", "STYLE", "CODE", "PRE"].includes(parent.tagName)) continue;
-            translateTextNode(node, language);
-        }
-
-        document.querySelectorAll("[placeholder], [title], [aria-label]")
-            .forEach(element => translateElementAttributes(element, language));
-
-        document.querySelectorAll("[data-pref-language]").forEach(button => {
-            button.classList.toggle("active", button.dataset.prefLanguage === language);
-            button.setAttribute("aria-pressed", button.dataset.prefLanguage === language ? "true" : "false");
-        });
-    }
+    const compact = value => (value ?? "").replace(/\s+/g, " ").trim();
 
     const converters = {
         length: {
@@ -203,7 +51,7 @@
         if (/(LengthMeters|WidthMeters|HeightMeters)$/i.test(name)) return "length";
         if (/(AreaSquareMeters|SquareMeters)$/i.test(name)) return "area";
         if (/Liters$/i.test(name)) return "liters";
-        if (/Watts$/i.test(name)) return "power";
+        if (/HeatingCapacityWatts$/i.test(name)) return "power";
         if (/(Celsius|TemperatureCelsius)$/i.test(name)) return "temperature";
         return null;
     }
@@ -248,9 +96,19 @@
         }
     }
 
+    function parseDisplayNumber(text) {
+        const lastComma = text.lastIndexOf(",");
+        const lastDot = text.lastIndexOf(".");
+        let normalized = text;
+        if (lastComma > lastDot) normalized = text.replace(/\./g, "").replace(",", ".");
+        else if (lastDot > lastComma && lastComma >= 0) normalized = text.replace(/,/g, "");
+        else if (lastComma >= 0) normalized = text.replace(",", ".");
+        return Number.parseFloat(normalized);
+    }
+
     function convertRenderedMeasurements(targetUnits) {
         document.querySelectorAll("[data-presentation-converted]").forEach(element => {
-            element.textContent = element.dataset.presentationOriginal;
+            element.textContent = element.dataset.presentationOriginal ?? element.textContent;
             element.removeAttribute("data-presentation-converted");
         });
 
@@ -263,16 +121,6 @@
             { regex: /(-?[\d.,]+)\s+liters?\b/gi, kind: "liters" },
             { regex: /(-?[\d.,]+)\s*W\b/g, kind: "power" }
         ];
-
-        const parseDisplayNumber = text => {
-            const lastComma = text.lastIndexOf(",");
-            const lastDot = text.lastIndexOf(".");
-            let normalized = text;
-            if (lastComma > lastDot) normalized = text.replace(/\./g, "").replace(",", ".");
-            else if (lastDot > lastComma && lastComma >= 0) normalized = text.replace(/,/g, "");
-            else if (lastComma >= 0) normalized = text.replace(",", ".");
-            return Number.parseFloat(normalized);
-        };
 
         const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
         const nodes = [];
@@ -308,29 +156,17 @@
         convertRenderedMeasurements(units);
 
         document.querySelectorAll("[data-pref-units]").forEach(button => {
-            button.classList.toggle("active", button.dataset.prefUnits === units);
-            button.setAttribute("aria-pressed", button.dataset.prefUnits === units ? "true" : "false");
+            const active = button.dataset.prefUnits === units;
+            button.classList.toggle("active", active);
+            button.setAttribute("aria-pressed", active ? "true" : "false");
         });
-    }
-
-    function refresh() {
-        applyLanguage(getLanguage());
-        applyUnits(getUnits());
     }
 
     document.addEventListener("DOMContentLoaded", () => {
-        document.querySelectorAll("[data-pref-language]").forEach(button => {
-            button.addEventListener("click", () => {
-                localStorage.setItem(LANGUAGE_KEY, button.dataset.prefLanguage);
-                refresh();
-            });
-        });
-
         document.querySelectorAll("[data-pref-units]").forEach(button => {
             button.addEventListener("click", () => {
-                const current = getUnits();
-                const next = button.dataset.prefUnits;
-                if (current === next) return;
+                const next = button.dataset.prefUnits === "imperial" ? "imperial" : "metric";
+                if (getUnits() === next) return;
                 localStorage.setItem(UNITS_KEY, next);
                 applyUnits(next);
             });
@@ -340,6 +176,6 @@
             form.addEventListener("submit", () => restoreMetricInputsBeforeSubmit(form), true);
         });
 
-        refresh();
+        applyUnits(getUnits());
     });
 })();
