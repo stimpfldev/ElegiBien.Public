@@ -1,3 +1,45 @@
+# ElegíBien 1.5.0
+
+## Alcance
+
+ElegíBien 1.5.0 amplía la presentación internacional de la aplicación sin modificar las reglas internas de cálculo ni el modelo de negocio.
+
+La aplicación continúa siendo una web/PWA pública, gratuita y orientada a cálculos y comparaciones explicables.
+
+## Novedades 1.5.0
+
+- Selector de idioma español / inglés (`ES` / `EN`).
+- Selector independiente de unidades métricas / imperiales (`MET` / `IMP`).
+- Métrico como sistema predeterminado para una instalación nueva.
+- Persistencia local de idioma y unidades elegidos por el usuario.
+- Conversión de entradas y resultados manteniendo la lógica interna en sistema métrico.
+- Longitud: `m` ↔ `ft`.
+- Superficie: `m²` ↔ `ft²`.
+- Volumen: `m³` ↔ `ft³`.
+- Pintura: `L` ↔ `US gal` y `m²/L` ↔ `ft²/US gal`.
+- Aire acondicionado: `frig/h` ↔ `BTU/h`.
+- Calefacción: `W` / `kcal/h` ↔ `BTU/h`.
+- Temperatura: soporte `°C` ↔ `°F` cuando corresponda.
+- Traducción de navegación, Home, calculadoras, comparaciones, contacto, legales y textos comunes de resultados.
+- Ajuste visual compacto del bloque principal del Home.
+- PWA actualizada para cachear los nuevos recursos de idioma/unidades y resolver correctamente assets con `?v=`.
+
+## Validación 1.5.0
+
+- Recorrido manual aprobado en español e inglés.
+- Validación manual aprobada de `MET` y `IMP` en Aire acondicionado, Pintura, Cerámicos y pisos y Calefacción.
+- Validación aprobada de conversiones en formularios, resultados y comparaciones.
+- Validación aprobada de `MET → IMP → MET` sin deriva material ni duplicación de unidades.
+- Persistencia de preferencias validada.
+- GitHub Actions `Build and Test` en verde sobre la rama de 1.5.0.
+- No se modificó el esquema de base de datos; permanece vigente el baseline `database/INSTALL-1.4.0.sql`.
+
+## Deployment
+
+La cadena de conexión, correo oficial, dominio y demás configuración de producción deben suministrarse externamente y no se incluyen en el repositorio ni en el artefacto público.
+
+---
+
 # ElegíBien 1.4.0
 
 ## Alcance
