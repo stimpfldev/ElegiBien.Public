@@ -63,4 +63,19 @@ public sealed class PublicSeoAndPwaTests : IClassFixture<ElegiBienWebApplication
         Assert.Contains("/js/presentation-language.js", content, StringComparison.Ordinal);
         Assert.Contains("ignoreSearch: true", content, StringComparison.Ordinal);
     }
+
+    [Fact]
+    public async Task LanguageToggle_DoesNotForcePageReload()
+    {
+        using var preferencesResponse = await _client.GetAsync("/js/presentation-preferences.js");
+        var preferences = await preferencesResponse.Content.ReadAsStringAsync();
+
+        using var languageResponse = await _client.GetAsync("/js/presentation-language.js");
+        var language = await languageResponse.Content.ReadAsStringAsync();
+
+        Assert.Equal(HttpStatusCode.OK, preferencesResponse.StatusCode);
+        Assert.Equal(HttpStatusCode.OK, languageResponse.StatusCode);
+        Assert.DoesNotContain("window.location.reload", preferences, StringComparison.Ordinal);
+        Assert.Contains("setTimeout(applyLanguage", language, StringComparison.Ordinal);
+    }
 }
