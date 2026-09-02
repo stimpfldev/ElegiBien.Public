@@ -189,7 +189,6 @@
             if (Number.isFinite(value)) {
                 item.input.value = Number(converters[item.kind].toMetric(value).toFixed(6)).toString();
             }
-            item.input.step = item.metricStep;
             item.currentUnits = "metric";
             changed.push(item);
         }
