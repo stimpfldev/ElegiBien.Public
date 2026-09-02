@@ -28,6 +28,13 @@
     border-color: var(--brand-navy);
 }
 
+.presentation-unit-hint {
+    color: var(--ink-soft);
+    font-size: 0.86em;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
 @media (min-width: 992px) {
     .site-header .nav-link {
         padding: 0.5rem 0.52rem !important;
@@ -52,8 +59,26 @@
 }
 
 .home-hero h1 {
-    font-size: clamp(2rem, 4vw, 3.65rem);
-    line-height: 1.07;
+    max-width: 760px;
+    font-size: clamp(2rem, 3.35vw, 3rem);
+    line-height: 1.08;
+}
+
+.home-hero .hero-copy {
+    max-width: 700px;
+    margin-top: 1rem;
+    margin-bottom: 1.35rem;
+    font-size: clamp(1rem, 1.45vw, 1.12rem);
+}
+
+.home-hero .hero-tools-grid {
+    gap: 0.65rem;
+}
+
+.home-hero .hero-tools-grid .btn {
+    padding: 0.72rem 1rem;
+    font-size: 1rem;
+    line-height: 1.2;
 }
 
 @media (max-width: 991.98px) {
@@ -66,5 +91,14 @@
     .site-main > .container h1,
     .site-main > .calculator-page h1 {
         font-size: 2rem;
+    }
+
+    .home-hero h1 {
+        font-size: 2.15rem;
+    }
+
+    .home-hero .hero-tools-grid .btn {
+        padding: 0.68rem 0.85rem;
+        font-size: 0.95rem;
     }
 }
