@@ -59,26 +59,26 @@
 }
 
 .home-hero h1 {
-    max-width: 760px;
-    font-size: clamp(2rem, 3.35vw, 3rem);
+    max-width: 720px;
+    font-size: clamp(1.9rem, 2.8vw, 2.55rem);
     line-height: 1.08;
 }
 
 .home-hero .hero-copy {
-    max-width: 700px;
-    margin-top: 1rem;
-    margin-bottom: 1.35rem;
-    font-size: clamp(1rem, 1.45vw, 1.12rem);
+    max-width: 680px;
+    margin-top: 0.9rem;
+    margin-bottom: 1.2rem;
+    font-size: clamp(0.95rem, 1.2vw, 1.03rem);
 }
 
 .home-hero .hero-tools-grid {
-    gap: 0.65rem;
+    gap: 0.5rem;
 }
 
 .home-hero .hero-tools-grid .btn {
-    padding: 0.72rem 1rem;
-    font-size: 1rem;
-    line-height: 1.2;
+    padding: 0.58rem 0.85rem;
+    font-size: 0.9rem;
+    line-height: 1.15;
 }
 
 @media (max-width: 991.98px) {
@@ -94,11 +94,11 @@
     }
 
     .home-hero h1 {
-        font-size: 2.15rem;
+        font-size: 1.9rem;
     }
 
     .home-hero .hero-tools-grid .btn {
-        padding: 0.68rem 0.85rem;
-        font-size: 0.95rem;
+        padding: 0.56rem 0.72rem;
+        font-size: 0.88rem;
     }
 }
