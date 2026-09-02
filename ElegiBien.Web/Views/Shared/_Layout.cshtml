@@ -8,15 +8,15 @@
     var canonicalUrl = $"{Context.Request.Scheme}://{Context.Request.Host}{Context.Request.PathBase}{Context.Request.Path}";
 
     var googleAnalyticsEnabled =
-    string.Equals(
-        Configuration["GoogleAnalytics:Enabled"],
-        "true",
-        StringComparison.OrdinalIgnoreCase);
+        string.Equals(
+            Configuration["GoogleAnalytics:Enabled"],
+            "true",
+            StringComparison.OrdinalIgnoreCase);
 
     var googleAnalyticsMeasurementId = Configuration["GoogleAnalytics:MeasurementId"];
-     var loadGoogleAnalytics = googleAnalyticsEnabled
-    && !string.IsNullOrWhiteSpace(googleAnalyticsMeasurementId)
-    && isIndexable;
+    var loadGoogleAnalytics = googleAnalyticsEnabled
+        && !string.IsNullOrWhiteSpace(googleAnalyticsMeasurementId)
+        && isIndexable;
 }
 <!DOCTYPE html>
 <html lang="es-AR">
@@ -49,9 +49,8 @@
 
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/presentation-preferences.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/ElegiBien.Web.styles.css" asp-append-version="true" />
-
-
 </head>
 <body>
     <header class="site-header">
@@ -79,6 +78,13 @@
 
                 <div class="collapse navbar-collapse" id="mainNavigation">
                     <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-1">
+                        <li class="nav-item">
+                            <a class="nav-link"
+                               asp-controller="Home"
+                               asp-action="Index">
+                                Inicio
+                            </a>
+                        </li>
                         <li class="nav-item">
                             <a class="nav-link"
                                asp-controller="AirConditioning"
@@ -114,12 +120,22 @@
                                 Contacto
                             </a>
                         </li>
-                        <li class="nav-item ms-lg-2">
+                        <li class="nav-item ms-lg-1">
                             <a class="nav-link nav-link-methodology"
                                asp-controller="Legal"
                                asp-action="Methodology">
                                 Cómo decidimos
                             </a>
+                        </li>
+                        <li class="nav-item presentation-controls ms-lg-1">
+                            <div class="presentation-switch" role="group" aria-label="Idioma">
+                                <button type="button" class="btn btn-outline-secondary" data-pref-language="es">ES</button>
+                                <button type="button" class="btn btn-outline-secondary" data-pref-language="en">EN</button>
+                            </div>
+                            <div class="presentation-switch" role="group" aria-label="Sistema de unidades">
+                                <button type="button" class="btn btn-outline-secondary" data-pref-units="metric">MET</button>
+                                <button type="button" class="btn btn-outline-secondary" data-pref-units="imperial">IMP</button>
+                            </div>
                         </li>
                     </ul>
                 </div>
@@ -158,9 +174,13 @@
             </div>
         </div>
     </footer>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/presentation-defaults.js" asp-append-version="true"></script>
+    <script src="~/js/presentation-preferences.js" asp-append-version="true"></script>
+    <script src="~/js/presentation-language.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

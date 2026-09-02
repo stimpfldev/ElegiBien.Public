@@ -51,4 +51,20 @@ public sealed class CoreNavigationPagesTests : IClassFixture<ElegiBienWebApplica
         Assert.DoesNotContain("Calcular cerámicos y pisos", html);
         Assert.DoesNotContain("category-card-featured", html);
     }
+
+    [Fact]
+    public async Task Home_IncludesLanguageAndUnitPreferences()
+    {
+        using var response = await _client.GetAsync("/");
+        var html = await response.Content.ReadAsStringAsync();
+
+        Assert.Contains("data-pref-language=\"es\"", html);
+        Assert.Contains("data-pref-language=\"en\"", html);
+        Assert.Contains("data-pref-units=\"metric\"", html);
+        Assert.Contains("data-pref-units=\"imperial\"", html);
+        Assert.Contains("/js/presentation-preferences.js", html);
+        Assert.Contains("/js/presentation-language.js", html);
+        Assert.DoesNotContain("presentation-translations-extra.js", html);
+        Assert.DoesNotContain("presentation-fixes.js", html);
+    }
 }

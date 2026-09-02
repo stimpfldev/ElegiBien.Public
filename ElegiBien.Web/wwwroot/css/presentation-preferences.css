@@ -1,0 +1,111 @@
+.presentation-controls {
+    display: flex;
+    flex: 0 0 auto;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.15rem 0;
+}
+
+.presentation-switch {
+    display: inline-flex;
+    gap: 0.15rem;
+}
+
+.presentation-switch .btn {
+    min-width: 0;
+    min-height: 0;
+    padding: 0.18rem 0.32rem;
+    border-radius: 6px !important;
+    font-size: 0.65rem;
+    font-weight: 700;
+    line-height: 1.1;
+    box-shadow: none;
+}
+
+.presentation-switch .btn.active {
+    color: #fff;
+    background: var(--brand-navy);
+    border-color: var(--brand-navy);
+}
+
+.presentation-unit-hint {
+    color: var(--ink-soft);
+    font-size: 0.86em;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+@media (min-width: 992px) {
+    .site-header .nav-link {
+        padding: 0.5rem 0.52rem !important;
+        font-size: 0.82rem;
+        white-space: nowrap;
+    }
+
+    .site-header .navbar-nav {
+        flex-wrap: nowrap;
+    }
+}
+
+.site-main > .container h1,
+.site-main > .calculator-page h1 {
+    font-size: clamp(2rem, 3vw, 2.8rem);
+    line-height: 1.1;
+}
+
+.site-main > .container .lead,
+.site-main > .calculator-page .lead {
+    font-size: 1.05rem;
+}
+
+.home-hero h1 {
+    max-width: 720px;
+    font-size: clamp(1.9rem, 2.8vw, 2.55rem);
+    line-height: 1.08;
+}
+
+.home-hero .hero-copy {
+    max-width: 680px;
+    margin-top: 0.9rem;
+    margin-bottom: 1.2rem;
+    font-size: clamp(0.95rem, 1.2vw, 1.03rem);
+}
+
+.home-hero .hero-tools-grid {
+    max-width: 640px;
+    gap: 0.5rem;
+}
+
+.home-hero .hero-tools-grid .btn {
+    min-height: 44px;
+    padding: 0.42rem 0.85rem;
+    font-size: 1rem;
+    line-height: 1.2;
+}
+
+@media (max-width: 991.98px) {
+    .presentation-controls {
+        padding: 0.45rem 0 0.15rem;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .site-main > .container h1,
+    .site-main > .calculator-page h1 {
+        font-size: 2rem;
+    }
+
+    .home-hero h1 {
+        font-size: 1.9rem;
+    }
+
+    .home-hero .hero-tools-grid {
+        max-width: none;
+    }
+
+    .home-hero .hero-tools-grid .btn {
+        min-height: 44px;
+        padding: 0.4rem 0.72rem;
+        font-size: 0.95rem;
+    }
+}
