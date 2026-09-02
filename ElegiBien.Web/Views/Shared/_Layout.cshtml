@@ -133,7 +133,7 @@
                                 <button type="button" class="btn btn-outline-secondary" data-pref-language="en">EN</button>
                             </div>
                             <div class="presentation-switch" role="group" aria-label="Sistema de unidades">
-                                <button type="button" class="btn btn-outline-secondary" data-pref-units="metric">M</button>
+                                <button type="button" class="btn btn-outline-secondary" data-pref-units="metric">MET</button>
                                 <button type="button" class="btn btn-outline-secondary" data-pref-units="imperial">IMP</button>
                             </div>
                         </li>
@@ -179,8 +179,7 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="~/js/presentation-preferences.js" asp-append-version="true"></script>
-    <script src="~/js/presentation-translations-extra.js" asp-append-version="true"></script>
-    <script src="~/js/presentation-fixes.js" asp-append-version="true"></script>
+    <script src="~/js/presentation-language.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
