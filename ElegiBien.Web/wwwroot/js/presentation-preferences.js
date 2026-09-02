@@ -40,7 +40,6 @@
             decimals: 2
         },
         paintCoverage: {
-            // 1 m²/L = 10.7639104167 ft² / 0.2641720524 US gal
             toImperial: value => value * 40.7458333932783,
             toMetric: value => value / 40.7458333932783,
             metricUnit: "m²/L",
@@ -55,7 +54,6 @@
             decimals: 0
         },
         coolingCapacity: {
-            // 1 frigoría/h = 1 kcal/h = 3.968320719 BTU/h
             toImperial: value => value * 3.968320719,
             toMetric: value => value / 3.968320719,
             metricUnit: "frig/h",
@@ -92,8 +90,7 @@
 
     function parseInputNumber(value) {
         if (typeof value !== "string") return Number(value);
-        const normalized = value.trim().replace(",", ".");
-        return Number.parseFloat(normalized);
+        return Number.parseFloat(value.trim().replace(",", "."));
     }
 
     function parseDisplayNumber(text) {
@@ -105,18 +102,14 @@
         let normalized = value;
 
         if (hasComma && hasDot) {
-            if (value.lastIndexOf(",") > value.lastIndexOf(".")) {
-                normalized = value.replace(/\./g, "").replace(",", ".");
-            } else {
-                normalized = value.replace(/,/g, "");
-            }
+            normalized = value.lastIndexOf(",") > value.lastIndexOf(".")
+                ? value.replace(/\./g, "").replace(",", ".")
+                : value.replace(/,/g, "");
         } else if (hasComma) {
-            // N0 can render 1,560 in an English culture. Treat groups of 3 as thousands.
             normalized = /^-?\d{1,3}(,\d{3})+$/.test(value)
                 ? value.replace(/,/g, "")
                 : value.replace(",", ".");
         } else if (hasDot) {
-            // N0 can render 1.560 in an es-AR culture. Treat groups of 3 as thousands.
             normalized = /^-?\d{1,3}(\.\d{3})+$/.test(value)
                 ? value.replace(/\./g, "")
                 : value;
@@ -130,6 +123,11 @@
             minimumFractionDigits: 0,
             maximumFractionDigits: converters[kind].decimals
         }).format(value);
+    }
+
+    function stepForDecimals(decimals) {
+        if (decimals <= 0) return "1";
+        return `0.${"0".repeat(decimals - 1)}1`;
     }
 
     function ensureUnitHint(item, units) {
@@ -164,7 +162,6 @@
     }
 
     function prepareManagedInputs() {
-        // Decimal tag helpers are not guaranteed to render type=number, so classify every named input.
         document.querySelectorAll("input[name]").forEach(input => {
             const kind = inputKind(input);
             if (!kind || managedInputs.some(item => item.input === input)) return;
@@ -180,11 +177,13 @@
                 const converted = targetUnits === "imperial"
                     ? converter.toImperial(value)
                     : converter.toMetric(value);
-                item.input.value = Number(converted.toFixed(converter.decimals === 0 ? 0 : 4)).toString();
+                item.input.value = Number(converted.toFixed(converter.decimals)).toString();
             }
             item.currentUnits = targetUnits;
             item.input.dataset.presentationUnits = targetUnits;
-            item.input.step = targetUnits === "imperial" && converter.decimals !== 0 ? "0.01" : item.metricStep;
+            item.input.step = targetUnits === "imperial"
+                ? stepForDecimals(converter.decimals)
+                : item.metricStep;
         }
         ensureUnitHint(item, targetUnits);
     }
