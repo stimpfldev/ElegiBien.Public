@@ -50,13 +50,17 @@ public sealed class PublicSeoAndPwaTests : IClassFixture<ElegiBienWebApplication
     }
 
     [Fact]
-    public async Task ServiceWorker_CachesHeatingVisualAsset()
+    public async Task ServiceWorker_CachesCurrentPresentationAssets()
     {
         using var response = await _client.GetAsync("/service-worker.js");
         var content = await response.Content.ReadAsStringAsync();
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        Assert.Contains("elegibien-static-v3", content, StringComparison.Ordinal);
+        Assert.Contains("elegibien-static-v4", content, StringComparison.Ordinal);
         Assert.Contains("/images/category-heating.svg", content, StringComparison.Ordinal);
+        Assert.Contains("/css/presentation-preferences.css", content, StringComparison.Ordinal);
+        Assert.Contains("/js/presentation-preferences.js", content, StringComparison.Ordinal);
+        Assert.Contains("/js/presentation-language.js", content, StringComparison.Ordinal);
+        Assert.Contains("ignoreSearch: true", content, StringComparison.Ordinal);
     }
 }
