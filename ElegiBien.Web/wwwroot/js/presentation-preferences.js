@@ -295,15 +295,6 @@
     }
 
     document.addEventListener("DOMContentLoaded", () => {
-        document.querySelectorAll("[data-pref-language]").forEach(button => {
-            button.addEventListener("click", event => {
-                event.preventDefault();
-                event.stopImmediatePropagation();
-                localStorage.setItem(LANGUAGE_KEY, button.dataset.prefLanguage === "en" ? "en" : "es");
-                window.location.reload();
-            }, true);
-        });
-
         document.querySelectorAll("[data-pref-units]").forEach(button => {
             button.addEventListener("click", () => {
                 const next = button.dataset.prefUnits === "imperial" ? "imperial" : "metric";
