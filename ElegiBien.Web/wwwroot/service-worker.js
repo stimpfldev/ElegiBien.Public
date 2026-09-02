@@ -1,4 +1,4 @@
-const CACHE_NAME = "elegibien-static-v3";
+const CACHE_NAME = "elegibien-static-v4";
 
 const STATIC_ASSETS = [
     "/offline.html",
@@ -6,7 +6,10 @@ const STATIC_ASSETS = [
     "/icons/icon-192.png",
     "/icons/icon-512.png",
     "/css/site.css",
+    "/css/presentation-preferences.css",
     "/js/site.js",
+    "/js/presentation-preferences.js",
+    "/js/presentation-language.js",
     "/images/elegibien-logo.svg",
     "/images/elegibien-logo-monochrome.svg",
     "/images/hero-decision.svg",
@@ -42,6 +45,6 @@ self.addEventListener("fetch", event => {
     }
 
     event.respondWith(
-        caches.match(request).then(cachedResponse => cachedResponse || fetch(request))
+        caches.match(request, { ignoreSearch: true }).then(cachedResponse => cachedResponse || fetch(request))
     );
 });
