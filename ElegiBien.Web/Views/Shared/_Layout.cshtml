@@ -14,9 +14,9 @@
         StringComparison.OrdinalIgnoreCase);
 
     var googleAnalyticsMeasurementId = Configuration["GoogleAnalytics:MeasurementId"];
-     var loadGoogleAnalytics = googleAnalyticsEnabled
-    && !string.IsNullOrWhiteSpace(googleAnalyticsMeasurementId)
-    && isIndexable;
+    var loadGoogleAnalytics = googleAnalyticsEnabled
+        && !string.IsNullOrWhiteSpace(googleAnalyticsMeasurementId)
+        && isIndexable;
 }
 <!DOCTYPE html>
 <html lang="es-AR">
@@ -50,8 +50,6 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/ElegiBien.Web.styles.css" asp-append-version="true" />
-
-
 </head>
 <body>
     <header class="site-header">
@@ -121,6 +119,18 @@
                                 Cómo decidimos
                             </a>
                         </li>
+                        <li class="nav-item ms-lg-2 d-flex align-items-center py-2 py-lg-0">
+                            <div class="btn-group btn-group-sm" role="group" aria-label="Idioma">
+                                <button type="button" class="btn btn-outline-secondary" data-pref-language="es">ES</button>
+                                <button type="button" class="btn btn-outline-secondary" data-pref-language="en">EN</button>
+                            </div>
+                        </li>
+                        <li class="nav-item ms-lg-2 d-flex align-items-center py-2 py-lg-0">
+                            <div class="btn-group btn-group-sm" role="group" aria-label="Sistema de unidades">
+                                <button type="button" class="btn btn-outline-secondary" data-pref-units="metric">Métrico</button>
+                                <button type="button" class="btn btn-outline-secondary" data-pref-units="imperial">Imperial</button>
+                            </div>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -158,9 +168,11 @@
             </div>
         </div>
     </footer>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/presentation-preferences.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
