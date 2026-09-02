@@ -125,11 +125,6 @@
         }).format(value);
     }
 
-    function stepForDecimals(decimals) {
-        if (decimals <= 0) return "1";
-        return `0.${"0".repeat(decimals - 1)}1`;
-    }
-
     function ensureUnitHint(item, units) {
         const { input, kind } = item;
         const converter = converters[kind];
@@ -181,9 +176,7 @@
             }
             item.currentUnits = targetUnits;
             item.input.dataset.presentationUnits = targetUnits;
-            item.input.step = targetUnits === "imperial"
-                ? stepForDecimals(converter.decimals)
-                : item.metricStep;
+            item.input.step = targetUnits === "imperial" ? "any" : item.metricStep;
         }
         ensureUnitHint(item, targetUnits);
     }
@@ -196,6 +189,7 @@
             if (Number.isFinite(value)) {
                 item.input.value = Number(converters[item.kind].toMetric(value).toFixed(6)).toString();
             }
+            item.input.step = item.metricStep;
             item.currentUnits = "metric";
             changed.push(item);
         }
