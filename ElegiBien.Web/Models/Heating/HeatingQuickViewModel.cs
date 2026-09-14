@@ -9,7 +9,7 @@ public class HeatingQuickViewModel
 
     public HeatingCalculationResultDto? Result { get; set; }
 
-    [Display(Name = "Permitir analítica anónima para mejorar ElegíBien")]
+    [Display(Name = "Permitir analítica anónima para mejorar OPTIANZA")]
     public bool AllowAnonymousAnalytics { get; set; }
 
     [Display(Name = "Permitir el uso anónimo de este resultado en estadísticas agregadas")]
