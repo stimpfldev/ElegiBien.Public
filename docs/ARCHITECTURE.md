@@ -1,4 +1,6 @@
-# Arquitectura de ElegíBien
+# Arquitectura de OPTIANZA
+
+La marca pública del producto es **OPTIANZA**. Los nombres técnicos `ElegiBien.*` se conservan por compatibilidad y para evitar una refactorización sin valor funcional.
 
 ## Estructura
 
