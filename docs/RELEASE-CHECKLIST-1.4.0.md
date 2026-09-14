@@ -1,4 +1,4 @@
-# Release checklist - ElegíBien 1.4.0
+# Release checklist - OPTIANZA 1.4.0
 
 ## Antes del commit
 
@@ -13,27 +13,18 @@
 
 - [ ] Commit final creado.
 - [ ] Working tree limpio.
-- [ ] Push a `master` realizado.
+- [ ] Push realizado.
 - [ ] GitHub Actions `Build and Test` finaliza en verde para el SHA del commit.
-
-## Tag y artefactos
-
-Solo después de CI verde:
-
-- [ ] Crear tag `v1.4.0` sobre el SHA validado.
-- [ ] Publicar el tag.
-- [ ] Ejecutar `scripts/Crear-Release-1.4.0.ps1`.
-- [ ] Verificar `artifacts/ElegiBien-1.4.0.zip`.
-- [ ] Verificar `artifacts/ElegiBien-1.4.0.zip.sha256`.
-- [ ] Recalcular SHA-256 local y confirmar coincidencia.
 
 ## GitHub Release
 
-- [ ] Crear release `ElegíBien 1.4.0` desde `v1.4.0`.
+- [ ] Crear release `OPTIANZA 1.4.0` desde `v1.4.0` si se conserva esta versión histórica.
 - [ ] No marcar prerelease salvo decisión explícita.
-- [ ] Adjuntar ZIP y `.sha256`.
 - [ ] Usar `RELEASE-NOTES.md` como base de descripción.
-- [ ] Confirmar digest del asset publicado contra SHA local.
+
+## Compatibilidad técnica
+
+Los identificadores internos `ElegiBien.*` se mantienen sin cambios. La marca pública es OPTIANZA.
 
 ## Backup
 

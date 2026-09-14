@@ -1,6 +1,6 @@
 # Third-party notices
 
-ElegíBien uses third-party components distributed under their respective licenses.
+OPTIANZA uses third-party components distributed under their respective licenses.
 
 ## Client-side libraries included in `wwwroot/lib`
 

@@ -8,7 +8,7 @@ La línea soportada para el primer release público es **1.4.x**. Las versiones 
 
 No publiques vulnerabilidades, secretos, credenciales ni datos sensibles en un issue público.
 
-El canal oficial de contacto de seguridad se publicará junto con la configuración productiva de ElegíBien. Hasta disponer del canal oficial de seguridad del sitio productivo, los reportes pueden realizarse mediante los medios de contacto publicados en el perfil del autor.
+El canal oficial de contacto de seguridad se publicará junto con la configuración productiva de OPTIANZA. Hasta disponer del canal oficial de seguridad del sitio productivo, los reportes pueden realizarse mediante los medios de contacto publicados en el perfil del autor.
 
 ## Configuración sensible
 
