@@ -1,8 +1,8 @@
-# ElegíBien 1.5.0
+# OPTIANZA 1.5.0
 
 ## Alcance
 
-ElegíBien 1.5.0 amplía la presentación internacional de la aplicación sin modificar las reglas internas de cálculo ni el modelo de negocio.
+OPTIANZA 1.5.0 amplía la presentación internacional de la aplicación sin modificar las reglas internas de cálculo ni el modelo de negocio.
 
 La aplicación continúa siendo una web/PWA pública, gratuita y orientada a cálculos y comparaciones explicables.
 
@@ -40,13 +40,13 @@ La cadena de conexión, correo oficial, dominio y demás configuración de produ
 
 ---
 
-# ElegíBien 1.4.0
+# OPTIANZA 1.4.0
 
 ## Alcance
 
-Versión 1.4.0 de ElegíBien.
+Versión 1.4.0 de OPTIANZA.
 
-ElegíBien es una aplicación web/PWA que ofrece herramientas de cálculo y comparación explicables.
+OPTIANZA es una aplicación web/PWA que ofrece herramientas de cálculo y comparación explicables.
 
 ## Incluye
 
