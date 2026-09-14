@@ -1,8 +1,8 @@
-# ElegíBien
+# OPTIANZA
 
 [![Build and Test](https://github.com/stimpfldev/ElegiBien.Public/actions/workflows/build-test.yml/badge.svg)](https://github.com/stimpfldev/ElegiBien.Public/actions/workflows/build-test.yml)
 
-ElegíBien es una aplicación web gratuita orientada a ayudar a tomar decisiones de compra mediante cálculos y comparaciones explicables.
+OPTIANZA es una aplicación web gratuita orientada a ayudar a tomar decisiones de compra mediante cálculos y comparaciones explicables.
 
 El producto está diseñado para ofrecer cálculos y comparaciones explicables, manteniendo criterios de evaluación independientes de relaciones comerciales.
 
@@ -35,6 +35,8 @@ La solución separa responsabilidades en:
 - `ElegiBien.Web`: MVC, endpoints web, UI, PWA, seguridad y configuración.
 - `ElegiBien.Tests.Unit`: pruebas de reglas y servicios.
 - `ElegiBien.Tests.Integration`: pruebas de integración del host web y flujos críticos.
+
+Los nombres técnicos `ElegiBien.*` se conservan por compatibilidad interna. La marca pública del producto es OPTIANZA.
 
 Más detalle: [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
 
@@ -90,7 +92,7 @@ dotnet test -c Release
 
 ## SEO y PWA
 
-ElegíBien incluye:
+OPTIANZA incluye:
 
 - `robots.txt` generado para el host activo.
 - `sitemap.xml` con las herramientas indexables.
@@ -102,10 +104,10 @@ Los resultados compartidos se excluyen de indexación.
 
 ## Estado de publicación
 
-La versión pública actual es **1.4.0**. La configuración de producción, dominio, correo oficial y secretos se suministrarán fuera del repositorio durante el deployment.
+La configuración de producción, dominio, correo oficial y secretos se suministran fuera del repositorio durante el deployment. El dominio público previsto es `optianza.com.ar`.
 
 ## Licencia
 
-El código propio de ElegíBien no se publica como software open source. Ver [`LICENSE.txt`](LICENSE.txt).
+El código propio de OPTIANZA no se publica como software open source. Ver [`LICENSE.txt`](LICENSE.txt).
 
 Los componentes de terceros conservan sus licencias correspondientes. Ver [`THIRD-PARTY-NOTICES.md`](THIRD-PARTY-NOTICES.md).
