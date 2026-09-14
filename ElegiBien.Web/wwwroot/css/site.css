@@ -752,3 +752,8 @@ a:hover {
         min-height: 52px;
     }
 }
+@media (min-width: 992px) {
+    html {
+        font-size: 80%;
+    }
+}
