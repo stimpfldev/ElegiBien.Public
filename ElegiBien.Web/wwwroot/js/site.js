@@ -82,32 +82,7 @@ document.addEventListener("DOMContentLoaded", () => {
     applyRecommendation();
 });
 
-document.addEventListener("DOMContentLoaded", () => {
-    const measurementElement =
-        document.querySelector('meta[name="google-analytics-measurement-id"]');
 
-    const measurementId = measurementElement?.content?.trim();
-
-    if (!measurementId) {
-        return;
-    }
-
-    window.dataLayer = window.dataLayer || [];
-
-    window.gtag = function () {
-        window.dataLayer.push(arguments);
-    };
-
-    window.gtag("js", new Date());
-    window.gtag("config", measurementId);
-
-    const script = document.createElement("script");
-    script.async = true;
-    script.src =
-        `https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(measurementId)}`;
-
-    document.head.appendChild(script);
-});
 document.addEventListener("DOMContentLoaded", () => {
     const measurementElement =
         document.querySelector('meta[name="google-analytics-measurement-id"]');
