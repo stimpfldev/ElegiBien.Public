@@ -757,3 +757,17 @@ a:hover {
         font-size: 80%;
     }
 }
+body {
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+}
+
+.site-main {
+    min-height: 0;
+}
+
+.site-footer {
+    margin-top: 0;
+}
